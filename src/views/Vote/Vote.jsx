@@ -8,7 +8,7 @@ import axios from 'axios';
 import cp from '../../cp';
 
 class VoteList extends Component {
-	// testeee
+	// testeeeeeff
 	constructor(props) {
 		super(props);
 		this.state = {
