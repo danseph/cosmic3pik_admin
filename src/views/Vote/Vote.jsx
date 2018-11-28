@@ -17,7 +17,8 @@ class VoteList extends Component {
 			data: '',
 
 		};
-		//wefewfeee
+		//wefewf
+		//wefwefwefwefewfewfwef
 		const queryString = require('query-string');
 		const parsed = queryString.parse(this.props.location.search);
 
