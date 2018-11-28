@@ -8,7 +8,6 @@ import axios from 'axios';
 import cp from '../../cp';
 
 class VoteList extends Component {
-	// testeeeeeffeezzz
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -17,11 +16,7 @@ class VoteList extends Component {
 			data: '',
 
 		};
-		//wefewf
-		//wefwefwefwefewfewfwef
-		//wefwefew
-		//ewfwefewfwefwef
-		//eeeee
+
 		const queryString = require('query-string');
 		const parsed = queryString.parse(this.props.location.search);
 
