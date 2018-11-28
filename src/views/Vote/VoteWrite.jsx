@@ -22,6 +22,7 @@ import Checkbox from 'components/CustomCheckbox/CustomCheckbox';
 
 
 class VoteWrite extends Component {
+	//zzz
 	constructor(props, context) {
 			super(props, context);
 
