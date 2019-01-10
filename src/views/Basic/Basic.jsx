@@ -378,6 +378,17 @@ class Basic extends Component {
                   description: '토큰 키값 절대 수정 말기',
                   required : true,
                 },
+								{
+									label: "token contract address",
+									name : 'contractAddress',
+									componentClass: "input",
+									type:"text",
+									bsClass: "form-control",
+									placeholder: "",
+									defaultValue: item.contractAddress,
+									description: '토큰 컨트랙트 주소',
+									required : true,
+								},
                 {
                   label: "token symbol",
                   name : 'symbol',
