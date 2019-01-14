@@ -57,7 +57,7 @@ class BoardWrite extends Component {
 					contentsChn :  '' ,
 					viewChn: false ,
 					isLoad : false ,
-					
+
 			};
 
 
@@ -74,7 +74,7 @@ class BoardWrite extends Component {
 				editorKr : editorState,
 				contentsKr : html,
 			});
-			
+
     }
   };
 
@@ -89,7 +89,7 @@ class BoardWrite extends Component {
 				editorEn : editorState,
 				contentsEn : html,
 			});
-			
+
     }
   };
 
@@ -104,7 +104,7 @@ class BoardWrite extends Component {
 				editorChn : editorState,
 				contentsChn : html,
 			});
-			
+
     }
 
   };
@@ -118,14 +118,14 @@ class BoardWrite extends Component {
 						var newFormObj  = new FormData();
 						newFormObj.append('listingImage', file , 'imageFIle' );
 
-						axios.post(cp.server_ip+'/api/upload', newFormObj)
-						.then(function (response) { 
+						axios.post(cp.server_ip+'/api/upload', newFormObj ,config)
+						.then(function (response) {
 								//console.log(cp.server_ip+'/'+response.data.path);
 								resolve({data: {link: cp.server_ip+'/'+response.data.path}})
-						}) 
-						.then(societe => { 
+						})
+						.then(societe => {
 								reject(societe);
-						}) 
+						})
 					}
 			);
 
@@ -172,7 +172,7 @@ class BoardWrite extends Component {
 
 
 
-					this.setState({ 
+					this.setState({
 						boardId : item._id,
 						boardCate: item.boardCate,
 						subCate:item.subCate,
@@ -193,13 +193,13 @@ class BoardWrite extends Component {
 						contentsChn :  item.contentsChn,
 						viewChn: item.viewChn,
 						isLoad : true ,
-					
+
 					})
 				}
 
 			}).catch(err => { /*console.log(err);*/ });
 		}
-	
+
 		const changed = (e , type , value , filedName) => {
 			if(type == 'checkbox'){
 				this.setState({ [filedName]:value });
@@ -208,8 +208,8 @@ class BoardWrite extends Component {
 			this.setState({ [e.target.name]: e.target.value })
 
 		};
-		
-		
+
+
 		var subCate= []
 		// FAQ 일시 서브항목 변수
 		if(this.state.boardCate == 'faq'){
@@ -277,7 +277,7 @@ class BoardWrite extends Component {
                 title="Board Write"
                 content={
                   <form method='post' onSubmit={(e ) => {doSumbit(e)}}>
-	
+
                     <Row>
 
 											<FormInputs
@@ -298,7 +298,7 @@ class BoardWrite extends Component {
 															{	value : 'notice',view : '공지사항( Notice )' },
 															{	value : 'event',view : '이벤트 ( Event )' },
 															{	value : 'faq',view : 'FAQ' },
-		
+
 														]
 													}
 												]}
