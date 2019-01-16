@@ -11,17 +11,15 @@ import Icons from "views/Icons/Icons";
 import Maps from "views/Maps/Maps";
 import Notifications from "views/Notifications/Notifications";
 import Upgrade from "views/Upgrade/Upgrade";
-import Login from "views/Login/Login";
 import Language from "views/Language/Language";
 import Robot from "views/Robot/Robot";
-
 
 const dashboardRoutes = [
   {
     path: "/dashboard",
     name: "Dashboard",
     icon: "pe-7s-graph",
-		view: true,
+    view: true,
     component: Dashboard
   },
   {
@@ -29,27 +27,28 @@ const dashboardRoutes = [
     name: "Basic",
     icon: "pe-7s-home",
     component: Basic,
-		view: true,
+    view: true,
   },
   {
     path: "/vote",
     name: "Vote",
     icon: "pe-7s-graph3",
     component: Vote,
-		view: true,
+    view: true,
   },
   {
     path: "/voteWrite",
     name: "VoteWrite",
     icon: "pe-7s-graph3",
-    component: VoteWrite
+    component: VoteWrite,
+    view: false,
   },
   {
     path: "/language",
     name: "Language set",
     icon: "pe-7s-micro",
     component: Language,
-		view: true
+    view: true
 
   },
   {
@@ -57,61 +56,79 @@ const dashboardRoutes = [
     name: "Board",
     icon: "pe-7s-chat",
     component: Board,
-		view: true,
+    view: true,
+  },
+  {
+    path: "/boardWrite",
+    name: "BoardWrite",
+    icon: "pe-7s-chat",
+    component: BoardWrite,
+    view: false,
   },
   {
     path: "/robot",
     name: "Robot",
     icon: "pe-7s-like",
     component: Robot,
-		view: true,
-  },
-  {
-    path: "/boardWrite",
-    name: "BoardWrite",
-    icon: "pe-7s-chat",
-    component: BoardWrite
+    view: true,
   },
   {
     path: "/typography",
     name: "Typography",
     icon: "pe-7s-news-paper",
-    component: Typography
+    component: Typography,
+    view: false,
   },
-  { path: "/icons", name: "Icons", icon: "pe-7s-science", component: Icons ,view: true,},
- /* 
- 
-
+  {
+    path: "/icons",
+    name: "Icons",
+    icon: "pe-7s-science",
+    component: Icons,
+    view: false,
+  },
   {
     path: "/user",
     name: "User Profile",
     icon: "pe-7s-user",
     component: UserProfile,
-		view: true,
+    view: false,
   },
   {
     path: "/table",
     name: "Table List",
     icon: "pe-7s-note2",
     component: TableList,
-		view: true,
-  }, 
-	{ path: "/maps", name: "Maps", icon: "pe-7s-map-marker", component: Maps },
-
-	{
+    view: false,
+  },
+  {
+    path: "/maps",
+    name: "Maps",
+    icon: "pe-7s-map-marker",
+    component: Maps,
+    view: false,
+  },
+  {
     path: "/notifications",
     name: "Notifications",
     icon: "pe-7s-bell",
-    component: Notifications
+    component: Notifications,
+    view: false,
   },
   {
     upgrade: true,
     path: "/upgrade",
     name: "Upgrade to PRO",
     icon: "pe-7s-rocket",
-    component: Upgrade
-  },*/
-  { redirect: true, path: "/", to: "/dashboard", name: "Dashboard" }
+    component: Upgrade,
+    view: false,
+  },
+  {
+    redirect: true,
+    path: "/",
+    to: "/dashboard",
+    name: "Dashboard",
+    view: false,
+  }
 ];
 
 export default dashboardRoutes;

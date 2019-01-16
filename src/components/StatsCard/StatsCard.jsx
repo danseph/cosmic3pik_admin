@@ -21,7 +21,7 @@ export class StatsCard extends Component {
           </Row>
           <div className="footer">
             <hr />
-            <div className="stats">
+            <div className="stats" onClick={this.props.statsClick}>
               {this.props.statsIcon} {this.props.statsIconText}
             </div>
           </div>
