@@ -13,12 +13,14 @@ class Dashboard extends Component {
     super()
     this.state = {
       totalAiCoin: 0,
+      usersCount: 0,
     };
+    this.token = window.localStorage['nu_token'];
   }
 
   getAicoins() {
-    const token = window.localStorage['nu_token'];
-    Axios.post(`${cp.server_ip}/api/coins`, { token })
+    // Coins
+    Axios.post(`${cp.server_ip}/api/coins`, { token: this.token })
       .then((res) => {
         if (!res || !res.data || !res.data.coins) return false;
         // for only AI coin
@@ -32,8 +34,22 @@ class Dashboard extends Component {
       });
   }
 
+  getUserCount() {
+    // All users count
+    Axios.post(`${cp.server_ip}/api/users/count`, { token: this.token })
+    .then((res) => {
+      if (!res || !res.data || !res.data.count) return false;
+      this.setState({ usersCount: res.data.count });
+    })
+    .catch((err) => {
+      console.log(err);
+      return false;
+    });
+  }
+
   componentDidMount() {
     this.getAicoins();
+    this.getUserCount();
   }
 
   createLegend(json) {
@@ -48,7 +64,7 @@ class Dashboard extends Component {
   }
 
   render() {
-    const { totalAiCoin } = this.state;
+    const { totalAiCoin, usersCount } = this.state;
     return (
       <div className="content">
         <Grid fluid>
@@ -61,6 +77,16 @@ class Dashboard extends Component {
                 statsIcon={<i className="fa fa-refresh" />}
                 statsIconText="Updated now"
                 statsClick={this.getAicoins.bind(this)}
+              />
+            </Col>
+            <Col lg={6} sm={6}>
+              <StatsCard
+                bigIcon={<i className="pe-7s-users text-warning" />}
+                statsText="Current users"
+                statsValue={usersCount}
+                statsIcon={<i className="fa fa-refresh" />}
+                statsIconText="Updated now"
+                statsClick={this.getUserCount.bind(this)}
               />
             </Col>
           </Row>
