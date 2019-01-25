@@ -20,7 +20,7 @@ class Dashboard extends Component {
 
   getAicoins() {
     // Coins
-    Axios.post(`${cp.server_ip}/api/coins`, { token: this.token })
+    Axios.post(`${cp.server_ip}/api/coins/count`, { token: this.token })
       .then((res) => {
         if (!res || !res.data || !res.data.coins) return false;
         // for only AI coin
