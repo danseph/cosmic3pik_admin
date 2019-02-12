@@ -3,32 +3,22 @@ import {
   Grid,
   Row,
   Col,
-  FormGroup,
   ControlLabel,
-  FormControl
 } from "react-bootstrap";
 
 import { Card } from "components/Card/Card.jsx";
 import { FormInputs } from "components/FormInputs/FormInputs.jsx";
-import { UserCard } from "components/UserCard/UserCard.jsx";
 import Button from "components/CustomButton/CustomButton.jsx";
-import CustomDatePicker from "components/CustomDatepicker/CustomDatepicker.jsx";
-import avatar from "assets/img/faces/face-3.jpg";
-import { NavDropdown  , MenuItem} from "react-bootstrap";
 import axios from 'axios';
 import cp from '../../cp';
-import Select from 'react-select';
 import Checkbox from 'components/CustomCheckbox/CustomCheckbox';
 import { ContentState,  EditorState, RichUtils, convertToRaw , convertFromRaw , convertFromHTML ,decorator } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
-import { thArray, tdArray ,style } from "variables/Variables.jsx";
+import { style } from "variables/Variables.jsx";
 import htmlToDraft from 'html-to-draftjs';
-import DraftPasteProcessor from 'draft-js/lib/DraftPasteProcessor';
 import draftToHtml from 'draftjs-to-html';
-import HTMLtoJSX from 'htmltojsx';
 
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-
 
 class BoardWrite extends Component {
 	constructor(props, context) {
@@ -57,10 +47,7 @@ class BoardWrite extends Component {
 					contentsChn :  '' ,
 					viewChn: false ,
 					isLoad : false ,
-
 			};
-
-
 	}
 
   onContentStateChangeKr : Function = (editorState) => {
@@ -104,12 +91,8 @@ class BoardWrite extends Component {
 				editorChn : editorState,
 				contentsChn : html,
 			});
-
     }
-
   };
-
-
 
 	uploadImageCallBack(file) {
 			return new Promise(
@@ -120,7 +103,6 @@ class BoardWrite extends Component {
 
 						axios.post(cp.server_ip+'/api/upload', newFormObj ,config)
 						.then(function (response) {
-								//console.log(cp.server_ip+'/'+response.data.path);
 								resolve({data: {link: cp.server_ip+'/'+response.data.path}})
 						})
 						.then(societe => {
@@ -128,20 +110,12 @@ class BoardWrite extends Component {
 						})
 					}
 			);
-
 	}
 
-
-
-
-
   render() {
-
-		console.log(this.state);
     const { editorKr  , editorEn , editorChn} = this.state;
 		const queryString = require('query-string');
 		const parsed = queryString.parse(this.props.location.search);
-		//console.log(parsed);
 		if(!this.state.isLoad && parsed.uid){
 			axios.post(cp.server_ip+'/api/board', {
 					proc: 'boardDetail',
@@ -149,17 +123,13 @@ class BoardWrite extends Component {
 					userToken: window.localStorage['nu_token'],
 					uid : parsed.uid
 			}).then(res => {
-				//console.log(editorStateWithoutUndo );
 				if(res.data.err){window.location.href='/';}
 				else{
-
 					var item = res.data
-
 
 			    const contentBlock_kr = htmlToDraft(item.contentsKr);
 					const contentState_kr = ContentState.createFromBlockArray(contentBlock_kr.contentBlocks);
 					const outputEditorState_Kr = EditorState.createWithContent(contentState_kr);
-
 
 			    const contentBlock_En = htmlToDraft(item.contentsEn);
 					const contentState_En = ContentState.createFromBlockArray(contentBlock_En.contentBlocks);
@@ -168,9 +138,6 @@ class BoardWrite extends Component {
 			    const contentBlock_Chn = htmlToDraft(item.contentsChn);
 					const contentState_Chn = ContentState.createFromBlockArray(contentBlock_Chn.contentBlocks);
 					const outputEditorState_Chn = EditorState.createWithContent(contentState_Chn);
-
-
-
 
 					this.setState({
 						boardId : item._id,
@@ -193,15 +160,13 @@ class BoardWrite extends Component {
 						contentsChn :  item.contentsChn,
 						viewChn: item.viewChn,
 						isLoad : true ,
-
 					})
 				}
-
-			}).catch(err => { /*console.log(err);*/ });
+			}).catch(err => { console.log(err); });
 		}
 
 		const changed = (e , type , value , filedName) => {
-			if(type == 'checkbox'){
+			if(type === 'checkbox'){
 				this.setState({ [filedName]:value });
 				return false;
 			}
@@ -212,7 +177,7 @@ class BoardWrite extends Component {
 
 		var subCate= []
 		// FAQ 일시 서브항목 변수
-		if(this.state.boardCate == 'faq'){
+		if(this.state.boardCate === 'faq'){
 			subCate.push(
 					<FormInputs
 						changeAction = {changed}
@@ -241,7 +206,6 @@ class BoardWrite extends Component {
 			);
 		}
 
-
 		const doSumbit = (e) =>{
 			e.preventDefault(); // 기본적인 서브밋 행동을 취소합니다
 			axios.post(cp.server_ip+'/api/board', {
@@ -252,7 +216,6 @@ class BoardWrite extends Component {
 			}).then(res => {
 				 window.location.href="/#board";
 			}).catch(err => { console.log(err); });
-
 			return false;
 		}
 
@@ -277,9 +240,7 @@ class BoardWrite extends Component {
                 title="Board Write"
                 content={
                   <form method='post' onSubmit={(e ) => {doSumbit(e)}}>
-
                     <Row>
-
 											<FormInputs
 												changeAction = {changed}
 												ncols={["col-md-2"]}
@@ -313,15 +274,12 @@ class BoardWrite extends Component {
 														isChecked= {Boolean(this.state.topView)}
 														label = "상단노출( top view )"
 												/>
-
 											</Col>
-
                     </Row>
 										<Row>
                       <Col md={12}>
 												<h4>한국어 ( Korean )</h4>
                       </Col>
-
 										</Row>
                     <Row>
 											<FormInputs
@@ -348,10 +306,8 @@ class BoardWrite extends Component {
 														isChecked= {Boolean(this.state.viewKr)}
 														label = "노출여부 ( with view )"
 												/>
-
 											</Col>
 										</Row>
-
                     <Row>
 											<FormInputs
 												changeAction = {changed}
@@ -369,7 +325,6 @@ class BoardWrite extends Component {
 												]}
 											/>
 										</Row>
-
                     <Row>
 											<Col md={10} style={Object.assign({}, style.Config.hp450)}>
 												<ControlLabel>컨탠츠 ( 한국어 )  / contents ( korean )</ControlLabel>
@@ -381,15 +336,12 @@ class BoardWrite extends Component {
                             toolbar={toolbar}
                             onEditorStateChange={this.onContentStateChangeKr.bind(this)}
                         />
-
 											</Col>
 										</Row>
-
 										<Row>
                       <Col md={12}>
 												<h4>영어 ( English )</h4>
                       </Col>
-
 										</Row>
                     <Row>
 											<FormInputs
@@ -416,10 +368,8 @@ class BoardWrite extends Component {
 														isChecked= {Boolean(this.state.viewEn)}
 														label = "노출여부 ( with view )"
 												/>
-
 											</Col>
 										</Row>
-
                     <Row>
 											<FormInputs
 												changeAction = {changed}
@@ -437,7 +387,6 @@ class BoardWrite extends Component {
 												]}
 											/>
 										</Row>
-
                     <Row>
 											<Col md={10} style={Object.assign({}, style.Config.hp450)}>
 												<ControlLabel>컨텐츠 ( 영어 )  / contents ( english )</ControlLabel>
@@ -451,12 +400,10 @@ class BoardWrite extends Component {
                         />
 											</Col>
 										</Row>
-
 										<Row>
                       <Col md={12}>
 												<h4>중국어 ( Chinese )</h4>
                       </Col>
-
 										</Row>
                     <Row>
 											<FormInputs
@@ -483,11 +430,8 @@ class BoardWrite extends Component {
 														isChecked= {Boolean(this.state.viewChn)}
 														label = "노출여부 ( top view )"
 												/>
-
 											</Col>
 										</Row>
-
-
                     <Row>
 											<FormInputs
 												changeAction = {changed}
@@ -505,8 +449,6 @@ class BoardWrite extends Component {
 												]}
 											/>
 										</Row>
-
-
                     <Row>
 											<Col md={10} style={Object.assign({}, style.Config.hp450)}>
 												<ControlLabel>컨탠츠 ( 중국어 )  / contents ( chinese )</ControlLabel>
@@ -519,18 +461,12 @@ class BoardWrite extends Component {
                             toolbar={toolbar}
                             onEditorStateChange={this.onContentStateChangeChn.bind(this)}
                         />
-
-
 											</Col>
 										</Row>
-
-
                     <Button bsStyle="info" pullRight fill type="submit" >
                       Update Profile
                     </Button>
                     <div className="clearfix" />
-
-
                   </form>
                 }
               />
@@ -544,4 +480,3 @@ class BoardWrite extends Component {
 }
 
 export default BoardWrite;
-

@@ -16,7 +16,6 @@ import {
 } from "react-bootstrap";
 import Button from "components/CustomButton/CustomButton.jsx";
 import ErrAction from '../../ErrAction' ;
-import mergeJSON from "merge-json" ;
 
 
 class Language extends Component {
@@ -109,8 +108,8 @@ class Language extends Component {
 
 
 				}
-				
-		}).catch(err => { console.log(err); });		
+
+		}).catch(err => { console.log(err); });
 	}
 
 
@@ -143,7 +142,7 @@ class Language extends Component {
 			dataArr.push(
 				<Col md={1}>
 					<NavLink onClick={(e ) => {this.setState({isLoad : false});}} to={'/robot?uid='+item._id} className="nav-link" activeClassName="active" style={{color:'#fff' }}><Button key={item._id} bsStyle="info" pullLeft fill type="button"  style={style2} >{item.name}</Button></NavLink>
-				</Col>						
+				</Col>
 			);
 		}
 
@@ -221,7 +220,7 @@ class Language extends Component {
 														onChange={(e ) => {changed(e)}}
 													>
 													</FormControl>
-													
+
 													<FormControl.Feedback />
 													<HelpBlock>로봇의 이름을 입력해 주세요</HelpBlock>
 												</FormGroup>
@@ -237,7 +236,7 @@ class Language extends Component {
 														onChange={(e ) => {changed(e)}}
 													>
 													</FormControl>
-													
+
 													<FormControl.Feedback />
 													<HelpBlock>이미지를 등록해 주세요</HelpBlock>
 												</FormGroup>
@@ -254,7 +253,7 @@ class Language extends Component {
 														onChange={(e ) => {changed(e)}}
 													>
 													</FormControl>
-													
+
 													<FormControl.Feedback />
 													<HelpBlock>썸네일 이미지를 등록해 주세요</HelpBlock>
 												</FormGroup>
@@ -271,7 +270,7 @@ class Language extends Component {
 														onChange={(e ) => {changed(e)}}
 													>
 													</FormControl>
-													
+
 													<FormControl.Feedback />
 													<HelpBlock>아이콘 이미지를 등록해 주세요</HelpBlock>
 												</FormGroup>
@@ -288,7 +287,7 @@ class Language extends Component {
 														onChange={(e ) => {changed(e)}}
 													>
 													</FormControl>
-													
+
 													<FormControl.Feedback />
 													<HelpBlock>턴테이블 동영상을 등록해 주세요</HelpBlock>
 												</FormGroup>
@@ -306,7 +305,7 @@ class Language extends Component {
 														onChange={(e ) => {changed(e)}}
 													>
 													</FormControl>
-													
+
 													<FormControl.Feedback />
 													<HelpBlock>동영상 유튜브 링크를 등록해 주세요</HelpBlock>
 												</FormGroup>
@@ -418,8 +417,8 @@ class Language extends Component {
 										</Row>
                   </form>
                 }
-								/> 
-															
+								/>
+
 								<Row>
 									<Col md={12}>
 										<Card

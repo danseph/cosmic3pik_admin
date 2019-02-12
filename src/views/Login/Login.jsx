@@ -1,11 +1,6 @@
 import React, { Component } from 'react';
-import { Route, Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 import cp from '../../cp';
-
-
-
-
 
 export class LoginComp extends Component {
     constructor(props) {
@@ -16,7 +11,7 @@ export class LoginComp extends Component {
 						jump : '' ,
         };
     }
-			
+
     // API를 호출하고 응답받은 토큰을 localStorage에 저장하기 --- (※1)
     api(command) {
         if(command == 'adminCheck'){
@@ -26,7 +21,7 @@ export class LoginComp extends Component {
                     userId: this.state.userId,
                     passwd: this.state.passwd
                 }).then(res => {
-										
+
                     const r = res.data;
                     if(r.msg == '1'){
                         alert('미갑입된 아이디 입니다.');
@@ -50,7 +45,7 @@ export class LoginComp extends Component {
     render() {
 					const changed = (name, e) => this.setState({ [name]: e.target.value });
 					return (
-	
+
 							<div>
 									<div className="limiter">
 											<div className="container-login100">
@@ -98,7 +93,7 @@ export class LoginComp extends Component {
 							</div>
 
 					);
-				
+
 
     }
 }

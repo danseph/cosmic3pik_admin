@@ -63,42 +63,6 @@ class Dashboard extends Component {
       autoDismiss: 15
     });
   }
-  /*
-	componentDidMount() {
-    this.setState({ _notificationSystem: this.refs.notificationSystem });
-    var _notificationSystem = this.refs.notificationSystem;
-    var color = Math.floor(Math.random() * 4 + 1);
-    var level;
-    switch (color) {
-      case 1:
-        level = "success";
-        break;
-      case 2:
-        level = "warning";
-        break;
-      case 3:
-        level = "error";
-        break;
-      case 4:
-        level = "info";
-        break;
-      default:
-        break;
-    }
-    _notificationSystem.addNotification({
-      title: <span data-notify="icon" className="pe-7s-gift" />,
-      message: (
-        <div>
-          Welcome to <b>Light Bootstrap Dashboard</b> - a beautiful freebie for
-          every web developer.
-        </div>
-      ),
-      level: level,
-      position: "tr",
-      autoDismiss: 15
-    });
-  }
-	*/
   componentDidUpdate(e) {
     if (
       window.innerWidth < 993 &&
@@ -114,9 +78,9 @@ class Dashboard extends Component {
     }
   }
   render() {
-		if(!this.state.isLogin && this.props.location.pathname == '/login'){
+		if(!this.state.isLogin && this.props.location.pathname === '/login'){
 				return (<Login />);
-		}	
+		}
 		if(this.state.isLogin){
 			return (
 				<div className="wrapper">
@@ -126,20 +90,6 @@ class Dashboard extends Component {
 						<Header {...this.props} />
 						<Switch>
 							{dashboardRoutes.map((prop, key) => {
-
-								/*if (prop.name === "Notifications")
-									return (
-										<Route
-											path={prop.path}
-											key={key}
-											render={routeProps => (
-												<prop.component
-													{...routeProps}
-													handleClick={this.handleNotificationClick}
-												/>
-											)}
-										/>
-									);*/
 								if (prop.redirect)
 									return <Redirect from={prop.path} to={prop.to} key={key} />;
 								return (
@@ -154,7 +104,7 @@ class Dashboard extends Component {
 		}else{
 				return <Redirect from='/' to='/login' />;
 
-			
+
 		}
   }
 }
