@@ -12,7 +12,7 @@ import Button from "components/CustomButton/CustomButton.jsx";
 import axios from 'axios';
 import cp from '../../cp';
 import Checkbox from 'components/CustomCheckbox/CustomCheckbox';
-import { ContentState,  EditorState, RichUtils, convertToRaw , convertFromRaw , convertFromHTML ,decorator } from 'draft-js';
+import { ContentState,  EditorState, convertToRaw } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import { style } from "variables/Variables.jsx";
 import htmlToDraft from 'html-to-draftjs';
@@ -50,13 +50,13 @@ class BoardWrite extends Component {
 			};
 	}
 
-  onContentStateChangeKr : Function = (editorState) => {
+  onContentStateChangeKr = (editorState) => {
     const rawContent = convertToRaw(editorState.getCurrentContent());
     const html = draftToHtml(rawContent);
     const contentBlock = htmlToDraft(html);
     if (contentBlock) {
-      const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
-      const outputEditorState = EditorState.createWithContent(contentState);
+      // const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
+      // const outputEditorState = EditorState.createWithContent(contentState);
 			this.setState({
 				editorKr : editorState,
 				contentsKr : html,
@@ -65,13 +65,13 @@ class BoardWrite extends Component {
     }
   };
 
-  onContentStateChangeEn : Function = (editorState) => {
+  onContentStateChangeEn = (editorState) => {
     const rawContent = convertToRaw(editorState.getCurrentContent());
     const html = draftToHtml(rawContent);
     const contentBlock = htmlToDraft(html);
     if (contentBlock) {
-      const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
-      const outputEditorState = EditorState.createWithContent(contentState);
+      // const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
+      // const outputEditorState = EditorState.createWithContent(contentState);
 			this.setState({
 				editorEn : editorState,
 				contentsEn : html,
@@ -80,13 +80,13 @@ class BoardWrite extends Component {
     }
   };
 
-  onContentStateChangeChn : Function = (editorState) => {
+  onContentStateChangeChn = (editorState) => {
     const rawContent = convertToRaw(editorState.getCurrentContent());
     const html = draftToHtml(rawContent);
     const contentBlock = htmlToDraft(html);
     if (contentBlock) {
-      const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
-      const outputEditorState = EditorState.createWithContent(contentState);
+      // const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
+      // const outputEditorState = EditorState.createWithContent(contentState);
 			this.setState({
 				editorChn : editorState,
 				contentsChn : html,

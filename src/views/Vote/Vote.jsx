@@ -2,26 +2,22 @@ import React, { Component } from "react";
 import { Grid, Row, Col, Table } from "react-bootstrap";
 
 import Card from "components/Card/Card.jsx";
-import { thArray, tdArray, style } from "variables/Variables.jsx";
+import { style } from "variables/Variables.jsx";
 import { NavLink } from "react-router-dom";
 import axios from 'axios';
 import cp from '../../cp';
 
 class VoteList extends Component {
-	//zz
 	constructor(props) {
 		super(props);
 		this.state = {
-			// or Date or Moment.js
 			isLoad: false,
 			data: '',
-
 		};
 
 		const queryString = require('query-string');
 		const parsed = queryString.parse(this.props.location.search);
 
-		//console.log(parsed);
 		if (!this.state.isLoad) {
 			axios.post(cp.server_ip + '/api/vote', {
 				proc: 'voteList',
@@ -39,10 +35,10 @@ class VoteList extends Component {
 
 
 	render() {
-		var tableTd = new Array();
-		var tableTh = new Array();
+		var tableTd = [];
+		var tableTh = [];
 		tableTh.push(
-			<tr>
+			<tr key="1">
 				<th style={Object.assign({}, style.Config.w10, style.Config.wordCenter, style.Config.wordBlod)} >날짜</th>
 				<th style={Object.assign({}, style.Config.w10, style.Config.wordCenter, style.Config.wordBlod)} >순번</th>
 				<th style={Object.assign({}, style.Config.w10, style.Config.wordCenter, style.Config.wordBlod)} >투표타입</th>
@@ -58,7 +54,7 @@ class VoteList extends Component {
 		for (var item of this.state.data) {
 			var link = '/voteWrite?uid=' + item._id;
 			tableTd.push(
-				<tr style={style.Config.pointer}  >
+				<tr style={style.Config.pointer} key={item._id} >
 					<td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)}><NavLink to={link} > {item.voteDate}</NavLink></td>
 					<td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)}>{item.voteNumber}</td>
 					<td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)}>{item.voteType}</td>

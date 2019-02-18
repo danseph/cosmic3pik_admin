@@ -3,32 +3,22 @@ import {
   Grid,
   Row,
   Col,
-  FormGroup,
   ControlLabel,
-  FormControl
 } from "react-bootstrap";
 
 import { Card } from "components/Card/Card.jsx";
 import { FormInputs } from "components/FormInputs/FormInputs.jsx";
-import { UserCard } from "components/UserCard/UserCard.jsx";
 import Button from "components/CustomButton/CustomButton.jsx";
 import CustomDatePicker from "components/CustomDatepicker/CustomDatepicker.jsx";
-import avatar from "assets/img/faces/face-3.jpg";
-import { NavDropdown  , MenuItem} from "react-bootstrap";
 import axios from 'axios';
 import cp from '../../cp';
 import Select from 'react-select';
 import Checkbox from 'components/CustomCheckbox/CustomCheckbox';
 
-
 class VoteWrite extends Component {
-  //zzz
   constructor(props, context) {
       super(props, context);
-
-      // Initial state with date
       this.state = {
-          // or Date or Moment.js
           voteId : '',
           voteDate: new Date(),
           voteNumber : '' ,
@@ -54,23 +44,20 @@ class VoteWrite extends Component {
   addFirstVoteReword(){		// 참여보상 추가 이벤트
     let temp = this.state.firstVoteReword;
     temp.push({'startNum' : '' , 'endNum' : '' , 'coinNum' : '' , 'pointNum' : '' , 'rewordEtc' : 'firstVote'});
-    this.setState({ ['firstVoteReword']: temp})
+    this.setState({ firstVoteReword: temp})
   }
   addFirstWinReword(){		// 정답보상 추가 이벤트
     let temp = this.state.firstWinReword;
     temp.push({'startNum' : '' , 'endNum' : '' , 'coinNum' : '' , 'pointNum' : '' , 'rewordEtc' : 'firstWin'});
-    this.setState({ ['firstWinReword']: temp})
+    this.setState({ firstWinReword: temp})
   }
   addEtcReword(){					// 그외보상 추가 이벤트
     let temp = this.state.etcReword;
     temp.push({'startNum' : ''  , 'coinNum' : '' , 'pointNum' : '' , 'rewordEtc' : 'luckyVote'});
-    this.setState({ ['etcReword']: temp})
+    this.setState({ etcReword: temp})
   }
 
-
   render() {
-
-
     const queryString = require('query-string');
     const parsed = queryString.parse(this.props.location.search);
     //console.log(parsed);
@@ -79,7 +66,7 @@ class VoteWrite extends Component {
     var rewordCoinValue = {};			//코인 항목 리스트 저장
     for(var coinItem of this.state.rewordCoinList){			//코인 리스트
       rewordCoinObject.push({ value: coinItem.key, label: coinItem.name+'('+coinItem.nameKR+')' , class: 'coinList' , name : coinItem.name });
-      if(coinItem.key == this.state.rewordCoin){
+      if(coinItem.key === this.state.rewordCoin){
         rewordCoinValue = {value: this.state.rewordCoin, label: coinItem.name+'('+coinItem.nameKR+')' , class: 'coinList' , name: coinItem.name };
       }
     }
@@ -138,7 +125,6 @@ class VoteWrite extends Component {
       }).then(res2 => {
           if(res2.data.err){window.location.href='/';}
           else{
-            console.log(res2);
             this.setState({
               rewordCoinList : res2.data.coinList,
               isLoad : true ,
@@ -157,7 +143,7 @@ class VoteWrite extends Component {
     }
 
     const changedCheck = (e , type , value , filedName) => {
-      if(type == 'checkbox'){
+      if(type === 'checkbox'){
         this.setState({ [filedName]:value });
         return false;
       }
@@ -166,7 +152,7 @@ class VoteWrite extends Component {
     };
 
     const changed = (e , arrayNum , filedName) => {
-      if(e.class == 'coinList'){ // 코인선택일시
+      if(e.class === 'coinList'){ // 코인선택일시
         this.setState({ rewordCoin: e.value })
         return false;
       }
@@ -186,13 +172,13 @@ class VoteWrite extends Component {
     var firstWinRewordFiled = [];  // 정답보상 input 배열
     var etcRewordFiled = [];  // 그외보상 input 배열
 
-    var num = 0;
-    for( item of this.state.firstVoteReword){		// 참여보상 input 배열 만들기
+    var num1 = 0;
+    for (let item of this.state.firstVoteReword) {		// 참여보상 input 배열 만들기
       firstVoteRewordFiled.push(
-          <Row>
+          <Row key={num1}>
             <FormInputs
               changeAction = {changed}
-              arrayNum = {num}
+              arrayNum = {num1}
               filedName = 'firstVoteReword'
               ncols={["col-md-2" , "col-md-2" , "col-md-2" , "col-md-2"]}
               proprieties={[
@@ -245,7 +231,7 @@ class VoteWrite extends Component {
             <Col md={1}>
             <ControlLabel>&nbsp;</ControlLabel>
               <div>
-                <Button  bsStyle="danger" fill type="button" filedName = 'firstVoteReword'  removeAction={removeField} cntNum={num} fill type="button" >
+                <Button  bsStyle="danger" filedName = 'firstVoteReword'  removeAction={removeField} cntNum={num1} fill type="button" >
                   delete
                 </Button>
               </div>
@@ -253,16 +239,16 @@ class VoteWrite extends Component {
 
           </Row>
       )
-      num++;
+      num1++;
     }
 
-    var num = 0;
-    for( item of this.state.firstWinReword ){		// 참여보상 input 배열 만들기
+    var num2 = 0;
+    for (let item of this.state.firstWinReword ) {		// 참여보상 input 배열 만들기
       firstWinRewordFiled.push(
-          <Row>
+          <Row key={num2}>
             <FormInputs
               changeAction = {changed}
-              arrayNum = {num}
+              arrayNum = {num2}
               filedName = 'firstWinReword'
               ncols={["col-md-2" , "col-md-2" , "col-md-2" , "col-md-2"]}
               proprieties={[
@@ -315,20 +301,20 @@ class VoteWrite extends Component {
             <Col md={1}>
             <ControlLabel>&nbsp;</ControlLabel>
               <div>
-                <Button  bsStyle="danger" fill type="button" filedName = 'firstWinReword' removeAction={removeField} cntNum={num}  fill type="button" >
+                <Button  bsStyle="danger" filedName = 'firstWinReword' removeAction={removeField} cntNum={num2}  fill type="button" >
                   delete
                 </Button>
               </div>
             </Col>
           </Row>
       )
-      num++;
+      num2++;
     }
 
     var num = 0;
-    for(var item of this.state.etcReword){		// 참여보상 input 배열 만들기
+    for (let item of this.state.etcReword) {		// 참여보상 input 배열 만들기
       etcRewordFiled.push(
-          <Row>
+          <Row key={num}>
             <FormInputs
               changeAction = {changed}
               arrayNum = {num}
@@ -373,7 +359,7 @@ class VoteWrite extends Component {
             <Col md={1}>
             <ControlLabel>&nbsp;</ControlLabel>
               <div>
-                <Button  bsStyle="danger" fill type="button" filedName = 'etcReword' removeAction={removeField} cntNum={num}  fill type="button" >
+                <Button  bsStyle="danger" filedName = 'etcReword' removeAction={removeField} cntNum={num}  fill type="button" >
                   delete
                 </Button>
               </div>
@@ -387,14 +373,13 @@ class VoteWrite extends Component {
     // 토큰에따른 회차
     var voteNumberOption = [];
     voteNumberOption.push({value : '' , view : '선택해주세요'});
-    if(this.state.voteType == 'BTC'){
+    if(this.state.voteType === 'BTC'){
       for(var i = 1 ; i < 13 ; i++){
         voteNumberOption.push({value : i*2 , view : i*2});
       }
-    }else if(this.state.voteType == 'ETH'){
-      for(var i = 1 ; i < 13 ; i++){
-        voteNumberOption.push({value : (i*2)-1 , view : (i*2)-1});
-
+    }else if(this.state.voteType === 'ETH'){
+      for(var j = 1 ; j < 13 ; j++){
+        voteNumberOption.push({value : (j*2)-1 , view : (j*2)-1});
       }
     }
 

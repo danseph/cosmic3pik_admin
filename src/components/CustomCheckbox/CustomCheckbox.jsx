@@ -13,7 +13,7 @@ class CustomCheckbox extends Component {
 		this.props.changeAction( '' ,'checkbox' , !this.props.isChecked  ,  this.props.name);
   }
   render() {
-    const { isChecked, number, label, inline, ...rest } = this.props;
+    const { isChecked, number, label, inline, changeAction, ...rest } = this.props;
     const classes =
       inline !== undefined ? "checkbox checkbox-inline" : "checkbox";
     return (

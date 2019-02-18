@@ -1,39 +1,10 @@
 import React, { Component } from "react";
-import { FormGroup, ControlLabel, FormControl, Row ,HelpBlock } from "react-bootstrap";
-
-
+import { FormGroup, ControlLabel, FormControl ,HelpBlock } from "react-bootstrap";
 
 export class FormInputs extends Component {
-/*
-	FieldGroup({ label, ...props }){
-		return (
-			<FormGroup>
-				<ControlLabel>{label}</ControlLabel>
-				<FormControl {...props}  onChange={e => this.changed( e)}  />
-			</FormGroup>
-		);
-	}
-  render() {
-		const changed = (e) => {console.log(e);};
-    var row = [];
-    for (var i = 0; i < this.props.ncols.length; i++) {
-      row.push(
-        <div key={i} className={this.props.ncols[i]}>
-          <FieldGroup {...this.props.proprieties[i]} />
-        </div>
-      );
-    }
-
-    return <Row>{row}</Row>;
-  }
-}
-*/
-
   constructor(props, context) {
     super(props, context);
-
     this.handleChange = this.handleChange.bind(this);
-
     this.state = {
       value:  this.props.defaultValue,
 			textConfirm : this.props.textConfirm
@@ -50,10 +21,7 @@ export class FormInputs extends Component {
 				break;
 			default:
 				return null;
-			
-
 		}
-
     return null;
   }
 
@@ -61,18 +29,16 @@ export class FormInputs extends Component {
     this.setState({ value: e.target.value });
   }
 
-	
   render() {
     var row = [];
 		var option = [];
 
     for (var i = 0; i < this.props.ncols.length; i++) {
-			if(this.props.proprieties[i].type == 'select'){
+			if(this.props.proprieties[i].type === 'select'){
 				option[i] = [];
 				for (var j = 0; j < this.props.proprieties[i].option.length; j++) {
 					option[i].push(<option key={i+'.'+j} value={this.props.proprieties[i].option[j].value}>{this.props.proprieties[i].option[j].view}</option>)
 				}
-
 			}
 
       row.push(
@@ -95,7 +61,7 @@ export class FormInputs extends Component {
 						>
 						{option[i]}
 						</FormControl>
-						
+
 						<FormControl.Feedback />
 						<HelpBlock>{this.props.proprieties[i].description}</HelpBlock>
 					</FormGroup>

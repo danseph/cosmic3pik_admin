@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Grid, Row, Col, Table } from "react-bootstrap";
 
 import Card from "components/Card/Card.jsx";
-import { thArray, tdArray ,style } from "variables/Variables.jsx";
+import { style } from "variables/Variables.jsx";
 import { NavLink } from "react-router-dom";
 import axios from 'axios';
 import cp from '../../cp';
@@ -12,16 +12,13 @@ class BoardList extends Component {
   constructor(props) {
     super(props);
 		this.state = {
-				// or Date or Moment.js
 				isLoad : false,
 				data: '',
-
 		};
 
 		const queryString = require('query-string');
 		const parsed = queryString.parse(this.props.location.search);
 
-		//console.log(parsed);
 		if(!this.state.isLoad){
 			axios.post(cp.server_ip+'/api/board', {
 					proc: 'boardList',
@@ -29,11 +26,8 @@ class BoardList extends Component {
 					userToken: window.localStorage['nu_token'],
 					page : parsed.page
 			}).then(res => {
-					console.log(res.data);
-
 					if(res.data.err){window.location.href='/';}
 					else{this.setState({data : res.data , isLoad:true})}
-					
 			}).catch(err => { console.log(err); });
 		}
 
@@ -41,22 +35,22 @@ class BoardList extends Component {
 
 
   render() {
-		var tableTd = new Array();
-		var tableTh = new Array();
+		var tableTd = [];
+		var tableTh = [];
 		tableTh.push(
-			<tr>
+			<tr key="1">
 				<th style={Object.assign({}, style.Config.w20, style.Config.wordCenter, style.Config.wordBlod)} >날짜</th>
 				<th style={Object.assign({}, style.Config.w10, style.Config.wordCenter, style.Config.wordBlod)} >카테고리</th>
 				<th style={Object.assign({}, style.Config.w10, style.Config.wordCenter, style.Config.wordBlod)} >하위 카테고리</th>
 				<th style={Object.assign({}, style.Config.w60, style.Config.wordLeft, style.Config.wordBlod)} >제목</th>
 			</tr>
-		
+
 		)
 
 		for(var item of this.state.data){
 				var link = '/boardWrite?uid='+item._id;
 				tableTd.push(
-				<tr>
+				<tr key={item._id}>
 					<td style={Object.assign({}, style.Config.w20, style.Config.wordCenter)} ><NavLink to={link} > {item.date}</NavLink></td>
 					<td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)} >{item.boardCate}</td>
 					<td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)} >{item.subCate}</td>

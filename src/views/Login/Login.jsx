@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import Button from "components/CustomButton/CustomButton.jsx";
 import cp from '../../cp';
+import './login.scss';
 
 export class LoginComp extends Component {
     constructor(props) {
@@ -10,93 +12,87 @@ export class LoginComp extends Component {
             passwd: '' ,
 						jump : '' ,
         };
-    }
+		}
 
-    // API를 호출하고 응답받은 토큰을 localStorage에 저장하기 --- (※1)
-    api(command) {
-        if(command == 'adminCheck'){
-            if(this.state.userId != '' && this.state.passwd != ''){
-                axios.post(cp.server_ip+'/api/users', {
-                    proc: command,
-                    userId: this.state.userId,
-                    passwd: this.state.passwd
-                }).then(res => {
+		componentDidMount() {
+			this._input.focus();
+		}
 
-                    const r = res.data;
-                    if(r.msg == '1'){
-                        alert('미갑입된 아이디 입니다.');
-                    }else if(r.msg == '2'){
-                        alert('비밀번호가 맞지 않습니다.');
-                    }else if(r.msg == '4'){
-                        alert('관리자가 아닙니다.');
-                    }else if (r.status && r.token) {
-                        // 인증 토큰을 localStorage에 저장하기
-                        window.localStorage['nu_id'] = r.token.userId;
-                        window.localStorage['nu_token'] = r.token.token;
-                        window.location.href='/';
-                    }
-                }).catch(err => { console.log(err); });
-            }else{
-                alert('이메일 혹은 비밀번호를 입력해주세요');
-            }
+    login() {
+			if (this.state.userId === '' || this.state.passwd === '') {
+				return alert('이메일 혹은 비밀번호를 입력해주세요');
+			}
+			axios.post(cp.server_ip+'/api/login', {
+				id: this.state.userId,
+				pass: this.state.passwd,
+				isAdmin: true,
+			}).then(res => {
+				if (!res.data.err && res.data.token) {
+					window.localStorage['nu_id'] = res.data.token.userId;
+					window.localStorage['nu_token'] = res.data.token.token;
+					window.location.href='/';
+					return false;
 				}
+				// not join or invaild password
+				if (res.data.errStatus === 1 || res.data.errStatus === 2) {
+					alert('정보를 확인해주세요.');
+				} else if(res.data.errStatus === 25) {
+					alert('관리자가 아닙니다.');
+				} else {
+					alert('관리자에게 문의하세요.');
+				}
+			}).catch(err => { console.log(err); });
 		}
 
     render() {
-					const changed = (name, e) => this.setState({ [name]: e.target.value });
-					return (
+			const enterEvent = e =>  e.key === 'Enter' ? this.login() : false;
+			return (
+				<div className='login-wrap'>
+					<div className='login-box'>
+						<form className="login-form">
 
-							<div>
-									<div className="limiter">
-											<div className="container-login100">
-													<div className="wrap-login100 p-l-110 p-r-110 p-b-33">
-															<p className='loginTitle' >Login</p>
-															<form className="login100-form validate-form flex-sb flex-w">
-																	<div className="p-t-31 p-b-9">
-																			<span className="txt1" >
-																					Email
-																			</span>
-																	</div>
-																	<div className="wrap-input100 validate-input" data-validate="Username is required">
-																			<input className="input100 email" type="text" name="email"  value={this.state.userId} onChange={e => changed('userId', e)}/>
-																			<span className="focus-input100"></span>
-																	</div>
-
-																	<div className="p-t-13 p-b-9">
-																			<span className="txt1">
-																					Password
-																			</span>
-
-																			<a href="#" className="txt2 bo1 m-l-5">
-																					Forgot?
-																			</a>
-																	</div>
-
-
-
-																	<div className="wrap-input100 validate-input" data-validate="Password is required">
-																			<input className="input100 pass" type="password" name="pass" value={this.state.passwd}  onChange={e => changed('passwd', e)}/>
-																			<span className="focus-input100"></span>
-																	</div>
-
-																	<div className="container-login100-form-btn m-t-30 m-b-20">
-																			<div className="login100-form-btn login" onClick={e => this.api('adminCheck')}>
-																					Login
-																			</div>
-																	</div>
-
-
-															</form>
-													</div>
-											</div>
-									</div>
+							<div className="login-field login-email-box">
+								<span className="login-email-text" >
+									Email
+								</span>
+								<div className="login-email-input" data-validate="Username is required">
+									<input
+										className="email-input"
+										type="text"
+										name="email"
+										value={ this.state.userId }
+										onChange= {e => this.setState({ userId: e.target.value }) }
+										onKeyPress={enterEvent}
+										autoFocus
+										ref={c => (this._input = c)}/>
+								</div>
 							</div>
 
-					);
+							<div className="login-field login-password-box">
+								<span className="login-password-text">
+									Password
+								</span>
+								<div className="login-password-input" data-validate="Password is required">
+									<input
+										className="password-input"
+										type="password"
+										name="pass"
+										value={this.state.passwd}
+										onChange={ e => this.setState({ passwd: e.target.value }) }
+										onKeyPress={enterEvent}/>
+								</div>
+							</div>
 
-
+							<div className="login-field login-button-box">
+								<Button bsStyle="info" simple type="button" bsSize="small" onClick={e => this.login()}>
+									Login
+								</Button>
+							</div>
+						</form>
+					</div>
+				</div>
+			);
     }
 }
-
 
 export default LoginComp;

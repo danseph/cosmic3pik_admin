@@ -16,21 +16,34 @@ import Login from "views/Login/Login";
 class Dashboard extends Component {
   constructor(props) {
     super(props);
-    //this.componentDidMount = this.componentDidMount.bind(this);
     this.handleNotificationClick = this.handleNotificationClick.bind(this);
     this.state = {
       _notificationSystem: null,
 			isLogin : false
     };
 
-    axios.post(cp.server_ip+'/api/users', {
-        proc: 'adminCheckToken',
-        userId: window.localStorage['nu_id'],
-        userToken: window.localStorage['nu_token']
-		}).then(res => {
-				this.setState({ isLogin: res.data.status });
+    this.checkToken();
+  }
+
+  checkToken() {
+    if (!window.localStorage['nu_token']) return;
+    axios({
+      url: `${cp.server_ip}/api/admin/check`,
+      method: 'GET',
+      headers: {
+          Authorization: 'Bearer ' + window.localStorage['nu_token'],
+      }
+    }).then(res => {
+        if (res.data.err) {
+          window.localStorage.removeItem('nu_id');
+          window.localStorage.removeItem('nu_token');
+          return;
+        }
+        const isLogin = !!res.data;
+				this.setState({ isLogin });
 		}).catch(err => { console.log(err); });
   }
+
   handleNotificationClick(position) {
     var color = Math.floor(Math.random() * 4 + 1);
     var level;
@@ -78,10 +91,10 @@ class Dashboard extends Component {
     }
   }
   render() {
-		if(!this.state.isLogin && this.props.location.pathname === '/login'){
+		if (!this.state.isLogin && this.props.location.pathname === '/login') {
 				return (<Login />);
 		}
-		if(this.state.isLogin){
+		if (this.state.isLogin) {
 			return (
 				<div className="wrapper">
 					<NotificationSystem ref="notificationSystem" style={style} />
@@ -101,10 +114,8 @@ class Dashboard extends Component {
 					</div>
 				</div>
 			);
-		}else{
+		} else {
 				return <Redirect from='/' to='/login' />;
-
-
 		}
   }
 }

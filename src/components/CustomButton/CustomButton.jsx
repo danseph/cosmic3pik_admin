@@ -5,18 +5,19 @@ import PropTypes from "prop-types";
 
 class CustomButton extends Component {
   render() {
-    const { fill, simple, pullRight, round, block, ...rest } = this.props;
+    const { fill, simple, pullLeft, pullRight, round, block, removeAction, filedName, cntNum, ...rest } = this.props;
 
     const btnClasses = cx({
       "btn-fill": fill,
       "btn-simple": simple,
+      "pull-left": pullLeft,
       "pull-right": pullRight,
       "btn-block": block,
       "btn-round": round
     });
 
-		if(this.props.removeAction){
-			 return <Button onClick={(e) => {this.props.removeAction(this.props.filedName , this.props.cntNum)}} className={btnClasses} {...rest} />;
+		if(removeAction){
+			 return <Button onClick={(e) => {removeAction(filedName, cntNum)}} className={btnClasses} {...rest} />;
 
 		}else{
 		   return <Button className={btnClasses} {...rest} />;
@@ -28,6 +29,7 @@ class CustomButton extends Component {
 CustomButton.propTypes = {
   fill: PropTypes.bool,
   simple: PropTypes.bool,
+  pullLeft: PropTypes.bool,
   pullRight: PropTypes.bool,
   block: PropTypes.bool,
   round: PropTypes.bool

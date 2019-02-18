@@ -334,10 +334,14 @@ var style = {
 		},
 		hp450:{
 			height:'600px'
-		}
-
-	}
-
+		},
+    floatL: {
+      float: 'left',
+    },
+    floatR: {
+      float: 'right'
+    }
+  }
 };
 
 //

@@ -3,18 +3,12 @@ import {
   Grid,
   Row,
   Col,
-  FormGroup,
   ControlLabel,
-  FormControl
 } from "react-bootstrap";
 
 import { Card } from "components/Card/Card.jsx";
 import { FormInputs } from "components/FormInputs/FormInputs.jsx";
-import { UserCard } from "components/UserCard/UserCard.jsx";
 import Button from "components/CustomButton/CustomButton.jsx";
-import CustomDatePicker from "components/CustomDatepicker/CustomDatepicker.jsx";
-import avatar from "assets/img/faces/face-3.jpg";
-import { NavDropdown  , MenuItem ,HelpBlock} from "react-bootstrap";
 import axios from 'axios';
 import cp from '../../cp';
 import Select from 'react-select';
@@ -23,7 +17,6 @@ class Basic extends Component {
   constructor(props, context) {
       super(props, context);
 
-      // Initial state with date
       this.state = {
           configId : '',
           coinList : [] ,
@@ -60,82 +53,75 @@ class Basic extends Component {
               'contRewordM' : '' ,
               'signReword' : '' ,
 
-            }
-          ,
+            },
           isLoad:false
-
-
       };
-
-
   }
 
   addCoinList(){
     let temp = this.state.coinList;
     temp.push({'key' : '' , 'contractAddress' : '' ,  'symbol' : '' , 'name' : '' , 'nameKR' : ''});
-    this.setState({ ['coinList']: temp})
+    this.setState({ coinList: temp})
   }
 
   addRandomVoteRewordD(){		// 일간 참가자 추첨 이벤트
     let temp = this.state.randomVoteRewordD;
     temp.push({'roundNum' : '' ,  'coinNum' : '' , 'pointNum' : '' , 'rewordEtc' : 'randomVoteD'});
-    this.setState({ ['randomVoteRewordD']: temp})
+    this.setState({ randomVoteRewordD: temp})
   }
   addRandomWinRewordD(){		// 일간 정답자 추첨 이벤트
     let temp = this.state.randomWinRewordD;
     temp.push({'roundNum' : '' , 'coinNum' : '' , 'pointNum' : '' , 'rewordEtc' : 'randomWinD'});
-    this.setState({ ['randomWinRewordD']: temp})
+    this.setState({ randomWinRewordD: temp})
   }
   addRankRewordD(){					// 일간 랭킹 이벤트
     let temp = this.state.rankRewordD;
     temp.push({'roundNum' : '' , 'coinNum' : '' , 'pointNum' : '' , 'rewordEtc' : 'rankD'});
-    this.setState({ ['rankRewordD']: temp})
+    this.setState({ rankRewordD: temp})
   }
-
 
   addRandomVoteRewordW(){		// 주간 참가자 추첨 이벤트
     let temp = this.state.randomVoteRewordW;
     temp.push({'roundNum' : '' , 'coinNum' : '' , 'pointNum' : '' , 'rewordEtc' : 'randomVoteW'});
-    this.setState({ ['randomVoteRewordW']: temp})
+    this.setState({ randomVoteRewordW: temp})
   }
   addRandomWinRewordW(){		// 주간 정답자 추첨 이벤트
     let temp = this.state.randomWinRewordW;
     temp.push({'roundNum' : '' , 'coinNum' : '' , 'pointNum' : '' , 'rewordEtc' : 'randomWinW'});
-    this.setState({ ['randomWinRewordW']: temp})
+    this.setState({ randomWinRewordW: temp})
   }
   addRankRewordW(){					// 주간 랭킹 이벤트
     let temp = this.state.rankRewordW;
     temp.push({'roundNum' : ''  , 'coinNum' : '' , 'pointNum' : '' , 'rewordEtc' : 'rankW'});
-    this.setState({ ['rankRewordW']: temp})
+    this.setState({ rankRewordW: temp})
   }
-
 
   addRandomVoteRewordM(){		// 월간 참가자 추첨 이벤트
     let temp = this.state.randomVoteRewordM;
     temp.push({'roundNum' : '' , 'coinNum' : '' , 'pointNum' : '' , 'rewordEtc' : 'randomWinM'});
-    this.setState({ ['randomVoteRewordM']: temp})
+    this.setState({ randomVoteRewordM: temp})
   }
   addRandomWinRewordM(){		// 월간 정답자 추첨 이벤트
     let temp = this.state.randomWinRewordM;
     temp.push({'roundNum' : '' , 'coinNum' : '' , 'pointNum' : '' , 'rewordEtc' : 'randomVoteM'});
-    this.setState({ ['randomWinRewordM']: temp})
+    this.setState({ randomWinRewordM: temp})
   }
   addRankRewordM(){					// 월간 랭킹 이벤트
     let temp = this.state.rankRewordM;
     temp.push({'roundNum' : ''  , 'coinNum' : '' , 'pointNum' : '' , 'rewordEtc' : 'rankM'});
-    this.setState({ ['rankRewordM']: temp})
+    this.setState({ rankRewordM: temp})
   }
 
-  addRankRewordM(){					// 월간 최다 투표자 이벤트
+  addRankRewordM2(){					// 월간 최다 투표자 이벤트
     let temp = this.state.rankVoteRewordM;
     temp.push({'roundNum' : ''  , 'coinNum' : '' , 'pointNum' : '' , 'rewordEtc' : 'rankVoteM'});
-    this.setState({ ['rankVoteRewordM']: temp})
+    this.setState({ rankVoteRewordM: temp})
   }
 
-  addRankRewordM(){					// 월간 최다 정답자 이벤트
+  addRankRewordM3(){					// 월간 최다 정답자 이벤트
     let temp = this.state.rankWinRewordM;
     temp.push({'roundNum' : ''  , 'coinNum' : '' , 'pointNum' : '' , 'rewordEtc' : 'rankWinM'});
-    this.setState({ ['rankWinRewordM']: temp})
+    this.setState({ rankWinRewordM: temp})
   }
 
   render() {
@@ -146,7 +132,9 @@ class Basic extends Component {
           userToken: window.localStorage['nu_token']
       }).then(res => {
           if(res.data.err){window.location.href='/';}
-          else{
+          else {
+            const rewordCoin = res.data.rewordCoin && Array.isArray(res.data.rewordCoin)
+              ? res.data.rewordCoin[0] : [];
             this.setState({
               configId : res.data._id,
               coinList: res.data.coinList,
@@ -165,40 +153,35 @@ class Basic extends Component {
               contRewordW : res.data.contRewordW,
               contRewordM : res.data.contRewordM,
               signReword : res.data.signReword,
-              rewordCoin : res.data.rewordCoin[0],
+              rewordCoin: rewordCoin,
               isLoad : true ,
 
             })
           }
-
-          console.log(res.data._id);
-
       }).catch(err => { console.log(err); });
     }
 
     var rewordCoinObject = [];			//코인 항목 리스트 저장
     var rewordCoinValue = [];
-    for( var item of Object.keys(this.state.rewordCoin)){
-      rewordCoinObject[item] = [];
+    for( var k of Object.keys(this.state.rewordCoin)){
+      rewordCoinObject[k] = [];
       for(var coinItem of this.state.coinList){			//코인 리스트
-        rewordCoinObject[item].push({ value: coinItem.key, label: coinItem.name+'('+coinItem.nameKR+')' , class: 'coinList' , name : item });
-        if(coinItem.key == this.state.rewordCoin[item]){
-          rewordCoinValue[item] = {value: this.state.rewordCoin[item], label: coinItem.name+'('+coinItem.nameKR+')' , class: 'coinList' , name : item }
+        rewordCoinObject[k].push({ value: coinItem.key, label: coinItem.name+'('+coinItem.nameKR+')' , class: 'coinList' , name : k });
+        if(coinItem.key === this.state.rewordCoin[k]){
+          rewordCoinValue[k] = {value: this.state.rewordCoin[k], label: coinItem.name+'('+coinItem.nameKR+')' , class: 'coinList' , name : k }
 
         }
       }
     }
 
-
     const removeField = (name , i) => {		// 보상항목 제거 이벤트
       let temp = this.state[name];
       temp.splice(i,1);
       this.setState({ [name]: temp })
-
     }
 
     const changed = (e , arrayNum , filedName) => {
-      if(e.class == 'coinList'){ // 코인선택일시
+      if(e.class === 'coinList'){ // 코인선택일시
         let temp = this.state.rewordCoin;
         temp[e.name] = e.value;
         this.setState({ rewordCoin: temp })
@@ -214,10 +197,6 @@ class Basic extends Component {
         this.setState({ [e.target.name]: e.target.value })
       }
     };
-    const changedValue = (name, data) => {this.setState({ [name]: data })};
-
-
-
 
     var defaultRewordArr = {
       randomVoteRewordD : [],
@@ -231,8 +210,6 @@ class Basic extends Component {
       rankRewordM : [] ,
       rankVoteRewordM : [] ,
       rankWinRewordM : [] ,
-
-
     }
 
     var defaultRewordArrNont = {	//논타켓 보상 에리어
@@ -244,16 +221,11 @@ class Basic extends Component {
 
     var coinList = [];  // 코인 리스트
 
-
-
-
     var makeRewordField = (cate) =>{
       var num = 0;
       for( var item of this.state[cate]){		// 참여보상 input 배열 만들기
         defaultRewordArr[cate].push(
-            <Row>
-
-
+            <Row key={num}>
               <FormInputs
                 changeAction = {changed}
                 arrayNum = {num}
@@ -298,7 +270,7 @@ class Basic extends Component {
               <Col md={1}>
               <ControlLabel>&nbsp;</ControlLabel>
                 <div>
-                  <Button  bsStyle="danger" fill type="button" filedName = {cate}  removeAction={removeField} cntNum={num} fill type="button" >
+                  <Button type="button" fill bsStyle="danger" filedName={cate} removeAction={removeField} cntNum={num}>
                     delete
                   </Button>
                 </div>
@@ -311,12 +283,11 @@ class Basic extends Component {
 
     }
 
-
     var makeRewordFieldNont = (cate) =>{
       var num = 0;
       for( var item of this.state[cate]){		// 논타켓 참여보상 input 배열 만들기
         defaultRewordArrNont[cate].push(
-            <Row>
+            <Row key={num}>
               <FormInputs
                 changeAction = {changed}
                 arrayNum = {num}
@@ -351,16 +322,12 @@ class Basic extends Component {
         )
         num++;
       }
-
     }
-
-
-
 
     var num = 0;
     for(var item of this.state.coinList){		// 참여보상 input 배열 만들기
       coinList.push(
-          <Row>
+          <Row key={num}>
             <FormInputs
               changeAction = {changed}
               arrayNum = {num}
@@ -427,7 +394,7 @@ class Basic extends Component {
             <Col md={1}>
             <ControlLabel>&nbsp;</ControlLabel>
               <div>
-                <Button  bsStyle="danger" fill type="button" filedName = 'coinList' removeAction={removeField} cntNum={num}  fill type="button" >
+                <Button type="button" fill bsStyle="danger" filedName = 'coinList' removeAction={removeField} cntNum={num}>
                   delete
                 </Button>
               </div>
@@ -438,14 +405,12 @@ class Basic extends Component {
       num++;
     }
 
-    for( var item of Object.keys(defaultRewordArr)){		// 참여보상 input 배열 만들기
-      makeRewordField(String(item));
+    for( let i of Object.keys(defaultRewordArr)){		// 참여보상 input 배열 만들기
+      makeRewordField(String(i));
     }
-    for( var item of Object.keys(defaultRewordArrNont)){		// 논타겟 참여보상 input 배열 만들기
-      makeRewordFieldNont(String(item));
+    for( let j of Object.keys(defaultRewordArrNont)){		// 논타겟 참여보상 input 배열 만들기
+      makeRewordFieldNont(String(j));
     }
-
-
 
     const doSumbit = (e) =>{
       e.preventDefault(); // 기본적인 서브밋 행동을 취소합니다
@@ -688,7 +653,7 @@ class Basic extends Component {
 
                     <Row>
                       <Col md={12}>
-                        <h4>월간 최다 투표자 보상[ 카운트 양식 단일대상 ex) 1  , 복수대상 ex) 1~3 ]&nbsp;&nbsp;&nbsp;<Button  onClick={(e ) => {this.addRankRewordM(e)}}  fill type="button">추가</Button></h4>
+                        <h4>월간 최다 투표자 보상[ 카운트 양식 단일대상 ex) 1  , 복수대상 ex) 1~3 ]&nbsp;&nbsp;&nbsp;<Button  onClick={(e ) => {this.addRankRewordM2(e)}}  fill type="button">추가</Button></h4>
                       </Col>
                     </Row>
                    <Row>
@@ -710,7 +675,7 @@ class Basic extends Component {
 
                     <Row>
                       <Col md={12}>
-                        <h4>월간 최다 정답자 보상[ 카운트 양식 단일대상 ex) 1  , 복수대상 ex) 1~3 ]&nbsp;&nbsp;&nbsp;<Button  onClick={(e ) => {this.addRankRewordM(e)}}  fill type="button">추가</Button></h4>
+                        <h4>월간 최다 정답자 보상[ 카운트 양식 단일대상 ex) 1  , 복수대상 ex) 1~3 ]&nbsp;&nbsp;&nbsp;<Button  onClick={(e ) => {this.addRankRewordM3(e)}}  fill type="button">추가</Button></h4>
                       </Col>
                     </Row>
                    <Row>

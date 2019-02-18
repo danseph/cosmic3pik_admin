@@ -1,18 +1,18 @@
 import React, { Component } from "react";
 
 import Card from "components/Card/Card.jsx";
-import { thArray, tdArray ,style } from "variables/Variables.jsx";
-import { NavLink } from "react-router-dom";
+import { style } from "variables/Variables.jsx";
 import axios from 'axios';
 import cp from '../../cp';
-import { FormInputs } from "components/FormInputs/FormInputs.jsx";
 import {
   Grid,
   Row,
   Col,
   FormGroup,
   ControlLabel,
-  FormControl, Table ,HelpBlock ,InputGroup
+	FormControl,
+	HelpBlock,
+	InputGroup
 } from "react-bootstrap";
 import Button from "components/CustomButton/CustomButton.jsx";
 import LanguageSub from './LanguageSub.jsx';
@@ -25,20 +25,15 @@ class Language extends Component {
   constructor(props) {
     super(props);
 		this.state = {
-				// or Date or Moment.js
 				isLoad : false,
-				data: new Array(),
+				data: [],
 				key: '' ,
 				mentKr: '' ,
 				mentEn: '' ,
 				mentChn: '' ,
 				searchText : '' ,
 				searchAc : false,
-
 		};
-
-
-
   }
 
 	loadLanguage() {
@@ -50,38 +45,38 @@ class Language extends Component {
 				userToken: window.localStorage['nu_token'],
 				page : parsed.page ,
 				searchText : this.state.searchText,
-			
 		}).then(res => {
 				if(res.data.err){window.location.href='/';}
 				else{
 					if(this.state.searchAc){
 						this.setState({
-							data :res.data ,
-							key: this.state.key ,
-							mentKr: this.state.mentKr ,
-							mentEn: this.state.mentEn ,
-							mentChn: this.state.mentChn ,
-							searchText : this.state.searchText , isLoad : true ,searchAc :true
+							data :res.data,
+							key: this.state.key,
+							mentKr: this.state.mentKr,
+							mentEn: this.state.mentEn,
+							mentChn: this.state.mentChn,
+							searchText: this.state.searchText,
+							isLoad: true,
+							searchAc :true,
 						})
 					}else{
 						this.setState({
-							data :res.data ,
+							data :res.data,
 							key: '' ,
-							mentKr: '' ,
+							mentKr: '',
 							mentEn: '' ,
 							mentChn: '' ,
-							searchText : '' , isLoad : true ,searchAc :false
+							searchText : '',
+							isLoad : true,
+							searchAc :false,
 						})
 					}
-
 				}
-				
-				
-		}).catch(err => { console.log(err); });		
+		}).catch(err => { console.log(err); });
 	}
 
 	renderProducts() {
-			return this.state.data.map(item => 
+			return this.state.data.map(item =>
 					(
 					  <LanguageSub key={item._id} data={item} searchText={this.state.searchText} />
 					)
@@ -89,22 +84,19 @@ class Language extends Component {
 	}
 
   render() {
-		//console.log(this.state);
-		
-		if(!this.state.isLoad){
+		if (!this.state.isLoad) {
 			this.loadLanguage();
 		}
 
-		var tableTh = new Array();
+		var tableTh = [];
 		tableTh.push(
-			<tr>
-				<th style={Object.assign({}, style.Config.w5, style.Config.wordCenter, style.Config.wordBlod)} >key [키값]</th>
-				<th style={Object.assign({}, style.Config.w30, style.Config.wordCenter, style.Config.wordBlod)} >KOREAN [한국어]</th>
-				<th style={Object.assign({}, style.Config.w30, style.Config.wordCenter, style.Config.wordBlod)} >ENGLISH [영어]</th>
-				<th style={Object.assign({}, style.Config.w30, style.Config.wordCenter, style.Config.wordBlod)} >CHINESE [중국어]</th>
-				<th style={Object.assign({}, style.Config.w5, style.Config.wordCenter, style.Config.wordBlod)} ></th>
-			</tr>
-		
+			<div key="1">
+				<div style={Object.assign({}, style.Config.w15, style.Config.wordCenter, style.Config.wordBlod, style.Config.floatL)} >key [키값]</div>
+				<div style={Object.assign({}, style.Config.w25, style.Config.wordCenter, style.Config.wordBlod, style.Config.floatL)} >KOREAN [한국어]</div>
+				<div style={Object.assign({}, style.Config.w25, style.Config.wordCenter, style.Config.wordBlod, style.Config.floatL)} >ENGLISH [영어]</div>
+				<div style={Object.assign({}, style.Config.w25, style.Config.wordCenter, style.Config.wordBlod, style.Config.floatL)} >CHINESE [중국어]</div>
+				<div style={Object.assign({}, style.Config.w10, style.Config.wordCenter, style.Config.wordBlod, style.Config.floatL)} ></div>
+			</div>
 		)
 
 		const changed = (e) => {
@@ -116,7 +108,7 @@ class Language extends Component {
 				this.setState({ [e.target.name]: e.target.value , isLoad:false , searchAc : true})
 
 		};
-		
+
 
 		const doSumbit = (e) =>{
 			e.preventDefault(); // 기본적인 서브밋 행동을 취소합니다
@@ -155,11 +147,10 @@ class Language extends Component {
 														name = "key"
 														required = "true"
 														defaultValue={this.state.key}
-														value={this.state.key}
 														onChange={(e ) => {changed(e)}}
 													>
 													</FormControl>
-													
+
 													<FormControl.Feedback />
 													<HelpBlock>해당 맨트의 상징적인 키 맨트를 입력하세요 (단어)</HelpBlock>
 												</FormGroup>
@@ -172,7 +163,6 @@ class Language extends Component {
 														rows="3"
 														componentClass="textarea"
 														defaultValue={this.state.mentKr}
-														value={this.state.mentKr}
 														required = "true"
 														onChange={(e ) => {changed(e)}}
 													/>
@@ -187,7 +177,6 @@ class Language extends Component {
 														rows="3"
 														componentClass="textarea"
 														defaultValue={this.state.mentEn}
-														value={this.state.mentEn}
 														required = "true"
 														onChange={(e ) => {changed(e)}}
 
@@ -203,7 +192,6 @@ class Language extends Component {
 														rows="3"
 														componentClass="textarea"
 														defaultValue={this.state.mentChn}
-														value={this.state.mentChn}
 														required = "true"
 														onChange={(e ) => {changed(e)}}
 
@@ -222,7 +210,7 @@ class Language extends Component {
                   </form>
                 }
 								/>
-															
+
 								<Row>
 									<Col md={12}>
 										<Card
@@ -234,7 +222,7 @@ class Language extends Component {
 											<div>
 												<Row style={style.Config.p15}>
 													<Col md={2}>
-														
+
 														<FormGroup	controlId="form-control">
 															<InputGroup>
 																<InputGroup.Addon><i className='pe-7s-search'></i></InputGroup.Addon>
@@ -242,7 +230,6 @@ class Language extends Component {
 																		componentClass="input"
 																		name = "searchText"
 																		defaultValue={this.state.searchText}
-																		value={this.state.searchText}
 																		onChange={(e ) => {changedSearch(e)}}
 																	>
 																	</FormControl>
@@ -251,16 +238,10 @@ class Language extends Component {
 														</FormGroup>
 													</Col>
 												</Row>
-												<Table striped hover>
-													<thead>
-														{tableTh}
-													</thead>
-													<td colSpan='5'>
-														<div style={style.Config.p15}>
-														{this.renderProducts()}
-														</div>
-													</td>
-												</Table>
+												<Row style={style.Config.p15}>
+													{tableTh}
+												</Row>
+												{this.renderProducts()}
 											</div>
 											}
 										/>

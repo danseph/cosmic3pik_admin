@@ -1,31 +1,18 @@
 import React, { Component } from "react";
-
-import Card from "components/Card/Card.jsx";
-import { thArray, tdArray ,style } from "variables/Variables.jsx";
-import { NavLink } from "react-router-dom";
 import axios from 'axios';
 import cp from '../../cp';
-import { FormInputs } from "components/FormInputs/FormInputs.jsx";
 import {
-  Grid,
   Row,
   Col,
   FormGroup,
-  ControlLabel,
-  FormControl, Table ,HelpBlock
+  FormControl,
 } from "react-bootstrap";
 import Button from "components/CustomButton/CustomButton.jsx";
 import ErrAction from '../../ErrAction' ;
 import reactStringReplace from "react-string-replace";
-import $ from 'jquery';
 import classNames from 'classnames';
 
-
 class LanguageSub extends Component {
-
-
-
-
 
   constructor(props) {
     super(props);
@@ -44,15 +31,9 @@ class LanguageSub extends Component {
     data: []
   }
 
-
   render() {
-
-    const curState = {};
-
-
-
     var replaceAll = (str, searchStr) => {
-      if(this.props.searchText != ''){
+      if(this.props.searchText !== ''){
         var str2  = String(str).split(/\n/g);
         var tempStr = [];
         for(var item of str2){
@@ -61,21 +42,13 @@ class LanguageSub extends Component {
                 <span className='highlight'>{searchStr}</span>
               ))}
             </div>);
-
-
         }
-
-
         return tempStr
       }
-
     }
 
-
     const changed = (e ) => {
-        //console.log(e.target.name);
         this.setState({ [e.target.name]: e.target.value })
-
     };
 
     const doDelete = (id) =>{
@@ -94,8 +67,7 @@ class LanguageSub extends Component {
     }
 
     const doSumbit = (e) =>{
-      //console.log(this.state);
-      e.preventDefault(); // 기본적인 서브밋 행동을 취소합니다
+      e.preventDefault();
       axios.post(cp.server_ip+'/api/language', {
           userId: window.localStorage['nu_id'],
           userToken: window.localStorage['nu_token'],
@@ -113,20 +85,15 @@ class LanguageSub extends Component {
               mentChn:  res.data.modifiedLanguage.mentChn ,
               id:  res.data.modifiedLanguage._id
             })
-
             alert('수정완료');
           }
       }).catch(err => { console.log(err); });
-
       return false;
     }
 
-
-
     return (
-
         <form method='post' onSubmit={(e ) => {doSumbit(e)}} id={this.state.id}>
-          <Row>
+          <Row key={this.state.id} style={{padding: '15px'}}>
             <Col md={2}>
 
               <FormGroup 	controlId="form-control">
@@ -137,7 +104,6 @@ class LanguageSub extends Component {
                   rows="1"
                   required = "true"
                   defaultValue={this.state.key}
-                  value={this.state.key}
                   onChange={(e ) => {changed(e)}}
 
                 >
@@ -154,7 +120,6 @@ class LanguageSub extends Component {
                   rows="3"
                   componentClass="textarea"
                   defaultValue={this.state.mentKr}
-                  value={this.state.mentKr}
                   required = "true"
                   onChange={(e ) => {changed(e)}}
 
@@ -171,7 +136,6 @@ class LanguageSub extends Component {
                   rows="3"
                   componentClass="textarea"
                   defaultValue={this.state.mentEn}
-                  value={this.state.mentEn}
                   required = "true"
                   onChange={(e ) => {changed(e)}}
 
@@ -186,7 +150,6 @@ class LanguageSub extends Component {
                   rows="3"
                   componentClass="textarea"
                   defaultValue={this.state.mentChn}
-                  value={this.state.mentChn}
                   required = "true"
                   onChange={(e ) => {changed(e)}}
 

@@ -1,31 +1,28 @@
 import React, { Component } from "react";
-
-import Card from "components/Card/Card.jsx";
-import { thArray, tdArray ,style } from "variables/Variables.jsx";
 import { NavLink } from "react-router-dom";
 import axios from 'axios';
-import cp from '../../cp';
-import { FormInputs } from "components/FormInputs/FormInputs.jsx";
 import {
   Grid,
   Row,
   Col,
   FormGroup,
   ControlLabel,
-  FormControl, Table ,HelpBlock ,InputGroup
+	FormControl,
+	HelpBlock,
 } from "react-bootstrap";
+import Card from "components/Card/Card.jsx";
 import Button from "components/CustomButton/CustomButton.jsx";
+import { style } from "variables/Variables.jsx";
 import ErrAction from '../../ErrAction' ;
-
+import cp from '../../cp';
 
 class Language extends Component {
 
   constructor(props) {
     super(props);
 		this.state = {
-				// or Date or Moment.js
 				isLoad : false,
-				data: new Array(),
+				data: [],
 				name: '' ,
 				uid: '' ,
 				file: '' ,
@@ -40,11 +37,7 @@ class Language extends Component {
 				tagChn : '',
 				videoLink : '' ,
 				fileData :  new FormData()
-
 		};
-
-
-
   }
 
 	loadRobot(parsed) {
@@ -55,10 +48,9 @@ class Language extends Component {
 		}).then(res => {
 				if(res.data.err){window.location.href='/';}
 				else{
-					//console.log(res)
 					var curData ;
 					for(var item of res.data){
-						if(item._id == parsed.uid){
+						if(item._id === parsed.uid){
 							curData = item;
 						}
 					}
@@ -80,9 +72,7 @@ class Language extends Component {
 							videoLink : curData.videoLink,
 							fileData :  new FormData(),
 							isLoad : true,
-
 						});
-
 					}else{
 						this.setState({
 							data: res.data,
@@ -101,24 +91,17 @@ class Language extends Component {
 							videoLink : '' ,
 							fileData :  new FormData(),
 							isLoad : true,
-
 						});
-
 					}
-
-
 				}
-
 		}).catch(err => { console.log(err); });
 	}
-
-
 
   render() {
 		const queryString = require('query-string');
 		const parsed = queryString.parse(this.props.location.search);
 
-		if(!this.state.isLoad || (!parsed.uid && this.state.uid != '') ){
+		if(!this.state.isLoad || (!parsed.uid && this.state.uid !== '') ){
 			this.loadRobot(parsed);
 		}
 
@@ -129,18 +112,16 @@ class Language extends Component {
 		var fileVideoPath = '';
 
 		for(var item of this.state.data){
-			if(parsed.uid == item._id){
-				var style2= {background:'#da4d55'}
-				filePath = <a target='_blank' href={cp.server_ip+'/uploads/'+item.file}><img style={{width:'50px'}} src ={cp.server_ip+'/uploads/'+item.file} /></a>;
-				fileThumbPath = <a target='_blank' href={cp.server_ip+'/uploads/'+item.fileThumb}><img style={{width:'50px'}} src ={cp.server_ip+'/uploads/'+item.fileThumb} /></a>;
-				fileIconPath = <a target='_blank' href={cp.server_ip+'/uploads/'+item.fileIcon}><img style={{width:'50px'}} src ={cp.server_ip+'/uploads/'+item.fileIcon} /></a>;
-				fileVideoPath = <a target='_blank' href={cp.server_ip+'/uploads/'+item.fileVideo}><img style={{width:'50px'}} src ={cp.server_ip+'/uploads/'+item.fileVideo} /></a>;
-			}else{
-				var style2= { }
-
+			var style2= { }
+			if(parsed.uid === item._id){
+				style2= {background:'#da4d55'}
+				filePath = <a target='_blank' rel='noopener noreferrer' href={cp.server_ip+'/uploads/'+item.file}><img alt='' style={{width:'50px'}} src ={cp.server_ip+'/uploads/'+item.file} /></a>;
+				fileThumbPath = <a target='_blank' rel='noopener noreferrer' href={cp.server_ip+'/uploads/'+item.fileThumb}><img alt='' style={{width:'50px'}} src ={cp.server_ip+'/uploads/'+item.fileThumb} /></a>;
+				fileIconPath = <a target='_blank' rel='noopener noreferrer' href={cp.server_ip+'/uploads/'+item.fileIcon}><img alt='' style={{width:'50px'}} src ={cp.server_ip+'/uploads/'+item.fileIcon} /></a>;
+				fileVideoPath = <a target='_blank' rel='noopener noreferrer' href={cp.server_ip+'/uploads/'+item.fileVideo}><img alt='' style={{width:'50px'}} src ={cp.server_ip+'/uploads/'+item.fileVideo} /></a>;
 			}
 			dataArr.push(
-				<Col md={1}>
+				<Col key={item._id} md={1}>
 					<NavLink onClick={(e ) => {this.setState({isLoad : false});}} to={'/robot?uid='+item._id} className="nav-link" activeClassName="active" style={{color:'#fff' }}><Button key={item._id} bsStyle="info" pullLeft fill type="button"  style={style2} >{item.name}</Button></NavLink>
 				</Col>
 			);
@@ -154,14 +135,11 @@ class Language extends Component {
 				}else{
 					this.setState({ [e.target.name]: e.target.value , searchAc: false})
 				}
-
 		};
 
-
 		const doSumbit = (e) =>{
-			e.preventDefault(); // 기본적인 서브밋 행동을 취소합니다
-		//console.log(this.state.fileData);
-			if(this.state.name == ''){
+			e.preventDefault();
+			if(this.state.name === ''){
 				alert('이름을 입력해 주세요');
 				return false;
 			}
@@ -183,7 +161,6 @@ class Language extends Component {
 			newFormObj.set('userId', window.localStorage['nu_id']);
 			newFormObj.set('userToken', window.localStorage['nu_token']);
 
-
 			axios.post(cp.server_ip+'/api/robot', newFormObj).then(res => {
 					if(res.data.err){
 						ErrAction(res.data.err);
@@ -192,11 +169,8 @@ class Language extends Component {
 						if(!res.data.err){ this.setState({  isLoad:false}) ;/*console.log(res) ;*/}
 					}
 			}).catch(err => { console.log(err); });
-
 			return false;
 		}
-
-
 
 		return (
       <div className="content">
@@ -216,7 +190,6 @@ class Language extends Component {
 														type="text"
 														name = "name"
 														defaultValue={this.state.name}
-														value={this.state.name}
 														onChange={(e ) => {changed(e)}}
 													>
 													</FormControl>
@@ -301,7 +274,6 @@ class Language extends Component {
 														type="text"
 														name = "videoLink"
 														defaultValue={this.state.videoLink}
-														value={this.state.videoLink}
 														onChange={(e ) => {changed(e)}}
 													>
 													</FormControl>
@@ -320,7 +292,6 @@ class Language extends Component {
 														rows="3"
 														componentClass="textarea"
 														defaultValue={this.state.infoKr}
-														value={this.state.infoKr}
 														onChange={(e ) => {changed(e)}}
 													/>
 													<HelpBlock>설명을 적어주세요 (한국어)</HelpBlock>
@@ -335,7 +306,6 @@ class Language extends Component {
 														componentClass="input"
 														type="text"
 														defaultValue={this.state.tagKr}
-														value={this.state.tagKr}
 														onChange={(e ) => {changed(e)}}
 
 													/>
@@ -352,7 +322,6 @@ class Language extends Component {
 														rows="3"
 														componentClass="textarea"
 														defaultValue={this.state.infoEn}
-														value={this.state.infoEn}
 														onChange={(e ) => {changed(e)}}
 													/>
 													<HelpBlock>설명을 적어주세요 (영어)</HelpBlock>
@@ -367,7 +336,6 @@ class Language extends Component {
 														componentClass="input"
 														type="text"
 														defaultValue={this.state.tagEn}
-														value={this.state.tagEn}
 														onChange={(e ) => {changed(e)}}
 
 													/>
@@ -384,7 +352,6 @@ class Language extends Component {
 														rows="3"
 														componentClass="textarea"
 														defaultValue={this.state.infoChn}
-														value={this.state.infoChn}
 														onChange={(e ) => {changed(e)}}
 													/>
 													<HelpBlock>설명을 적어주세요 (중국어)</HelpBlock>
@@ -399,7 +366,6 @@ class Language extends Component {
 														componentClass="input"
 														type="text"
 														defaultValue={this.state.tagChn}
-														value={this.state.tagChn}
 														onChange={(e ) => {changed(e)}}
 
 													/>

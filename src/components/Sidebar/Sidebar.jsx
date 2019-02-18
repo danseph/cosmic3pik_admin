@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 
-import HeaderLinks from "../Header/HeaderLinks.jsx";
-
 import imagine from "assets/img/sidebar-3.jpg";
 import logo from "assets/img/reactlogo.png";
 
@@ -46,16 +44,16 @@ class Sidebar extends Component {
               <img src={logo} alt="logo_image" />
             </div>
           </a>
-          <a
-            href="https://www.creative-tim.com"
-            className="simple-text logo-normal"
+          <NavLink
+            to="/dashboard"
+            className="nav-link simple-text logo-normal"
+            activeClassName="active"
           >
-            Creative Tim
-          </a>
+            3PIKS ADMIN
+          </NavLink>
         </div>
         <div className="sidebar-wrapper">
           <ul className="nav">
-            {this.state.width <= 991 ? <HeaderLinks /> : null}
             {dashboardRoutes.map((prop, key) => {
               if (!prop.redirect && prop.view)
                 return (
