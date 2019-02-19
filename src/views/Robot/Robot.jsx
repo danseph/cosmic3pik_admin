@@ -164,10 +164,10 @@ class Language extends Component {
 			axios.post(cp.server_ip+'/api/robot', newFormObj).then(res => {
 					if(res.data.err){
 						ErrAction(res.data.err);
-						return
-					}else{
-						if(!res.data.err){ this.setState({  isLoad:false}) ;/*console.log(res) ;*/}
+						return;
 					}
+					alert('Success!');
+					this.setState({ isLoad:false });
 			}).catch(err => { console.log(err); });
 			return false;
 		}
@@ -189,7 +189,7 @@ class Language extends Component {
 														componentClass="input"
 														type="text"
 														name = "name"
-														defaultValue={this.state.name}
+														value={this.state.name}
 														onChange={(e ) => {changed(e)}}
 													>
 													</FormControl>
@@ -273,7 +273,7 @@ class Language extends Component {
 														componentClass="input"
 														type="text"
 														name = "videoLink"
-														defaultValue={this.state.videoLink}
+														value={this.state.videoLink}
 														onChange={(e ) => {changed(e)}}
 													>
 													</FormControl>
@@ -291,7 +291,7 @@ class Language extends Component {
 														name = 'infoKr'
 														rows="3"
 														componentClass="textarea"
-														defaultValue={this.state.infoKr}
+														value={this.state.infoKr}
 														onChange={(e ) => {changed(e)}}
 													/>
 													<HelpBlock>설명을 적어주세요 (한국어)</HelpBlock>
@@ -305,7 +305,7 @@ class Language extends Component {
 														rows="3"
 														componentClass="input"
 														type="text"
-														defaultValue={this.state.tagKr}
+														value={this.state.tagKr}
 														onChange={(e ) => {changed(e)}}
 
 													/>
@@ -321,7 +321,7 @@ class Language extends Component {
 														name = 'infoEn'
 														rows="3"
 														componentClass="textarea"
-														defaultValue={this.state.infoEn}
+														value={this.state.infoEn}
 														onChange={(e ) => {changed(e)}}
 													/>
 													<HelpBlock>설명을 적어주세요 (영어)</HelpBlock>
@@ -335,7 +335,7 @@ class Language extends Component {
 														rows="3"
 														componentClass="input"
 														type="text"
-														defaultValue={this.state.tagEn}
+														value={this.state.tagEn}
 														onChange={(e ) => {changed(e)}}
 
 													/>
@@ -351,7 +351,7 @@ class Language extends Component {
 														name = 'infoChn'
 														rows="3"
 														componentClass="textarea"
-														defaultValue={this.state.infoChn}
+														value={this.state.infoChn}
 														onChange={(e ) => {changed(e)}}
 													/>
 													<HelpBlock>설명을 적어주세요 (중국어)</HelpBlock>
@@ -365,7 +365,7 @@ class Language extends Component {
 														rows="3"
 														componentClass="input"
 														type="text"
-														defaultValue={this.state.tagChn}
+														value={this.state.tagChn}
 														onChange={(e ) => {changed(e)}}
 
 													/>

@@ -52,7 +52,7 @@ class LanguageSub extends Component {
     };
 
     const doDelete = (id) =>{
-      if(window.confirm('삭제하시곘습니까?')){
+      if(window.confirm('Are you sure?')){
         axios.post(cp.server_ip+'/api/language', {
           userId: window.localStorage['nu_id'],
           userToken: window.localStorage['nu_token'],
@@ -74,19 +74,22 @@ class LanguageSub extends Component {
           data : this.state,
           proc: 'languageWrite'
       }).then(res => {
-          if(res.data.err){
-            ErrAction(res.data.err);
-            return
-          }else{
-            this.setState({
-              key: res.data.modifiedLanguage.key ,
-              mentKr:  res.data.modifiedLanguage.mentKr ,
-              mentEn:  res.data.modifiedLanguage.mentEn ,
-              mentChn:  res.data.modifiedLanguage.mentChn ,
-              id:  res.data.modifiedLanguage._id
-            })
-            alert('수정완료');
+        if (res.data.err) {
+          if (res.data.errStatus === 0) {
+            alert('Update fail, please login!');
+            return;
           }
+          ErrAction(res.data.err);
+          return;
+        }
+        this.setState({
+          key: res.data.modifiedLanguage.key,
+          mentKr:  res.data.modifiedLanguage.mentKr,
+          mentEn:  res.data.modifiedLanguage.mentEn,
+          mentChn:  res.data.modifiedLanguage.mentChn,
+          id:  res.data.modifiedLanguage._id
+        })
+        alert('Success!');
       }).catch(err => { console.log(err); });
       return false;
     }
@@ -104,8 +107,7 @@ class LanguageSub extends Component {
                   rows="1"
                   required = "true"
                   defaultValue={this.state.key}
-                  onChange={(e ) => {changed(e)}}
-
+                  disabled
                 >
                 </FormControl>
 

@@ -101,7 +101,6 @@ class Language extends Component {
 
 		const changed = (e) => {
 				this.setState({ [e.target.name]: e.target.value , searchAc: false})
-
 		};
 
 		const changedSearch = (e) => {
@@ -115,15 +114,35 @@ class Language extends Component {
 			axios.post(cp.server_ip+'/api/language', {
 					userId: window.localStorage['nu_id'],
 					userToken: window.localStorage['nu_token'],
-					data : this.state,
+					data : {
+						key: this.state.key,
+						mentChn: this.state.mentChn,
+						mentEn: this.state.mentEn,
+						mentKr: this.state.mentKr,
+					},
 					proc: 'languageWrite'
 			}).then(res => {
-					if(res.data.err){
+					if (res.data.err) {
+						if (res.data.errStatus === 0) {
+							alert('Update fail, please login!');
+							return;
+						}
+						if (res.data.errStatus === 26) {
+							alert('Duplicate key');
+							return;
+						}
 						ErrAction(res.data.err);
-						return
-					}else{
-						if(!res.data.err){this.setState({  isLoad:false , searchAc: false})}
+						return;
 					}
+					alert('Success!');
+					this.setState({
+						isLoad:false,
+						searchAc: false,
+						key: '',
+						mentChn: '',
+						mentEn: '',
+						mentKr: '',
+					});
 			}).catch(err => { console.log(err); });
 
 			return false;
@@ -147,7 +166,7 @@ class Language extends Component {
 														name = "key"
 														required = "true"
 														defaultValue={this.state.key}
-														onChange={(e ) => {changed(e)}}
+														onBlur={changed}
 													>
 													</FormControl>
 
@@ -164,7 +183,7 @@ class Language extends Component {
 														componentClass="textarea"
 														defaultValue={this.state.mentKr}
 														required = "true"
-														onChange={(e ) => {changed(e)}}
+														onBlur={changed}
 													/>
 													<HelpBlock>한국어</HelpBlock>
 												</FormGroup>
@@ -178,8 +197,7 @@ class Language extends Component {
 														componentClass="textarea"
 														defaultValue={this.state.mentEn}
 														required = "true"
-														onChange={(e ) => {changed(e)}}
-
+														onBlur={changed}
 													/>
 													<HelpBlock>영어</HelpBlock>
 												</FormGroup>
@@ -193,8 +211,7 @@ class Language extends Component {
 														componentClass="textarea"
 														defaultValue={this.state.mentChn}
 														required = "true"
-														onChange={(e ) => {changed(e)}}
-
+														onBlur={changed}
 													/>
 													<HelpBlock>중국어</HelpBlock>
 												</FormGroup>
