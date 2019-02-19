@@ -165,8 +165,8 @@ class Language extends Component {
 														type="text"
 														name = "key"
 														required = "true"
-														defaultValue={this.state.key}
-														onBlur={changed}
+														value={this.state.key}
+														onChange={changed}
 													>
 													</FormControl>
 
@@ -181,9 +181,9 @@ class Language extends Component {
 														name = 'mentKr'
 														rows="3"
 														componentClass="textarea"
-														defaultValue={this.state.mentKr}
+														value={this.state.mentKr}
 														required = "true"
-														onBlur={changed}
+														onChange={changed}
 													/>
 													<HelpBlock>한국어</HelpBlock>
 												</FormGroup>
@@ -195,9 +195,9 @@ class Language extends Component {
 														name = 'mentEn'
 														rows="3"
 														componentClass="textarea"
-														defaultValue={this.state.mentEn}
+														value={this.state.mentEn}
 														required = "true"
-														onBlur={changed}
+														onChange={changed}
 													/>
 													<HelpBlock>영어</HelpBlock>
 												</FormGroup>
@@ -209,9 +209,9 @@ class Language extends Component {
 														name = 'mentChn'
 														rows="3"
 														componentClass="textarea"
-														defaultValue={this.state.mentChn}
+														value={this.state.mentChn}
 														required = "true"
-														onBlur={changed}
+														onChange={changed}
 													/>
 													<HelpBlock>중국어</HelpBlock>
 												</FormGroup>
@@ -247,7 +247,7 @@ class Language extends Component {
 																		componentClass="input"
 																		name = "searchText"
 																		defaultValue={this.state.searchText}
-																		onChange={(e ) => {changedSearch(e)}}
+																		onChange={changedSearch}
 																	>
 																	</FormControl>
 																</InputGroup>

@@ -102,11 +102,11 @@ class LanguageSub extends Component {
               <FormGroup 	controlId="form-control">
                 <div className ={classNames({'highlight-div': true}) }>{replaceAll(this.state.key , this.props.searchText)}</div>
                 <FormControl
-                  componentClass="textarea"
+                  componentClass="input"
                   name = "key"
                   rows="1"
                   required = "true"
-                  defaultValue={this.state.key}
+                  value={this.state.key}
                   disabled
                 >
                 </FormControl>
