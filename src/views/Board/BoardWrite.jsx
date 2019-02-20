@@ -330,13 +330,13 @@ class BoardWrite extends Component {
 											/>
 										</Row>
                     <Row>
-											<Col md={10} style={Object.assign({}, style.Config.hp450)}>
+											<Col md={10}>
 												<ControlLabel>컨탠츠 ( 한국어 )  / contents ( korean )</ControlLabel>
                         <Editor
                             editorState={editorKr}
                             editorClassName="demo-editor"
-                            toolbarClassName="toolbar-class"
-                           // defaultEditorState={sampleEditorContent}
+														toolbarClassName="toolbar-class"
+														stripPastedStyles={true}
                             toolbar={toolbar}
                             onEditorStateChange={this.onContentStateChangeKr.bind(this)}
                         />
@@ -392,13 +392,13 @@ class BoardWrite extends Component {
 											/>
 										</Row>
                     <Row>
-											<Col md={10} style={Object.assign({}, style.Config.hp450)}>
+											<Col md={10}>
 												<ControlLabel>컨텐츠 ( 영어 )  / contents ( english )</ControlLabel>
                         <Editor
                             editorState={editorEn}
                             editorClassName="demo-editor"
                             toolbarClassName="toolbar-class"
-                           // defaultEditorState={sampleEditorContent}
+														stripPastedStyles={true}
                             toolbar={toolbar}
                             onEditorStateChange={this.onContentStateChangeEn.bind(this)}
                         />
@@ -454,14 +454,14 @@ class BoardWrite extends Component {
 											/>
 										</Row>
                     <Row>
-											<Col md={10} style={Object.assign({}, style.Config.hp450)}>
+											<Col md={10}>
 												<ControlLabel>컨탠츠 ( 중국어 )  / contents ( chinese )</ControlLabel>
                         <Editor
 														wrapperClassName="demo-wrapper"
                             editorState={editorChn}
                             editorClassName="demo-editor"
                             toolbarClassName="toolbar-class"
-                           // defaultEditorState={sampleEditorContent}
+														stripPastedStyles={true}
                             toolbar={toolbar}
                             onEditorStateChange={this.onContentStateChangeChn.bind(this)}
                         />
