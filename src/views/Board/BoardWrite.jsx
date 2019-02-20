@@ -214,7 +214,11 @@ class BoardWrite extends Component {
 					data : this.state,
 					proc: 'boardWrite'
 			}).then(res => {
-				 window.location.href="/#board";
+				if (res.data.err) {
+					alert('Fail update');
+					return;
+				}
+				alert('success!');
 			}).catch(err => { console.log(err); });
 			return false;
 		}
@@ -473,7 +477,7 @@ class BoardWrite extends Component {
             </Col>
           </Row>
 
-        </Grid>>
+        </Grid>
 	    </div>
     );
   }
