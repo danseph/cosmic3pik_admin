@@ -14,7 +14,6 @@ import cp from '../../cp';
 import Checkbox from 'components/CustomCheckbox/CustomCheckbox';
 import { ContentState,  EditorState, convertToRaw } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
-import { style } from "variables/Variables.jsx";
 import htmlToDraft from 'html-to-draftjs';
 import draftToHtml from 'draftjs-to-html';
 
@@ -24,9 +23,7 @@ class BoardWrite extends Component {
 	constructor(props, context) {
 			super(props, context);
 
-			// Initial state with date
 			this.state = {
-					// or Date or Moment.js
 					boardId : '',
 					boardCate: '',
 					subCate: '',
@@ -55,13 +52,10 @@ class BoardWrite extends Component {
     const html = draftToHtml(rawContent);
     const contentBlock = htmlToDraft(html);
     if (contentBlock) {
-      // const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
-      // const outputEditorState = EditorState.createWithContent(contentState);
 			this.setState({
 				editorKr : editorState,
 				contentsKr : html,
 			});
-
     }
   };
 
@@ -70,13 +64,10 @@ class BoardWrite extends Component {
     const html = draftToHtml(rawContent);
     const contentBlock = htmlToDraft(html);
     if (contentBlock) {
-      // const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
-      // const outputEditorState = EditorState.createWithContent(contentState);
 			this.setState({
 				editorEn : editorState,
 				contentsEn : html,
 			});
-
     }
   };
 
@@ -85,8 +76,6 @@ class BoardWrite extends Component {
     const html = draftToHtml(rawContent);
     const contentBlock = htmlToDraft(html);
     if (contentBlock) {
-      // const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
-      // const outputEditorState = EditorState.createWithContent(contentState);
 			this.setState({
 				editorChn : editorState,
 				contentsChn : html,
@@ -171,7 +160,6 @@ class BoardWrite extends Component {
 				return false;
 			}
 			this.setState({ [e.target.name]: e.target.value })
-
 		};
 
 
@@ -180,8 +168,9 @@ class BoardWrite extends Component {
 		if(this.state.boardCate === 'faq'){
 			subCate.push(
 					<FormInputs
+						key="boardCateFAQ"
 						changeAction = {changed}
-						ncols={["col-md-2"]}
+						ncols={["col-md-3"]}
 						proprieties={[
 							{
 								label: "sub catagory",
@@ -198,7 +187,6 @@ class BoardWrite extends Component {
 									{	value : 'using',view : '이용방법 ( Using )' },
 									{	value : 'withdraw',view : '출금 관련 ( Withdraw )' },
 									{	value : 'etc',view : '기타 ( ETC )' },
-
 								]
 							}
 						]}
@@ -247,7 +235,7 @@ class BoardWrite extends Component {
                     <Row>
 											<FormInputs
 												changeAction = {changed}
-												ncols={["col-md-2"]}
+												ncols={["col-md-3"]}
 												proprieties={[
 													{
 														label: "board catagory",
@@ -263,7 +251,6 @@ class BoardWrite extends Component {
 															{	value : 'notice',view : '공지사항( Notice )' },
 															{	value : 'event',view : '이벤트 ( Event )' },
 															{	value : 'faq',view : 'FAQ' },
-
 														]
 													}
 												]}
@@ -333,12 +320,13 @@ class BoardWrite extends Component {
 											<Col md={10}>
 												<ControlLabel>컨탠츠 ( 한국어 )  / contents ( korean )</ControlLabel>
                         <Editor
-                            editorState={editorKr}
-                            editorClassName="demo-editor"
-														toolbarClassName="toolbar-class"
-														stripPastedStyles={true}
-                            toolbar={toolbar}
-                            onEditorStateChange={this.onContentStateChangeKr.bind(this)}
+													editorState={editorKr}
+													editorClassName="demo-editor"
+													toolbarClassName="toolbar-class"
+													wrapperStyle={{border: '1px solid #eee', padding: '1em'}}
+													stripPastedStyles={true}
+													toolbar={toolbar}
+													onEditorStateChange={this.onContentStateChangeKr.bind(this)}
                         />
 											</Col>
 										</Row>
@@ -398,6 +386,7 @@ class BoardWrite extends Component {
                             editorState={editorEn}
                             editorClassName="demo-editor"
                             toolbarClassName="toolbar-class"
+														wrapperStyle={{border: '1px solid #eee', padding: '1em'}}
 														stripPastedStyles={true}
                             toolbar={toolbar}
                             onEditorStateChange={this.onContentStateChangeEn.bind(this)}
@@ -461,6 +450,7 @@ class BoardWrite extends Component {
                             editorState={editorChn}
                             editorClassName="demo-editor"
                             toolbarClassName="toolbar-class"
+														wrapperStyle={{border: '1px solid #eee', padding: '1em'}}
 														stripPastedStyles={true}
                             toolbar={toolbar}
                             onEditorStateChange={this.onContentStateChangeChn.bind(this)}

@@ -91,53 +91,6 @@ class Language extends Component {
 		this.setState({ [e.target.name]: e.target.value , isLoad:false , searchAc : true})
 	};
 
-	doSumbit(e){
-		e.preventDefault();
-		axios.post(cp.server_ip+'/api/language', {
-				userId: window.localStorage['nu_id'],
-				userToken: window.localStorage['nu_token'],
-				data : {
-					key: this.state.key,
-					mentChn: this.state.mentChn,
-					mentEn: this.state.mentEn,
-					mentKr: this.state.mentKr,
-				},
-				proc: 'languageWrite'
-		}).then(res => {
-				if (res.data.err) {
-					if (res.data.errStatus === 0) {
-						alert('Update fail, please login!');
-						return;
-					}
-					if (res.data.errStatus === 26) {
-						alert('Duplicate key');
-						return;
-					}
-					ErrAction(res.data.err);
-					return;
-				}
-				alert('Success!');
-				this.setState({
-					isLoad:false,
-					searchAc: false,
-					key: '',
-					mentChn: '',
-					mentEn: '',
-					mentKr: '',
-				});
-		}).catch(err => { console.log(err); });
-
-		return false;
-	}
-
-	changed(e) {
-		this.setState({ [e.target.name]: e.target.value , searchAc: false})
-	};
-
-	changedSearch(e) {
-		this.setState({ [e.target.name]: e.target.value , isLoad:false , searchAc : true})
-	};
-
 	doSumbit(e) {
 		e.preventDefault(); // 기본적인 서브밋 행동을 취소합니다
 		axios.post(cp.server_ip+'/api/language', {

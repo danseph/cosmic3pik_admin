@@ -9,7 +9,6 @@ import {
 } from "react-bootstrap";
 import Button from "components/CustomButton/CustomButton.jsx";
 import ErrAction from '../../ErrAction' ;
-import { FormattedMessage } from 'react-intl'
 
 class LanguageSub extends Component {
 
