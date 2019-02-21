@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { FormattedMessage } from 'react-intl'
 
 import Card from "components/Card/Card.jsx";
 import { style } from "variables/Variables.jsx";
@@ -11,7 +12,6 @@ import {
   FormGroup,
   ControlLabel,
 	FormControl,
-	HelpBlock,
 	InputGroup
 } from "react-bootstrap";
 import Button from "components/CustomButton/CustomButton.jsx";
@@ -83,6 +83,100 @@ class Language extends Component {
 			)
 	}
 
+	changed(e) {
+		this.setState({ [e.target.name]: e.target.value , searchAc: false})
+	};
+
+	changedSearch(e) {
+		this.setState({ [e.target.name]: e.target.value , isLoad:false , searchAc : true})
+	};
+
+	doSumbit(e){
+		e.preventDefault();
+		axios.post(cp.server_ip+'/api/language', {
+				userId: window.localStorage['nu_id'],
+				userToken: window.localStorage['nu_token'],
+				data : {
+					key: this.state.key,
+					mentChn: this.state.mentChn,
+					mentEn: this.state.mentEn,
+					mentKr: this.state.mentKr,
+				},
+				proc: 'languageWrite'
+		}).then(res => {
+				if (res.data.err) {
+					if (res.data.errStatus === 0) {
+						alert('Update fail, please login!');
+						return;
+					}
+					if (res.data.errStatus === 26) {
+						alert('Duplicate key');
+						return;
+					}
+					ErrAction(res.data.err);
+					return;
+				}
+				alert('Success!');
+				this.setState({
+					isLoad:false,
+					searchAc: false,
+					key: '',
+					mentChn: '',
+					mentEn: '',
+					mentKr: '',
+				});
+		}).catch(err => { console.log(err); });
+
+		return false;
+	}
+
+	changed(e) {
+		this.setState({ [e.target.name]: e.target.value , searchAc: false})
+	};
+
+	changedSearch(e) {
+		this.setState({ [e.target.name]: e.target.value , isLoad:false , searchAc : true})
+	};
+
+	doSumbit(e) {
+		e.preventDefault(); // 기본적인 서브밋 행동을 취소합니다
+		axios.post(cp.server_ip+'/api/language', {
+				userId: window.localStorage['nu_id'],
+				userToken: window.localStorage['nu_token'],
+				data : {
+					key: this.state.key,
+					mentChn: this.state.mentChn,
+					mentEn: this.state.mentEn,
+					mentKr: this.state.mentKr,
+				},
+				proc: 'languageWrite'
+		}).then(res => {
+				if (res.data.err) {
+					if (res.data.errStatus === 0) {
+						alert('Update fail, please login!');
+						return;
+					}
+					if (res.data.errStatus === 26) {
+						alert('Duplicate key');
+						return;
+					}
+					ErrAction(res.data.err);
+					return;
+				}
+				alert('Success!');
+				this.setState({
+					isLoad:false,
+					searchAc: false,
+					key: '',
+					mentChn: '',
+					mentEn: '',
+					mentKr: '',
+				});
+		}).catch(err => { console.log(err); });
+
+		return false;
+	}
+
   render() {
 		if (!this.state.isLoad) {
 			this.loadLanguage();
@@ -91,62 +185,22 @@ class Language extends Component {
 		var tableTh = [];
 		tableTh.push(
 			<div key="1">
-				<div style={Object.assign({}, style.Config.w15, style.Config.wordCenter, style.Config.wordBlod, style.Config.floatL)} >key [키값]</div>
-				<div style={Object.assign({}, style.Config.w25, style.Config.wordCenter, style.Config.wordBlod, style.Config.floatL)} >KOREAN [한국어]</div>
-				<div style={Object.assign({}, style.Config.w25, style.Config.wordCenter, style.Config.wordBlod, style.Config.floatL)} >ENGLISH [영어]</div>
-				<div style={Object.assign({}, style.Config.w25, style.Config.wordCenter, style.Config.wordBlod, style.Config.floatL)} >CHINESE [중국어]</div>
+				<div style={Object.assign({}, style.Config.w15, style.Config.wordCenter, style.Config.wordBlod, style.Config.floatL)} >
+					<FormattedMessage id="LANGUAGE.UNIQUE_KEY" />
+				</div>
+				<div style={Object.assign({}, style.Config.w25, style.Config.wordCenter, style.Config.wordBlod, style.Config.floatL)} >
+					<FormattedMessage id="LANGUAGE.KOREAN" />
+					</div>
+				<div style={Object.assign({}, style.Config.w25, style.Config.wordCenter, style.Config.wordBlod, style.Config.floatL)} >
+					<FormattedMessage id="LANGUAGE.ENGLISH" />
+					</div>
+				<div style={Object.assign({}, style.Config.w25, style.Config.wordCenter, style.Config.wordBlod, style.Config.floatL)} >
+					<FormattedMessage id="LANGUAGE.CHINA" />
+					</div>
 				<div style={Object.assign({}, style.Config.w10, style.Config.wordCenter, style.Config.wordBlod, style.Config.floatL)} ></div>
 			</div>
 		)
 
-		const changed = (e) => {
-				this.setState({ [e.target.name]: e.target.value , searchAc: false})
-		};
-
-		const changedSearch = (e) => {
-				this.setState({ [e.target.name]: e.target.value , isLoad:false , searchAc : true})
-
-		};
-
-
-		const doSumbit = (e) =>{
-			e.preventDefault(); // 기본적인 서브밋 행동을 취소합니다
-			axios.post(cp.server_ip+'/api/language', {
-					userId: window.localStorage['nu_id'],
-					userToken: window.localStorage['nu_token'],
-					data : {
-						key: this.state.key,
-						mentChn: this.state.mentChn,
-						mentEn: this.state.mentEn,
-						mentKr: this.state.mentKr,
-					},
-					proc: 'languageWrite'
-			}).then(res => {
-					if (res.data.err) {
-						if (res.data.errStatus === 0) {
-							alert('Update fail, please login!');
-							return;
-						}
-						if (res.data.errStatus === 26) {
-							alert('Duplicate key');
-							return;
-						}
-						ErrAction(res.data.err);
-						return;
-					}
-					alert('Success!');
-					this.setState({
-						isLoad:false,
-						searchAc: false,
-						key: '',
-						mentChn: '',
-						mentEn: '',
-						mentKr: '',
-					});
-			}).catch(err => { console.log(err); });
-
-			return false;
-		}
 		return (
       <div className="content">
 				<Grid fluid>
@@ -155,65 +209,69 @@ class Language extends Component {
               <Card
                 title="Language Set"
                 content={
-                  <form method='post' onSubmit={(e ) => {doSumbit(e)}}>
+                  <form method='post' onSubmit={(e ) => {this.doSumbit(e)}}>
 										<Row>
 											<Col md={2}>
 												<FormGroup	controlId="form-control">
-													<ControlLabel>key</ControlLabel>
+													<ControlLabel>
+														<FormattedMessage id="LANGUAGE.UNIQUE_KEY" />
+													</ControlLabel>
 													<FormControl
 														componentClass="input"
 														type="text"
 														name = "key"
 														required = "true"
 														value={this.state.key}
-														onChange={changed}
+														onChange={(e) => this.changed(e)}
 													>
 													</FormControl>
 
 													<FormControl.Feedback />
-													<HelpBlock>해당 맨트의 상징적인 키 맨트를 입력하세요 (단어)</HelpBlock>
 												</FormGroup>
 											</Col>
 											<Col md={3}>
 												<FormGroup controlId="formControlsTextarea">
-													<ControlLabel>Korean</ControlLabel>
+													<ControlLabel>
+														<FormattedMessage id="LANGUAGE.KOREAN" />
+													</ControlLabel>
 													<FormControl
 														name = 'mentKr'
 														rows="3"
 														componentClass="textarea"
 														value={this.state.mentKr}
 														required = "true"
-														onChange={changed}
+														onChange={(e) => this.changed(e)}
 													/>
-													<HelpBlock>한국어</HelpBlock>
 												</FormGroup>
 											</Col>
 											<Col md={3}>
 												<FormGroup controlId="formControlsTextarea">
-													<ControlLabel>English</ControlLabel>
+													<ControlLabel>
+														<FormattedMessage id="LANGUAGE.ENGLISH" />
+													</ControlLabel>
 													<FormControl
 														name = 'mentEn'
 														rows="3"
 														componentClass="textarea"
 														value={this.state.mentEn}
 														required = "true"
-														onChange={changed}
+														onChange={(e) => this.changed(e)}
 													/>
-													<HelpBlock>영어</HelpBlock>
 												</FormGroup>
 											</Col>
 											<Col md={3}>
 												<FormGroup controlId="formControlsTextarea">
-													<ControlLabel>Chinese</ControlLabel>
+													<ControlLabel>
+														<FormattedMessage id="LANGUAGE.CHINA" />
+													</ControlLabel>
 													<FormControl
 														name = 'mentChn'
 														rows="3"
 														componentClass="textarea"
 														value={this.state.mentChn}
 														required = "true"
-														onChange={changed}
+														onChange={(e) => this.changed(e)}
 													/>
-													<HelpBlock>중국어</HelpBlock>
 												</FormGroup>
 											</Col>
 											<Col md={1}>
@@ -239,7 +297,6 @@ class Language extends Component {
 											<div>
 												<Row style={style.Config.p15}>
 													<Col md={2}>
-
 														<FormGroup	controlId="form-control">
 															<InputGroup>
 																<InputGroup.Addon><i className='pe-7s-search'></i></InputGroup.Addon>
@@ -247,7 +304,7 @@ class Language extends Component {
 																		componentClass="input"
 																		name = "searchText"
 																		defaultValue={this.state.searchText}
-																		onChange={changedSearch}
+																		onChange={(e) => this.changedSearch(e)}
 																	>
 																	</FormControl>
 																</InputGroup>
@@ -255,7 +312,7 @@ class Language extends Component {
 														</FormGroup>
 													</Col>
 												</Row>
-												<Row style={style.Config.p15}>
+												<Row>
 													{tableTh}
 												</Row>
 												{this.renderProducts()}

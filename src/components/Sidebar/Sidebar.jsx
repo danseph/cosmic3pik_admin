@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
+import { FormattedMessage } from 'react-intl'
 
 import imagine from "assets/img/sidebar-3.jpg";
-import logo from "assets/img/reactlogo.png";
-
 import dashboardRoutes from "routes/dashboard.jsx";
 
 class Sidebar extends Component {
@@ -36,14 +35,6 @@ class Sidebar extends Component {
       >
         <div className="sidebar-background" style={sidebarBackground} />
         <div className="logo">
-          <a
-            href="https://www.creative-tim.com"
-            className="simple-text logo-mini"
-          >
-            <div className="logo-img">
-              <img src={logo} alt="logo_image" />
-            </div>
-          </a>
           <NavLink
             to="/dashboard"
             className="nav-link simple-text logo-normal"
@@ -71,7 +62,7 @@ class Sidebar extends Component {
                       activeClassName="active"
                     >
                       <i className={prop.icon} />
-                      <p>{prop.name}</p>
+                      <p><FormattedMessage id={prop.name}/></p>
                     </NavLink>
                   </li>
                 );
