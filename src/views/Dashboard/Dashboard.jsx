@@ -14,16 +14,29 @@ class Dashboard extends Component {
       totalAiCoin: 0,
       usersCount: 0,
     };
-    this.token = window.localStorage['nu_token'];
+  }
+
+  pleaseLogin() {
+    alert('Please login!');
+    window.location.href='/';
+    return;
   }
 
   getAicoins() {
     // Coins
-    Axios.post(`${cp.server_ip}/api/coins/count`, { token: this.token })
+    Axios.get(`${cp.server_ip}/api/coins/count`, {
+        headers: {
+          Authorization : `Bearer ${window.localStorage['nu_token']}`,
+        },
+      })
       .then((res) => {
-        if (!res || !res.data || !res.data.coins) return false;
+        const data = res.data;
+        if (!res || !data) return alert('Error, no data!');
+        if (data.err && data.errStatus === 0) return this.pleaseLogin();
+        if (data.err) return alert(`Error, ${data.errStatus}: ${data.err}`);
+        if (!data.coins) return alert('Error, there is no coin!');
         // for only AI coin
-        const coins = res.data.coins.find(coin => coin.name === '3');
+        const coins = data.coins.find(coin => coin.name === '3');
         if (!coins) return false;
         this.setState({ totalAiCoin: coins.total });
       })
@@ -35,9 +48,17 @@ class Dashboard extends Component {
 
   getUserCount() {
     // All users count
-    Axios.post(`${cp.server_ip}/api/users/count`, { token: this.token })
+    Axios.get(`${cp.server_ip}/api/users/count`, {
+      headers: {
+        Authorization : `Bearer ${window.localStorage['nu_token']}`,
+      },
+    })
     .then((res) => {
-      if (!res || !res.data || !res.data.count) return false;
+      const data = res.data;
+      if (!res || !data) return alert('Error, no data!');
+      if (data.err && data.errStatus === 0) return this.pleaseLogin();
+      if (data.err) return alert(`Error, ${data.errStatus}: ${data.err}`);
+      if (!data.count) return alert('Error, there is no user count!');
       this.setState({ usersCount: res.data.count });
     })
     .catch((err) => {
