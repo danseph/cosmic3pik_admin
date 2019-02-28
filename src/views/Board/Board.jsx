@@ -39,7 +39,8 @@ class BoardList extends Component {
 		var tableTh = [];
 		tableTh.push(
 			<tr key="1">
-				<th style={Object.assign({}, style.Config.w20, style.Config.wordCenter, style.Config.wordBlod)} >날짜</th>
+				<th style={Object.assign({}, style.Config.w5, style.Config.wordCenter, style.Config.wordBlod)} >No.</th>
+				<th style={Object.assign({}, style.Config.w15, style.Config.wordCenter, style.Config.wordBlod)} >날짜</th>
 				<th style={Object.assign({}, style.Config.w10, style.Config.wordCenter, style.Config.wordBlod)} >카테고리</th>
 				<th style={Object.assign({}, style.Config.w10, style.Config.wordCenter, style.Config.wordBlod)} >하위 카테고리</th>
 				<th style={Object.assign({}, style.Config.w60, style.Config.wordLeft, style.Config.wordBlod)} >제목</th>
@@ -51,7 +52,8 @@ class BoardList extends Component {
 				var link = '/boardWrite?uid='+item._id;
 				tableTd.push(
 				<tr key={item._id}>
-					<td style={Object.assign({}, style.Config.w20, style.Config.wordCenter)} ><NavLink to={link} > {item.date}</NavLink></td>
+					<td style={Object.assign({}, style.Config.w5, style.Config.wordCenter)} >{this.state.data.indexOf(item) + 1}</td>
+					<td style={Object.assign({}, style.Config.w15, style.Config.wordCenter)} ><NavLink to={link} > {item.date}</NavLink></td>
 					<td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)} >{item.boardCate}</td>
 					<td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)} >{item.subCate}</td>
 					<td style={Object.assign({}, style.Config.w60, style.Config.wordLeft)} >{item.titleKr}</td>
