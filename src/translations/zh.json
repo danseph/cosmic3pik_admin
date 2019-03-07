@@ -1,12 +1,13 @@
 {
-  "Dashboard": "Dashboard2",
+  "Dashboard": "Dashboard",
   "Basic": "Basic",
   "Vote": "Vote",
   "Language set": "Language set",
   "Board": "Board",
   "Robot": "Robot",
-  "LANGUAGE.UNIQUE_KEY": "Please a unique key",
+  "LANGUAGE.UNIQUE_KEY": "A unique key",
   "LANGUAGE.KOREAN": "KOREAN",
   "LANGUAGE.ENGLISH": "ENGLISH",
-  "LANGUAGE.CHINA": "CHINA"
+  "LANGUAGE.CHINA": "CHINA",
+  "LANGUAGE.JAPANESE": "JAPANESE"
 }

@@ -19,6 +19,7 @@ class LanguageSub extends Component {
       mentKr: this.props.data.mentKr,
       mentEn: this.props.data.mentEn,
       mentChn: this.props.data.mentChn,
+      mentJa: this.props.data.mentJa,
       id: this.props.data._id,
     };
   }
@@ -48,6 +49,7 @@ class LanguageSub extends Component {
         mentKr: res.data.modifiedLanguage.mentKr,
         mentEn: res.data.modifiedLanguage.mentEn,
         mentChn: res.data.modifiedLanguage.mentChn,
+        mentJa: res.data.modifiedLanguage.mentJa,
         id: res.data.modifiedLanguage._id
       })
       alert('Success!');
@@ -74,88 +76,71 @@ class LanguageSub extends Component {
     this.setState({ [e.target.name]: e.target.value })
   }
 
+  makeLanguageList = () => {
+    const list = [
+      { name: 'key', disabled: true },
+      { name: 'mentKr', disabled: false },
+      { name: 'mentEn', disabled: false },
+      { name: 'mentChn', disabled: false },
+      { name: 'mentJa', disabled: false },
+    ];
+
+    return (
+      <Row key={this.state.id} style={{padding: '15px'}}>
+        {list.map((item, idx) => {
+          return (
+            <Col md={2} key={`${item.name}-${idx}`}>
+              <FormGroup controlId="formControlsTextarea">
+              <FormControl
+                componentClass="textarea"
+                defaultValue={this.state[item.name]}
+                name={item.name}
+                required="true"
+                rows="2"
+                disabled={item.disabled}
+                onChange={(e) => {this.changed(e)}}
+              >
+              </FormControl>
+              <FormControl.Feedback />
+            </FormGroup>
+          </Col>
+          )
+        })}
+        <Col md={2}>
+          <Button
+            style={{
+              width: '5em',
+              padding: '.5em .1em',
+              margin: '0 .2em .2em 0'}}
+            bsStyle="info"
+            pullLeft
+            fill
+            type="submit">
+            Edit
+          </Button>
+          <Button
+            style={{
+              width: '5em',
+              padding: '.5em .1em'}}
+            bsStyle="danger"
+            pullLeft
+            fill
+            onClick={() => {this.doDelete(this.state.id)}}
+            type="button">
+            Delete
+          </Button>
+        </Col>
+      </Row>
+    );
+  }
+
   render() {
     return (
         <form
           method='post'
           onSubmit={(e) => {this.doSumbit(e)}}
           id={this.state.id}>
-          <Row key={this.state.id} style={{padding: '15px'}}>
-            <Col md={2}>
-              <FormGroup 	controlId="form-control">
-                <FormControl
-                  componentClass="input"
-                  name = "key"
-                  rows="1"
-                  required = "true"
-                  value={this.state.key}
-                  disabled
-                >
-                </FormControl>
-                <FormControl.Feedback />
-              </FormGroup>
-            </Col>
-            <Col md={3}>
-              <FormGroup controlId="formControlsTextarea" >
-                <FormControl
-                  name = 'mentKr'
-                  rows="3"
-                  componentClass="textarea"
-                  defaultValue={this.state.mentKr}
-                  required = "true"
-                  onChange={(e) => {this.changed(e)}}
-                />
-              </FormGroup>
-            </Col>
-            <Col md={3}>
-              <FormGroup controlId="formControlsTextarea">
-                <FormControl
-                  name = 'mentEn'
-                  rows="3"
-                  componentClass="textarea"
-                  defaultValue={this.state.mentEn}
-                  required = "true"
-                  onChange={(e) => {this.changed(e)}}
-                />
-              </FormGroup>
-            </Col>
-            <Col md={3}>
-              <FormGroup controlId="formControlsTextarea">
-                <FormControl
-                  name = 'mentChn'
-                  rows="3"
-                  componentClass="textarea"
-                  defaultValue={this.state.mentChn}
-                  required = "true"
-                  onChange={(e) => {this.changed(e)}}
-                />
-              </FormGroup>
-            </Col>
-            <Col md={1}>
-              <Button
-                style={{
-                  width: '5em',
-                  padding: '.5em .1em',
-                  margin: '0 .2em .2em 0'}}
-                bsStyle="info"
-                pullLeft
-                fill
-                type="submit">
-                Edit
-              </Button>
-              <Button
-                style={{
-                  width: '5em',
-                  padding: '.5em .1em'}}
-                bsStyle="danger"
-                pullLeft
-                fill
-                onClick={() => {this.doDelete(this.state.id)}}
-                type="button">
-                Delete
-              </Button>
-            </Col>
-          </Row>
+          {this.makeLanguageList()}
         </form>
     );
   }

@@ -8,5 +8,6 @@
   "LANGUAGE.UNIQUE_KEY": "중복되지 않는 키",
   "LANGUAGE.KOREAN": "한국어",
   "LANGUAGE.ENGLISH": "영어",
-  "LANGUAGE.CHINA": "중국어"
+  "LANGUAGE.CHINA": "중국어",
+  "LANGUAGE.JAPANESE": "일본어"
 }

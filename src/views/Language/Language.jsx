@@ -19,7 +19,6 @@ import LanguageSub from './LanguageSub.jsx';
 
 import ErrAction from '../../ErrAction' ;
 
-
 class Language extends Component {
 
   constructor(props) {
@@ -31,6 +30,7 @@ class Language extends Component {
 				mentKr: '' ,
 				mentEn: '' ,
 				mentChn: '' ,
+				mentJa: '' ,
 				searchText : '' ,
 				searchAc : false,
 		};
@@ -55,6 +55,7 @@ class Language extends Component {
 							mentKr: this.state.mentKr,
 							mentEn: this.state.mentEn,
 							mentChn: this.state.mentChn,
+							mentJa: this.state.mentJa,
 							searchText: this.state.searchText,
 							isLoad: true,
 							searchAc :true,
@@ -66,6 +67,7 @@ class Language extends Component {
 							mentKr: '',
 							mentEn: '' ,
 							mentChn: '' ,
+							mentJa: '' ,
 							searchText : '',
 							isLoad : true,
 							searchAc :false,
@@ -73,14 +75,6 @@ class Language extends Component {
 					}
 				}
 		}).catch(err => { console.log(err); });
-	}
-
-	renderProducts() {
-			return this.state.data.map(item =>
-					(
-					  <LanguageSub key={item._id} data={item} searchText={this.state.searchText} />
-					)
-			)
 	}
 
 	changed(e) {
@@ -101,6 +95,7 @@ class Language extends Component {
 					mentChn: this.state.mentChn,
 					mentEn: this.state.mentEn,
 					mentKr: this.state.mentKr,
+					mentJa: this.state.mentJa,
 				},
 				proc: 'languageWrite'
 		}).then(res => {
@@ -124,36 +119,100 @@ class Language extends Component {
 					mentChn: '',
 					mentEn: '',
 					mentKr: '',
+					mentJa: '',
 				});
 		}).catch(err => { console.log(err); });
 
 		return false;
 	}
 
-  render() {
-		if (!this.state.isLoad) {
-			this.loadLanguage();
-		}
+	makeLanguageInsertBox = () => {
+		const boxs = [
+			{ id: 'LANGUAGE.UNIQUE_KEY', name: 'key' },
+			{ id: 'LANGUAGE.KOREAN', name: 'mentKr' },,
+			{ id: 'LANGUAGE.ENGLISH', name: 'mentEn' },,
+			{ id: 'LANGUAGE.CHINA', name: 'mentChn' },,
+			{ id: 'LANGUAGE.JAPANESE', name: 'mentJa' },
+		];
 
-		var tableTh = [];
-		tableTh.push(
-			<div key="1">
-				<div style={Object.assign({}, style.Config.w15, style.Config.wordCenter, style.Config.wordBlod, style.Config.floatL)} >
-					<FormattedMessage id="LANGUAGE.UNIQUE_KEY" />
+		return (
+			<Row>
+				{boxs.map(item => {
+					return (
+						<Col md={2} key={item.name}>
+						<FormGroup	controlId="formControlsTextarea">
+							<FormControl
+								name={item.name}
+								label={item.name}
+								rows="3"
+								componentClass="textarea"
+								value={this.state[item.name]}
+								required="true"
+								onChange={(e) => this.changed(e)}
+							>
+							</FormControl>
+							<ControlLabel style={{float: "right"}}>
+								<FormattedMessage id={item.id} />
+							</ControlLabel>
+							<FormControl.Feedback />
+						</FormGroup>
+						</Col>
+					);
+				})}
+
+				<Col md={2}>
+					<Button bsStyle="info" pullLeft fill type="submit" >
+						submit
+					</Button>
+				</Col>
+			</Row>
+		);
+	}
+
+	makeLanguageListBoxHeader = () => {
+		const list = [
+			{ id: 'LANGUAGE.UNIQUE_KEY' },
+			{ id: 'LANGUAGE.KOREAN' },
+			{ id: 'LANGUAGE.ENGLISH' },
+			{ id: 'LANGUAGE.CHINA' },
+			{ id: 'LANGUAGE.JAPANESE' },
+			{ id: 'LANGUAGE.UNIQUE_KEY' },
+		];
+		return (
+			<Row style={{ padding: '0 15px' }}>
+				<div key="1">
+					{list.map((item, idx) => (
+						<div 
+							key={`${item.id}-${idx}`}
+							style={
+								Object.assign(
+									{ width: `${100 / 6}%`, padding: '0 15px' }, 
+									style.Config.wordLeft, 
+									style.Config.wordBlod, 
+									style.Config.floatL
+								)}
+							>
+							<FormattedMessage id={item.id} />
+						</div>
+					))}
 				</div>
-				<div style={Object.assign({}, style.Config.w25, style.Config.wordCenter, style.Config.wordBlod, style.Config.floatL)} >
-					<FormattedMessage id="LANGUAGE.KOREAN" />
-					</div>
-				<div style={Object.assign({}, style.Config.w25, style.Config.wordCenter, style.Config.wordBlod, style.Config.floatL)} >
-					<FormattedMessage id="LANGUAGE.ENGLISH" />
-					</div>
-				<div style={Object.assign({}, style.Config.w25, style.Config.wordCenter, style.Config.wordBlod, style.Config.floatL)} >
-					<FormattedMessage id="LANGUAGE.CHINA" />
-					</div>
-				<div style={Object.assign({}, style.Config.w10, style.Config.wordCenter, style.Config.wordBlod, style.Config.floatL)} ></div>
-			</div>
-		)
+			</Row>
+		);
+	}
 
+	makeLanguageListBox = () => {
+			return this.state.data.map(item =>
+					(
+						<LanguageSub 
+							key={item._id} 
+							data={item} 
+							searchText={this.state.searchText} />
+					)
+			);
+	}
+
+  render() {
+		if (!this.state.isLoad) this.loadLanguage();
 		return (
       <div className="content">
 				<Grid fluid>
@@ -163,99 +222,27 @@ class Language extends Component {
                 title="Language Set"
                 content={
                   <form method='post' onSubmit={(e ) => {this.doSumbit(e)}}>
-										<Row>
-											<Col md={2}>
-												<FormGroup	controlId="form-control">
-													<ControlLabel>
-														<FormattedMessage id="LANGUAGE.UNIQUE_KEY" />
-													</ControlLabel>
-													<FormControl
-														componentClass="input"
-														type="text"
-														name = "key"
-														required = "true"
-														value={this.state.key}
-														onChange={(e) => this.changed(e)}
-													>
-													</FormControl>
-
-													<FormControl.Feedback />
-												</FormGroup>
-											</Col>
-											<Col md={3}>
-												<FormGroup controlId="formControlsTextarea">
-													<ControlLabel>
-														<FormattedMessage id="LANGUAGE.KOREAN" />
-													</ControlLabel>
-													<FormControl
-														name = 'mentKr'
-														rows="3"
-														componentClass="textarea"
-														value={this.state.mentKr}
-														required = "true"
-														onChange={(e) => this.changed(e)}
-													/>
-												</FormGroup>
-											</Col>
-											<Col md={3}>
-												<FormGroup controlId="formControlsTextarea">
-													<ControlLabel>
-														<FormattedMessage id="LANGUAGE.ENGLISH" />
-													</ControlLabel>
-													<FormControl
-														name = 'mentEn'
-														rows="3"
-														componentClass="textarea"
-														value={this.state.mentEn}
-														required = "true"
-														onChange={(e) => this.changed(e)}
-													/>
-												</FormGroup>
-											</Col>
-											<Col md={3}>
-												<FormGroup controlId="formControlsTextarea">
-													<ControlLabel>
-														<FormattedMessage id="LANGUAGE.CHINA" />
-													</ControlLabel>
-													<FormControl
-														name = 'mentChn'
-														rows="3"
-														componentClass="textarea"
-														value={this.state.mentChn}
-														required = "true"
-														onChange={(e) => this.changed(e)}
-													/>
-												</FormGroup>
-											</Col>
-											<Col md={1}>
-												<br /><br /><br />
-												<Button bsStyle="info" pullLeft fill type="submit" >
-													submit
-												</Button>
-											</Col>
-
-										</Row>
+										{this.makeLanguageInsertBox()}
                   </form>
                 }
-								/>
-
-								<Row>
-									<Col md={12}>
-										<Card
-											title="Language List"
-											category=""
-											ctTableFullWidth
-											ctTableResponsive
-											content={
+							/>
+							<Row>
+								<Col md={12}>
+									<Card
+										title="Language List"
+										category=""
+										ctTableFullWidth
+										ctTableResponsive
+										content={
 											<div>
 												<Row style={style.Config.p15}>
 													<Col md={2}>
 														<FormGroup	controlId="form-control">
 															<InputGroup>
-																<InputGroup.Addon><i className='pe-7s-search'></i></InputGroup.Addon>
+																<InputGroup.Addon><i className="pe-7s-search"></i></InputGroup.Addon>
 																	<FormControl
 																		componentClass="input"
-																		name = "searchText"
+																		name="searchText"
 																		defaultValue={this.state.searchText}
 																		onChange={(e) => this.changedSearch(e)}
 																	>
@@ -265,16 +252,13 @@ class Language extends Component {
 														</FormGroup>
 													</Col>
 												</Row>
-												<Row>
-													{tableTh}
-												</Row>
-												{this.renderProducts()}
+												{this.makeLanguageListBoxHeader()}
+												{this.makeLanguageListBox()}
 											</div>
-											}
-										/>
-									</Col>
-								</Row>
-
+										}
+									/>
+								</Col>
+							</Row>
 	           </Col>
           </Row>
         </Grid>
