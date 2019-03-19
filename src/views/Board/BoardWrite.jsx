@@ -144,9 +144,9 @@ class BoardWrite extends Component {
 				var newFormObj  = new FormData();
 				newFormObj.append('listingImage', file , 'imageFIle' );
 
-				axios.post(`${cp.image_server_ip}/upload`, newFormObj ,config)
+				axios.post(`${cp.server_ip}/api/upload`, newFormObj ,config)
 				.then(function (response) {
-						resolve({data: {link: `${cp.image_server_ip}/${response.data.path}`}})
+						resolve({data: {link: `${cp.server_ip}/${response.data.path}`}})
 				})
 				.then(societe => {
 						reject(societe);
