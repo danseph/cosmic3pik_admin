@@ -15,6 +15,7 @@ import Button from "components/CustomButton/CustomButton.jsx";
 import { style } from "variables/Variables.jsx";
 import ErrAction from '../../ErrAction' ;
 import cp from '../../cp';
+import queryString from 'query-string';
 
 class Language extends Component {
 
@@ -31,14 +32,39 @@ class Language extends Component {
 				fileViceo :'' ,
 				infoKr: '' ,
 				infoEn: '' ,
-				infoChn : '' ,
+				infoChn : '',
+				infoJa: '',
 				tagKr : '',
 				tagEn : '',
 				tagChn : '',
+				tagJa: '',
 				videoLink : '' ,
 				fileData :  new FormData()
 		};
-  }
+	}
+	
+	resetData = (data) => {
+		this.setState({
+			data: data,
+			name: '' ,
+			uid: '' ,
+			file: '' ,
+			fileThumb: '' ,
+			fileIcon : '' ,
+			fileVideo : '' ,
+			infoKr: '' ,
+			infoEn: '' ,
+			infoChn: '',
+			infoJa: '',
+			tagKr: '',
+			tagEn: '',
+			tagChn: '',
+			tagJa: '',
+			videoLink: '',
+			fileData: new FormData(),
+			isLoad: true,
+		});
+	}
 
 	loadRobot(parsed) {
 		axios.post(cp.server_ip+'/api/robot', {
@@ -54,54 +80,35 @@ class Language extends Component {
 							curData = item;
 						}
 					}
-					if(curData){
-						this.setState({
-							data: res.data,
-							uid: curData._id,
-							name: curData.name,
-							file: curData.file,
-							fileThumb: curData.fileThumb,
-							fileIcon: curData.fileIcon,
-							fileVideo: curData.fileVideo,
-							infoKr: curData.infoKr,
-							infoEn: curData.infoEn,
-							infoChn : curData.infoChn,
-							tagKr : curData.tagKr,
-							tagEn : curData.tagEn,
-							tagChn : curData.tagChn  ,
-							videoLink : curData.videoLink,
-							fileData :  new FormData(),
-							isLoad : true,
-						});
-					}else{
-						this.setState({
-							data: res.data,
-							name: '' ,
-							uid: '' ,
-							file: '' ,
-							fileThumb: '' ,
-							fileIcon : '' ,
-							fileVideo : '' ,
-							infoKr: '' ,
-							infoEn: '' ,
-							infoChn : '' ,
-							tagKr : '',
-							tagEn : '',
-							tagChn : '',
-							videoLink : '' ,
-							fileData :  new FormData(),
-							isLoad : true,
-						});
-					}
+					this.resetData(res.data);
+					if (!curData) return;
+					this.setState({
+						data: res.data,
+						uid: curData._id,
+						name: curData.name,
+						file: curData.file,
+						fileThumb: curData.fileThumb,
+						fileIcon: curData.fileIcon,
+						fileVideo: curData.fileVideo,
+						infoKr: curData.infoKr,
+						infoEn: curData.infoEn,
+						infoChn : curData.infoChn,
+						infoJa: curData.infoJa,
+						tagKr : curData.tagKr,
+						tagEn : curData.tagEn,
+						tagChn : curData.tagChn,
+						tagJa: curData.tagJa,
+						videoLink : curData.videoLink,
+						fileData :  new FormData(),
+						isLoad : true,
+					});
 				}
 		}).catch(err => { console.log(err); });
 	}
 
   render() {
-		const queryString = require('query-string');
 		const parsed = queryString.parse(this.props.location.search);
-
-		if(!this.state.isLoad || (!parsed.uid && this.state.uid !== '') ){
+		if (!this.state.isLoad || (!parsed.uid && this.state.uid !== '') ){
 			this.loadRobot(parsed);
 		}
 
@@ -150,9 +157,11 @@ class Language extends Component {
 			newFormObj.set('infoKr', this.state.infoKr);
 			newFormObj.set('infoEn', this.state.infoEn);
 			newFormObj.set('infoChn', this.state.infoChn);
+			newFormObj.set('infoJa', this.state.infoJa);
 			newFormObj.set('tagKr', this.state.tagKr);
 			newFormObj.set('tagEn', this.state.tagEn);
 			newFormObj.set('tagChn', this.state.tagChn);
+			newFormObj.set('tagJa', this.state.tagJa);
 			newFormObj.set('videoLink', this.state.videoLink);
 			newFormObj.set('fileTemp', this.state.file);
 			newFormObj.set('fileThumbTemp', this.state.fileThumb);
@@ -171,6 +180,99 @@ class Language extends Component {
 			}).catch(err => { console.log(err); });
 			return false;
 		}
+
+		const prepareLanguages = () => {
+			const languageList = [
+				{
+					language: 'Ko',
+					infoLable: 'Infomation Korean',
+					infoName: 'infoKr',
+					infoRows: 5,
+					infoComponentClass: 'textarea',
+					infoValue: this.state.infoKr,
+					tagLable: 'Tag for Korean',
+					tagName: 'tagKr',
+					tagRows: 2,
+					tagComponentClass: 'textarea',
+					tagValue: this.state.tagKr,
+					viewBox: true,
+				},
+				{
+					language: 'En',
+					infoLable: 'Infomation English',
+					infoName: 'infoEn',
+					infoRows: 5,
+					infoComponentClass: 'textarea',
+					infoValue: this.state.infoEn,
+					tagLable: 'Tag for English',
+					tagName: 'tagEn',
+					tagRows: 2,
+					tagComponentClass: 'textarea',
+					tagValue: this.state.tagEn,
+					viewBox: true,
+				},
+				{
+					language: 'Cn',
+					infoLable: 'Infomation Chinese',
+					infoName: 'infoChn',
+					infoRows: 5,
+					infoComponentClass: 'textarea',
+					infoValue: this.state.infoChn,
+					tagLable: 'Tag for Chinese',
+					tagName: 'tagChn',
+					tagRows: 2,
+					tagComponentClass: 'textarea',
+					tagValue: this.state.tagChn,
+					viewBox: true,
+				},
+				{
+					language: 'Ja',
+					infoLable: 'Infomation Japanese',
+					infoName: 'infoJa',
+					infoRows: 5,
+					infoComponentClass: 'textarea',
+					infoValue: this.state.infoJa,
+					tagLable: 'Tag for Japanese',
+					tagName: 'tagJa',
+					tagRows: 2,
+					tagComponentClass: 'textarea',
+					tagValue: this.state.tagJa,
+					viewBox: true,
+				}
+			];
+			
+			return languageList.map((item) => {
+				return item.viewBox ? (<div key={item.language}>
+					<Row>
+						<Col md={4}>
+							<FormGroup controlId="formControlsTextarea">
+								<ControlLabel>{item.tagLable}</ControlLabel>
+								<FormControl
+									name={item.tagName}
+									rows={item.tagRows}
+									componentClass={item.tagComponentClass}
+									value={item.tagValue}
+									onChange={(e) => {changed(e)}}
+								/>
+							</FormGroup>
+						</Col>
+						<Col md={8}>
+							<FormGroup controlId="formControlsTextarea">
+								<ControlLabel>{item.infoLable}</ControlLabel>
+								<FormControl
+									name={item.infoName}
+									rows={item.infoRows}
+									componentClass={item.infoComponentClass}
+									value={item.infoValue}
+									onChange={(e) => {changed(e)}}
+								/>
+							</FormGroup>
+						</Col>
+					</Row>
+				</div>
+				): false}
+			);
+		};
 
 		return (
       <div className="content">
@@ -283,96 +385,7 @@ class Language extends Component {
 												</FormGroup>
 											</Col>
 										</Row>
-										<Row>
-											<Col md={4}>
-												<FormGroup controlId="formControlsTextarea">
-													<ControlLabel>infomation KR</ControlLabel>
-													<FormControl
-														name = 'infoKr'
-														rows="3"
-														componentClass="textarea"
-														value={this.state.infoKr}
-														onChange={(e ) => {changed(e)}}
-													/>
-													<HelpBlock>설명을 적어주세요 (한국어)</HelpBlock>
-												</FormGroup>
-											</Col>
-											<Col md={4}>
-												<FormGroup controlId="formControlsTextarea">
-													<ControlLabel>tag KR</ControlLabel>
-													<FormControl
-														name = 'tagKr'
-														rows="3"
-														componentClass="input"
-														type="text"
-														value={this.state.tagKr}
-														onChange={(e ) => {changed(e)}}
-
-													/>
-													<HelpBlock>태그르 적어주세요 (한국어)</HelpBlock>
-												</FormGroup>
-											</Col>
-										</Row>
-										<Row>
-											<Col md={4}>
-												<FormGroup controlId="formControlsTextarea">
-													<ControlLabel>infomation En</ControlLabel>
-													<FormControl
-														name = 'infoEn'
-														rows="3"
-														componentClass="textarea"
-														value={this.state.infoEn}
-														onChange={(e ) => {changed(e)}}
-													/>
-													<HelpBlock>설명을 적어주세요 (영어)</HelpBlock>
-												</FormGroup>
-											</Col>
-											<Col md={4}>
-												<FormGroup controlId="formControlsTextarea">
-													<ControlLabel>tag En</ControlLabel>
-													<FormControl
-														name = 'tagEn'
-														rows="3"
-														componentClass="input"
-														type="text"
-														value={this.state.tagEn}
-														onChange={(e ) => {changed(e)}}
-
-													/>
-													<HelpBlock>태그르 적어주세요 (영어)</HelpBlock>
-												</FormGroup>
-											</Col>
-										</Row>
-										<Row>
-											<Col md={4}>
-												<FormGroup controlId="formControlsTextarea">
-													<ControlLabel>infomation Chn</ControlLabel>
-													<FormControl
-														name = 'infoChn'
-														rows="3"
-														componentClass="textarea"
-														value={this.state.infoChn}
-														onChange={(e ) => {changed(e)}}
-													/>
-													<HelpBlock>설명을 적어주세요 (중국어)</HelpBlock>
-												</FormGroup>
-											</Col>
-											<Col md={4}>
-												<FormGroup controlId="formControlsTextarea">
-													<ControlLabel>tag Chn</ControlLabel>
-													<FormControl
-														name = 'tagChn'
-														rows="3"
-														componentClass="input"
-														type="text"
-														value={this.state.tagChn}
-														onChange={(e ) => {changed(e)}}
-
-													/>
-													<HelpBlock>태그르 적어주세요 (중국어)</HelpBlock>
-												</FormGroup>
-											</Col>
-										</Row>
+										{prepareLanguages()}
 										<Row>
 											<Col md={1}>
 												<br /><br /><br />
@@ -384,7 +397,6 @@ class Language extends Component {
                   </form>
                 }
 								/>
-
 								<Row>
 									<Col md={12}>
 										<Card
