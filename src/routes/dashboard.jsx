@@ -13,6 +13,10 @@ import Notifications from "views/Notifications/Notifications";
 import Upgrade from "views/Upgrade/Upgrade";
 import Language from "views/Language/Language";
 import Robot from "views/Robot/Robot";
+import Withdraw from "views/Withdraw/Withdraw";
+import WithdrawView from "views/Withdraw/WithdrawView";
+import WithdrawWrite from "views/Withdraw/WithdrawWrite";
+import WithdrawLog from "views/Withdraw/WithdrawLog";
 
 const dashboardRoutes = [
   {
@@ -71,6 +75,34 @@ const dashboardRoutes = [
     icon: "pe-7s-like",
     component: Robot,
     view: true,
+  },
+  {
+    path: "/withdraw",
+    name: "Withdraw",
+    icon: "pe-7s-wallet",
+    component: Withdraw,
+    view: true,
+  },
+  {
+    path: "/withdrawView",
+    name: "Withdraw",
+    icon: "pe-7s-wallet",
+    component: WithdrawView,
+    view: false,
+  },
+  {
+    path: "/withdrawWrite",
+    name: "Withdraw",
+    icon: "pe-7s-wallet",
+    component: WithdrawWrite,
+    view: false,
+  },
+  {
+    path: "/withdrawLog",
+    name: "Withdraw",
+    icon: "pe-7s-wallet",
+    component: WithdrawLog,
+    view: false,
   },
   {
     path: "/typography",
