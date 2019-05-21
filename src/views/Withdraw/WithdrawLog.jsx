@@ -78,6 +78,10 @@ class VoteList extends Component {
 			);
 	}
 
+    addComma = (num) => {
+        var regexp = /\B(?=(\d{3})+(?!\d))/g;
+        return num.toString().replace(regexp, ',');
+    }
 
     render() {
         if (!this.state.isLoad) {
@@ -109,9 +113,9 @@ class VoteList extends Component {
                     <td style={Object.assign({}, style.Config.w20, style.Config.wordCenter)}>{startDate} ~ {endDate}</td>
                     <td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)}>{infoData.withdraw_info_id}</td>
                     <td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)}>{infoData.coin_type}</td>
-                    <td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)}>{infoData.personal_amount_min}, {infoData.personal_amount_max}</td>
-                    <td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)}>{infoData.unit_min}</td>
-                    <td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)}>{infoData.total_amount}</td>
+                    <td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)}>{this.addComma(infoData.personal_amount_min)} / {this.addComma(infoData.personal_amount_max)}</td>
+                    <td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)}>{this.addComma(infoData.unit_min)}</td>
+                    <td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)}>{this.addComma(infoData.total_amount)}</td>
                     <td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)}>{moDate}</td>
                 </tr>
             );
@@ -122,7 +126,7 @@ class VoteList extends Component {
             // 히스토리 리스트
             tableTh.push(
                 <tr key="1">
-                    <th style={Object.assign({}, style.Config.w10, style.Config.wordCenter, style.Config.wordBlod)} >유저id (추후 닉네임추가)</th>
+                    <th style={Object.assign({}, style.Config.w10, style.Config.wordCenter, style.Config.wordBlod)} >유저닉네임</th>
                     <th style={Object.assign({}, style.Config.w5, style.Config.wordCenter, style.Config.wordBlod)} >신청 ai수량</th>
                     <th style={Object.assign({}, style.Config.w5, style.Config.wordCenter, style.Config.wordBlod)} >스왑코인</th>
                     <th style={Object.assign({}, style.Config.w5, style.Config.wordCenter, style.Config.wordBlod)} >변환된 수량</th>

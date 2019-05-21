@@ -38,6 +38,10 @@ class VoteList extends Component {
 
     }
 
+    addComma = (num) => {
+        var regexp = /\B(?=(\d{3})+(?!\d))/g;
+        return num.toString().replace(regexp, ',');
+    }
 
     render() {
         var tableTd = [];
@@ -64,12 +68,12 @@ class VoteList extends Component {
 			tableTd.push(
 				<tr style={style.Config.pointer} key={item._id} >
 					<td style={Object.assign({}, style.Config.w20, style.Config.wordCenter)}><NavLink to={link} >{startDate} ~ {endDate}</NavLink></td>
-					<td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)}>{item.withdraw_info_id}</td>
-					<td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)}>{item.coin_type}</td>
-					<td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)}>{item.personal_amount_min}, {item.personal_amount_max}</td>
-					<td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)}>{item.unit_min}</td>
-					<td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)}>{item.total_amount}</td>
-					<td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)}>{moDate}</td>
+                    <td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)}>{item.withdraw_info_id}</td>
+                    <td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)}>{item.coin_type}</td>
+                    <td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)}>{this.addComma(item.personal_amount_min)} / {this.addComma(item.personal_amount_max)}</td>
+                    <td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)}>{this.addComma(item.unit_min)}</td>
+                    <td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)}>{this.addComma(item.total_amount)}</td>
+                    <td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)}>{moDate}</td>
 				</tr>);
 
 		}

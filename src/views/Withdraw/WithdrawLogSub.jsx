@@ -79,16 +79,23 @@ class LanguageSub extends Component {
       }
   }
 
+
+    addComma = (num) => {
+        var regexp = /\B(?=(\d{3})+(?!\d))/g;
+        return num.toString().replace(regexp, ',');
+    }
+
+
   makeLanguageList = () => {
     const item = this.state.data;
     var crDate = moment(item.cr_date).format('YYYY-MM-DD HH:mm');
     var userStatus = {'R' : '준비중' , 'I' : "진행중" , 'C' : '진행완료'};
     return (
         <tr style={style.Config.pointer} key={item._id} >
-            <td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)}>{item.user_id}</td>
-            <td style={Object.assign({}, style.Config.w5, style.Config.wordCenter)}>{item.ai_amount}</td>
+            <td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)}>{item.nick}</td>
+            <td style={Object.assign({}, style.Config.w5, style.Config.wordCenter)}>{this.addComma(item.ai_amount)}</td>
             <td style={Object.assign({}, style.Config.w5, style.Config.wordCenter)}>{item.coin_type}</td>
-            <td style={Object.assign({}, style.Config.w5, style.Config.wordCenter)}>{item.coin_amount}</td>
+            <td style={Object.assign({}, style.Config.w5, style.Config.wordCenter)}>{this.addComma(item.coin_amount)}</td>
             <td style={Object.assign({}, style.Config.w10, style.Config.wordLeft)}>{item.wallet}</td>
             <td style={Object.assign({}, style.Config.w5, style.Config.wordCenter)}>{userStatus[item.status]}</td>
             <td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)}>{crDate}</td>
