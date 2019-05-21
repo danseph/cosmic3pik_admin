@@ -56,7 +56,7 @@ class VoteList extends Component {
 		)
 
 		for (var item of this.state.data) {
-            var link = '/WithdrawWrite?uid=' + item._id;
+            var link = '/WithdrawWrite?uid=' + item.withdraw_info_id;
             var startDate = moment(item.start_date).format('YYYY-MM-DD HH:mm');
             var endDate = moment(item.end_date).format('YYYY-MM-DD HH:mm');
             var moDate = moment(item.mo_date).format('YYYY-MM-DD HH:mm');
