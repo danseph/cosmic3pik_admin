@@ -10,6 +10,7 @@ import moment from 'moment';
 import Button from "components/CustomButton/CustomButton.jsx";
 import { createBrowserHistory } from 'history';
 import WithdrawLogSub from './WithdrawLogSub.jsx';
+import { FormInputs } from "components/FormInputs/FormInputs.jsx";
 
 export const history = createBrowserHistory();
 
@@ -82,7 +83,29 @@ class VoteList extends Component {
         var regexp = /\B(?=(\d{3})+(?!\d))/g;
         return num.toString().replace(regexp, ',');
     }
+    search = () => {
+        const queryString = require('query-string');
+        const parsed = queryString.parse(this.props.location.search);
+        axios.post(cp.server_ip + '/api/withdraw/Withdraw_history_for_event',
+            {
+                data: {
+                    token: window.localStorage['nu_token'],
+                    page: parsed.page,
+                    uid: parsed.info_id,
+                    search: this.state.search,
+                }
+            }
+        ).then(res => {
+            if (res.data.status === 'err') {
+                alert(res.data.msg);
+            }
+            else { this.setState({ data: res.data.data, infoData: res.data.infoData.data, isLoad: true }) }
 
+        }).catch(err => { console.log(err); });
+    };
+    changed = (e) => {
+        this.setState({ [e.target.name]: e.target.value })
+    };
     render() {
         if (!this.state.isLoad) {
             return (<div></div>);
@@ -180,14 +203,37 @@ class VoteList extends Component {
                                     ctTableFullWidth
                                     ctTableResponsive
                                     content={
-                                        <Table striped hover>
-                                            <thead>
-                                                {tableTh}
-                                            </thead>
-                                            <tbody>
-                                                {this.makeLogBox()}
-                                            </tbody>
-                                        </Table>
+                                        <div>
+                                            <Row style={{position:"absolute", top:"10", right:"10", width:"20%",marginRight:"0"}}>
+                                                <FormInputs
+                                                    changeAction = {this.changed}
+                                                    ncols={["col-md-10"]}
+                                                    proprieties={[
+                                                        {
+                                                            label: "닉네임 검색(현재 닉네임을 입력해 주세요)",
+                                                            name: 'search',
+                                                            componentClass: "input",
+                                                            type: "text",
+                                                            bsClass: "form-control",
+                                                            defaultValue: this.state.search,
+                                                            required: false
+                                                        }
+                                                    ]}
+
+                                                />
+                                                <Col md={2} style={{ paddingLeft:"0", top:"28"}} onClick={this.search}>
+                                                    <i style={{width:"30", height:"30", fontSize:"28", cursor:"pointer",}} className="pe-7s-search" />
+                                                </Col>
+                                            </Row>
+                                            <Table striped hover>
+                                                <thead>
+                                                    {tableTh}
+                                                </thead>
+                                                <tbody>
+                                                    {this.makeLogBox()}
+                                                </tbody>
+                                            </Table>
+                                        </div>
 
                                     }
                                 />

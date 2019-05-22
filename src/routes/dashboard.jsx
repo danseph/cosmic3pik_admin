@@ -116,7 +116,7 @@ const dashboardRoutes = [
     name: "Icons",
     icon: "pe-7s-science",
     component: Icons,
-    view: false,
+    view: true,
   },
   {
     path: "/user",
