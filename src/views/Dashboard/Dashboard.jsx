@@ -1,8 +1,10 @@
 import React, { Component } from "react";
-import { Grid, Row, Col } from "react-bootstrap";
+import { Grid, Row, Col, Table } from "react-bootstrap";
 
+import Card from "components/Card/Card.jsx";
 import Axios from 'axios';
 import cp from '../../cp';
+import { style } from 'variables/Variables.jsx';
 
 import { StatsCard } from "components/StatsCard/StatsCard.jsx";
 
@@ -12,16 +14,19 @@ class Dashboard extends Component {
     super()
     this.state = {
       totalAiCoin: 0,
-      usersCount: 0,
+      usersTotalCnt: 0,
+      usersMonthCnt: [],
     };
   }
 
+  // 로그인 페이지로 이동
   pleaseLogin() {
     alert('Please login!');
     window.location.href='/';
     return;
   }
 
+  // 총 지급된 코인 갯수 요청
   getAicoins() {
     // Coins
     Axios.get(`${cp.server_ip}/api/coins/count`, {
@@ -46,6 +51,7 @@ class Dashboard extends Component {
       });
   }
 
+  // 총 가입자 수와 월별 가입자수를 요청
   getUserCount() {
     // All users count
     Axios.get(`${cp.server_ip}/api/users/count`, {
@@ -59,11 +65,24 @@ class Dashboard extends Component {
       if (data.err && data.errStatus === 0) return this.pleaseLogin();
       if (data.err) return alert(`Error, ${data.errStatus}: ${data.err}`);
       if (!data.count) return alert('Error, there is no user count!');
-      this.setState({ usersCount: res.data.count });
+      this.getMonthUserCount(data.result.monthCount);
+      this.setState({ usersTotalCnt: data.result.totalCount});
     })
     .catch((err) => {
       console.log(err);
       return false;
+    });
+  }
+
+  // 월별 가입자 수
+  getMonthUserCount(monthArr) {
+    return monthArr.map(item => {
+      this.state.usersMonthCnt.push(
+				<tr key={item._id}>
+					<td style={Object.assign({}, style.Config.w5, style.Config.wordCenter)} >{item._id}</td>
+					<td style={Object.assign({}, style.Config.w15, style.Config.wordCenter)} >{item.count}</td>
+        </tr>
+      );
     });
   }
 
@@ -84,7 +103,7 @@ class Dashboard extends Component {
   }
 
   render() {
-    const { totalAiCoin, usersCount } = this.state;
+    const { totalAiCoin, usersTotalCnt: usersTotalCnt } = this.state;
     return (
       <div className="content">
         <Grid fluid>
@@ -103,10 +122,33 @@ class Dashboard extends Component {
               <StatsCard
                 bigIcon={<i className="pe-7s-users text-warning" />}
                 statsText="Current users"
-                statsValue={usersCount}
+                statsValue={usersTotalCnt}
                 statsIcon={<i className="fa fa-refresh" />}
                 statsIconText="Updated now"
                 statsClick={this.getUserCount.bind(this)}
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col md={6}>
+              <Card
+                title="Month users count"
+                category=""
+                ctTableFullWidth
+                ctTableResponsive
+                content={
+                  <Table striped hover>
+                    <thead>
+                      <tr key="user-month-count">
+                        <th style={Object.assign({}, style.Config.w15, style.Config.wordCenter, style.Config.wordBlod)} >날짜</th>
+                        <th style={Object.assign({}, style.Config.w10, style.Config.wordCenter, style.Config.wordBlod)} >가입수</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+											{this.state.usersMonthCnt}
+                    </tbody>
+                  </Table>
+                }
               />
             </Col>
           </Row>
