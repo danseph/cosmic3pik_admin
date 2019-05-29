@@ -21,6 +21,7 @@ class VoteList extends Component {
             isLoad: false,
             data: '',
             infoData:'',
+            totalData: '',
         };
 
         const queryString = require('query-string');
@@ -40,7 +41,7 @@ class VoteList extends Component {
                     alert(res.data.msg);
                 }
                 if (res.data.err) { window.location.href = '/'; }
-                else { this.setState({ data: res.data.data, infoData: res.data.infoData.data, isLoad: true }) }
+                else { this.setState({ data: res.data.data, infoData: res.data.infoData.data, totalData: res.data.totalData, isLoad: true }) }
 
             }).catch(err => { console.log(err); });
         }
@@ -99,7 +100,7 @@ class VoteList extends Component {
             if (res.data.status === 'err') {
                 alert(res.data.msg);
             }
-            else { this.setState({ data: res.data.data, infoData: res.data.infoData.data, isLoad: true }) }
+            else { this.setState({ data: res.data.data, infoData: res.data.infoData.data, totalData: res.data.totalData, isLoad: true }) }
 
         }).catch(err => { console.log(err); });
     };
@@ -117,17 +118,19 @@ class VoteList extends Component {
             // info 리스트
             tableInfoTd.push(
                 <tr key="1">
-                    <th style={Object.assign({}, style.Config.w20, style.Config.wordCenter, style.Config.wordBlod)} >진행기간</th>
+                    <th style={Object.assign({}, style.Config.w15, style.Config.wordCenter, style.Config.wordBlod)} >진행기간</th>
                     <th style={Object.assign({}, style.Config.w10, style.Config.wordCenter, style.Config.wordBlod)} >이벤트 번호</th>
                     <th style={Object.assign({}, style.Config.w10, style.Config.wordCenter, style.Config.wordBlod)} >스왑코인</th>
                     <th style={Object.assign({}, style.Config.w10, style.Config.wordCenter, style.Config.wordBlod)} >인당 최소, 최대 신청AI</th>
                     <th style={Object.assign({}, style.Config.w10, style.Config.wordCenter, style.Config.wordBlod)} >최소신청 AI단위</th>
                     <th style={Object.assign({}, style.Config.w10, style.Config.wordCenter, style.Config.wordBlod)} >총 신청 AI 제한</th>
-                    <th style={Object.assign({}, style.Config.w10, style.Config.wordCenter, style.Config.wordBlod)} >마지막 수정일</th>
+                    <th style={Object.assign({}, style.Config.w10, style.Config.wordCenter, style.Config.wordBlod)} >신청수량</th>
+                    <th style={Object.assign({}, style.Config.w10, style.Config.wordCenter, style.Config.wordBlod)} >신청인원</th>
                 </tr>
 
             )
             var infoData = this.state.infoData;
+            var totalData = this.state.totalData;
             var startDate = moment(infoData.start_date).format('YYYY-MM-DD HH:mm');
             var endDate = moment(infoData.end_date).format('YYYY-MM-DD HH:mm');
             var moDate = moment(infoData.mo_date).format('YYYY-MM-DD HH:mm');
@@ -139,7 +142,8 @@ class VoteList extends Component {
                     <td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)}>{this.addComma(infoData.personal_amount_min)} / {this.addComma(infoData.personal_amount_max)}</td>
                     <td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)}>{this.addComma(infoData.unit_min)}</td>
                     <td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)}>{this.addComma(infoData.total_amount)}</td>
-                    <td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)}>{moDate}</td>
+                    <td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)}>{totalData.count}</td>
+                    <td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)}>{totalData.users}</td>
                 </tr>
             );
 
