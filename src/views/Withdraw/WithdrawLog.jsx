@@ -142,8 +142,8 @@ class VoteList extends Component {
                     <td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)}>{this.addComma(infoData.personal_amount_min)} / {this.addComma(infoData.personal_amount_max)}</td>
                     <td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)}>{this.addComma(infoData.unit_min)}</td>
                     <td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)}>{this.addComma(infoData.total_amount)}</td>
-                    <td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)}>{totalData.count}</td>
-                    <td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)}>{totalData.users}</td>
+                    <td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)}>{this.addComma(totalData.count)}</td>
+                    <td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)}>{this.addComma(totalData.users)}</td>
                 </tr>
             );
 
