@@ -78,7 +78,12 @@ class LanguageSub extends Component {
             this.setState({ data: status });
         }
     }
-
+    async cancle(e){
+        if (window.confirm('취소하시겠습니까? 한번 선택하시면 수정 할 수 없습니다.')) {
+            var status = await this.props.cancleEvent(this.state.data);
+            this.setState({ data: status });
+        }
+    }
 
     addComma = (num) => {
         var regexp = /\B(?=(\d{3})+(?!\d))/g;
@@ -96,7 +101,7 @@ class LanguageSub extends Component {
   makeLanguageList = () => {
     const item = this.state.data;
     var crDate = moment(item.cr_date).format('YYYY-MM-DD HH:mm');
-    var userStatus = {'R' : '준비중' , 'I' : "진행중" , 'C' : '진행완료'};
+    var userStatus = {'R' : '준비중' , 'I' : "진행중" , 'C' : '진행완료', 'W' : '취소완료'};
     return (
         <tr style={style.Config.pointer} key={item._id} >
             <td style={Object.assign({}, style.Config.w10, style.Config.wordCenter)}>{item.nick}</td>
@@ -138,7 +143,21 @@ class LanguageSub extends Component {
                     type="button">
                     완료하기
                         </Button>
-
+                {(item.status === 'R' || item.status === 'I') &&
+                    <Button
+                        style={{
+                            width: '5em',
+                            padding: '.5em .1em',
+                            margin: '0 .2em .2em 0'
+                        }}
+                        bsStyle="warning"
+                        pullLeft
+                        fill
+                        onClick={(e) => { this.cancle(e) }}
+                        type="button">
+                        취소하기
+                    </Button>
+                }
             </th>
         </tr>
     );

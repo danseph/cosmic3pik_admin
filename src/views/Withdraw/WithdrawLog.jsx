@@ -64,7 +64,21 @@ class VoteList extends Component {
             alert('업데이트 성공.')
         }
         return resData.data.data;
+    }
 
+    cancleEvent = async (data) =>{
+        var resData =  await axios.post(cp.server_ip + '/api/withdraw/cancle_history',
+            {
+                data: {
+                    token: window.localStorage['nu_token'],
+                    data: data,
+                }
+            }
+        )
+        if(resData.status === 200 && resData.data.result === 'succ'){
+            alert('출금 취소 성공.')
+        }
+        return resData.data.data;
     }
 
 	makeLogBox = () => {
@@ -75,6 +89,7 @@ class VoteList extends Component {
 							data={item}
 							searchText={this.state.searchText}
                             updateEvent={this.updateEvent}
+                            cancleEvent={this.cancleEvent}
                              />
 					)
 			);
