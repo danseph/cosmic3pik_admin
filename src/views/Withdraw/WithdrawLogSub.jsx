@@ -130,19 +130,21 @@ class LanguageSub extends Component {
                 </FormGroup>
             </td>
             <th style={Object.assign({}, style.Config.w5, style.Config.wordCenter, style.Config.wordBlod)} >
-                <Button
-                    style={{
-                        width: '5em',
-                        padding: '.5em .1em',
-                        margin: '0 .2em .2em 0'
-                    }}
-                    bsStyle="info"
-                    pullLeft
-                    fill
-                    onClick={(e) => { this.update(e) }}
-                    type="button">
-                    완료하기
-                        </Button>
+                {(item.status !== 'W') &&
+                    <Button
+                        style={{
+                            width: '5em',
+                            padding: '.5em .1em',
+                            margin: '0 .2em .2em 0'
+                        }}
+                        bsStyle="info"
+                        pullLeft
+                        fill
+                        onClick={(e) => { this.update(e) }}
+                        type="button">
+                        완료하기
+                    </Button>
+                }
                 {(item.status === 'R' || item.status === 'I') &&
                     <Button
                         style={{
