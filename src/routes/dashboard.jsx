@@ -17,6 +17,7 @@ import Withdraw from "views/Withdraw/Withdraw";
 import WithdrawView from "views/Withdraw/WithdrawView";
 import WithdrawWrite from "views/Withdraw/WithdrawWrite";
 import WithdrawLog from "views/Withdraw/WithdrawLog";
+import Member from "views/Member/Member";
 
 const dashboardRoutes = [
   {
@@ -81,6 +82,13 @@ const dashboardRoutes = [
     name: "Withdraw",
     icon: "pe-7s-wallet",
     component: Withdraw,
+    view: true,
+  },
+  {
+    path: "/member",
+    name: "Member",
+    icon: "pe-7s-user",
+    component: Member,
     view: true,
   },
   {
