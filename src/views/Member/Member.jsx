@@ -51,16 +51,20 @@ class Member extends Component {
             }
         ).then(res => {
             const { data } = res;
-            if (data.err) { window.location.href = '/'; }
-            else { this.setState({
-                    data: data.data, 
-                    totalCount: data.totalCount, 
-                    isLoad: true 
-                    }) 
-                }
+            if (data.err) { 
+                window.location.href = '/'; 
+            } else { 
+                this.setState(
+                    {
+                        data: data.data, 
+                        totalCount: data.totalCount, 
+                        isLoad: true 
+                    }
+                ) 
+            }
 
         }).catch(err => { 
-            console.log(err); 
+            console.error(err); 
         });
     };
 
@@ -69,13 +73,13 @@ class Member extends Component {
      */
     pageClick = pageNumber => {
         this.setState({activePage: pageNumber});
-        this.fetch(pageNumber);
+        this.fetch(pageNumber, this.search.value);
     };
 
     onSearchClick = e => {
-        console.log('e',e);
+        // console.log('e',e);
         // this.setState({search: this.state.search});
-        this.fetch(0,this.search.value);
+        this.fetch(0, this.search.value);
     };
 
     render() {
