@@ -16,6 +16,8 @@ class Dashboard extends Component {
       totalAiCoin: 0,
       usersTotalCnt: 0,
       usersMonthCnt: [],
+      totalAmount: 0,
+      dayAmount:[]
     };
   }
 
@@ -50,6 +52,31 @@ class Dashboard extends Component {
         return false;
       });
   }
+
+    // 일주일치 코인 발행량 갯수 요청
+    getAiCoinAmount() {
+      // Coins
+      Axios.get(`${cp.server_ip}/api/coins/issue/7`, {
+          headers: {
+            Authorization : `Bearer ${window.localStorage['nu_token']}`,
+          },
+        })
+        .then((res) => {
+          const data = res.data;
+          if (!res || !data) return alert('Error, no data!');
+          if (data.err && data.errStatus === 0) return this.pleaseLogin();
+          if (data.err) return alert(`Error, ${data.errStatus}: ${data.err}`);
+          if (!data) return alert('Error, there is no data!');
+          // for only AI coin
+          this.setState({ totalAmount: data.totalAmount , dayAmount :data.dayAmount, issueDate :data.issueDate });
+        })
+        .catch((err) => {
+          console.log(err);
+          return false;
+        });
+    }
+
+  
 
   // 총 가입자 수와 월별 가입자수를 요청
   getUserCount() {
@@ -86,9 +113,27 @@ class Dashboard extends Component {
     });
   }
 
+    // 일별 코인발행량
+    getDayCoinAmount(dayAmountArr,issueDateArr) {
+      let data = [];
+      let num =0 ;
+      dayAmountArr.map(item => {
+        data.push(
+          <tr key={item.date}>
+            <td style={Object.assign({}, style.Config.w5, style.Config.wordCenter)} >{issueDateArr[num]}</td>
+            <td style={Object.assign({}, style.Config.w15, style.Config.wordCenter)} >{dayAmountArr[num]}</td>
+          </tr>
+        );
+        num++;
+      });
+      return data;
+    }
+
+
   componentDidMount() {
     this.getAicoins();
     this.getUserCount();
+    this.getAiCoinAmount();
   }
 
   createLegend(json) {
@@ -147,6 +192,34 @@ class Dashboard extends Component {
                     <tbody>
 											{this.state.usersMonthCnt}
                     </tbody>
+                  </Table>
+                }
+              />
+            </Col>
+            <Col md={6}>
+              <Card
+                title="Coin Issue Quantity For A week"
+                category=""
+                ctTableFullWidth
+                ctTableResponsive
+                content={
+                  <Table striped hover>
+                    <thead>
+                      <tr key="user-month-count">
+                        <th style={Object.assign({}, style.Config.w15, style.Config.wordCenter, style.Config.wordBlod)} >날짜</th>
+                        <th style={Object.assign({}, style.Config.w10, style.Config.wordCenter, style.Config.wordBlod)} >AI coin 발행량</th>
+                      </tr>  
+                    </thead>
+                    <tbody>
+                      {this.state.dayAmount &&
+                        this.getDayCoinAmount(this.state.dayAmount,this.state.issueDate)
+                      }
+                    <tr key="user-month-count">
+                        <th style={Object.assign({}, style.Config.w15, style.Config.wordCenter, style.Config.wordBlod)} >total</th>
+                        <th style={Object.assign({}, style.Config.w10, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.totalAmount}</th>
+                    </tr>  
+                    </tbody>
+                    
                   </Table>
                 }
               />
