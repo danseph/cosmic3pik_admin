@@ -7,6 +7,7 @@ import cp from '../../cp';
 import { style } from 'variables/Variables.jsx';
 
 import { StatsCard } from "components/StatsCard/StatsCard.jsx";
+import { Update } from "components/Update/Update.jsx";
 
 class Dashboard extends Component {
 
@@ -76,8 +77,6 @@ class Dashboard extends Component {
         });
     }
 
-  
-
   // 총 가입자 수와 월별 가입자수를 요청
   getUserCount() {
     // All users count
@@ -92,8 +91,7 @@ class Dashboard extends Component {
       if (data.err && data.errStatus === 0) return this.pleaseLogin();
       if (data.err) return alert(`Error, ${data.errStatus}: ${data.err}`);
       if (!data.count) return alert('Error, there is no user count!');
-      this.getMonthUserCount(data.result.monthCount);
-      this.setState({ usersTotalCnt: data.result.totalCount});
+      this.setState({ usersTotalCnt: data.result.totalCount, usersMonthCnt: data.result.monthCount });
     })
     .catch((err) => {
       console.log(err);
@@ -103,14 +101,16 @@ class Dashboard extends Component {
 
   // 월별 가입자 수
   getMonthUserCount(monthArr) {
-    return monthArr.map(item => {
-      this.state.usersMonthCnt.push(
-				<tr key={item._id}>
+    let data = [];
+    monthArr.map(item => {
+      data.push(
+				<tr  key={item._id}>
 					<td style={Object.assign({}, style.Config.w5, style.Config.wordCenter)} >{item._id}</td>
 					<td style={Object.assign({}, style.Config.w15, style.Config.wordCenter)} >{item.count}</td>
         </tr>
       );
     });
+    return data;
   }
 
     // 일별 코인발행량
@@ -182,9 +182,9 @@ class Dashboard extends Component {
                 ctTableFullWidth
                 ctTableResponsive
                 content={
-                  <Table striped hover>
+                  <Table striped hover >
                     <thead>
-                      <tr key="user-month-count">
+                      <tr key="aicoin-day-count">
                         <th style={Object.assign({}, style.Config.w15, style.Config.wordCenter, style.Config.wordBlod)} >날짜</th>
                         <th style={Object.assign({}, style.Config.w10, style.Config.wordCenter, style.Config.wordBlod)} >AI coin 발행량</th>
                       </tr>  
@@ -193,11 +193,22 @@ class Dashboard extends Component {
                       {this.state.dayAmount &&
                         this.getDayCoinAmount(this.state.dayAmount,this.state.issueDate)
                       }
-                    <tr key="user-month-count">
-                        <th style={Object.assign({}, style.Config.w15, style.Config.wordCenter, style.Config.wordBlod)} >total</th>
-                        <th style={Object.assign({}, style.Config.w10, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.totalAmount}</th>
-                    </tr>  
+                      <tr>
+                          <td style={Object.assign({}, style.Config.w15, style.Config.wordCenter, style.Config.wordBlod)} >Total</td>
+                          <td style={Object.assign({}, style.Config.w10, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.totalAmount}</td>
+                      </tr>
                     </tbody>
+                    <tfoot>
+                      <tr>
+                          <td colspan="2">
+                            <Update 
+                              statsIconText="Updated now"
+                              statsIcon={<i className="fa fa-refresh" />}
+                              statsClick={this.getAiCoinAmount.bind(this)}
+                            />
+                          </td>
+                        </tr>  
+                    </tfoot>
                   </Table>
                 }
               />
@@ -217,8 +228,21 @@ class Dashboard extends Component {
                       </tr>
                     </thead>
                     <tbody>
-											{this.state.usersMonthCnt}
+                      {this.state.usersMonthCnt && 
+                        this.getMonthUserCount(this.state.usersMonthCnt)
+                      }
                     </tbody>
+                    <tfoot>
+                      <tr>
+                          <td colspan="2">
+                            <Update 
+                              statsIconText="Updated now"
+                              statsIcon={<i className="fa fa-refresh" />}
+                              statsClick={this.getUserCount.bind(this)}
+                            />
+                          </td>
+                        </tr>  
+                    </tfoot>
                   </Table>
                 }
               />
