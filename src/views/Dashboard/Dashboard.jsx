@@ -175,6 +175,33 @@ class Dashboard extends Component {
             </Col>
           </Row>
           <Row>
+          <Col md={6}>
+              <Card
+                title="AI coin Issue Quantity For A week"
+                category=""
+                ctTableFullWidth
+                ctTableResponsive
+                content={
+                  <Table striped hover>
+                    <thead>
+                      <tr key="user-month-count">
+                        <th style={Object.assign({}, style.Config.w15, style.Config.wordCenter, style.Config.wordBlod)} >날짜</th>
+                        <th style={Object.assign({}, style.Config.w10, style.Config.wordCenter, style.Config.wordBlod)} >AI coin 발행량</th>
+                      </tr>  
+                    </thead>
+                    <tbody>
+                      {this.state.dayAmount &&
+                        this.getDayCoinAmount(this.state.dayAmount,this.state.issueDate)
+                      }
+                    <tr key="user-month-count">
+                        <th style={Object.assign({}, style.Config.w15, style.Config.wordCenter, style.Config.wordBlod)} >total</th>
+                        <th style={Object.assign({}, style.Config.w10, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.totalAmount}</th>
+                    </tr>  
+                    </tbody>
+                  </Table>
+                }
+              />
+            </Col>
             <Col md={6}>
               <Card
                 title="Month users count"
@@ -196,34 +223,7 @@ class Dashboard extends Component {
                 }
               />
             </Col>
-            <Col md={6}>
-              <Card
-                title="Coin Issue Quantity For A week"
-                category=""
-                ctTableFullWidth
-                ctTableResponsive
-                content={
-                  <Table striped hover>
-                    <thead>
-                      <tr key="user-month-count">
-                        <th style={Object.assign({}, style.Config.w15, style.Config.wordCenter, style.Config.wordBlod)} >날짜</th>
-                        <th style={Object.assign({}, style.Config.w10, style.Config.wordCenter, style.Config.wordBlod)} >AI coin 발행량</th>
-                      </tr>  
-                    </thead>
-                    <tbody>
-                      {this.state.dayAmount &&
-                        this.getDayCoinAmount(this.state.dayAmount,this.state.issueDate)
-                      }
-                    <tr key="user-month-count">
-                        <th style={Object.assign({}, style.Config.w15, style.Config.wordCenter, style.Config.wordBlod)} >total</th>
-                        <th style={Object.assign({}, style.Config.w10, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.totalAmount}</th>
-                    </tr>  
-                    </tbody>
-                    
-                  </Table>
-                }
-              />
-            </Col>
+            
           </Row>
         </Grid>
       </div>
