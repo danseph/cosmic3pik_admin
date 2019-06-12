@@ -119,7 +119,7 @@ class Dashboard extends Component {
       let num =0 ;
       dayAmountArr.map(item => {
         data.push(
-          <tr key={item.date}>
+          <tr key={issueDateArr[num]}>
             <td style={Object.assign({}, style.Config.w5, style.Config.wordCenter)} >{issueDateArr[num]}</td>
             <td style={Object.assign({}, style.Config.w15, style.Config.wordCenter)} >{dayAmountArr[num]}</td>
           </tr>
