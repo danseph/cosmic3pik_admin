@@ -24,7 +24,6 @@ class VoteWrite extends Component {
             version_name: '',
             version_type: 'android',
             version_comment: '',
-            hard: false,
             isLoad:false
         };
     }
@@ -153,17 +152,6 @@ class VoteWrite extends Component {
                                     },
                                 ]}
                             />
-                            <Col md={2}>
-                                <br />
-                                <Checkbox
-                                    changeAction = {changedCheck}
-                                    number="2"
-                                    name = 'hard'
-                                    isChecked= {Boolean(this.state.hard)}
-                                    label = "강제업데이트"
-                                />
-
-                            </Col>
                         </Row>
                         <Button bsStyle="info" pullRight fill type="submit" >
                         Update Profile
