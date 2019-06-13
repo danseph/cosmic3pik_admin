@@ -17,8 +17,9 @@ class Dashboard extends Component {
       totalAiCoin: 0,
       usersTotalCnt: 0,
       usersMonthCnt: [],
-      totalAmount: 0,
-      dayAmount:[]
+      dayAmount:[],
+      weekAmount: 0,
+      issueDate:[]
     };
   }
 
@@ -29,7 +30,7 @@ class Dashboard extends Component {
     return;
   }
 
-  // 총 지급된 코인 갯수 요청
+  // 총 지급된 코인발행량 및 주간코인발행량, 일일코인발행량 요청
   getAicoins() {
     // Coins
     Axios.get(`${cp.server_ip}/api/coins/count`, {
@@ -42,40 +43,17 @@ class Dashboard extends Component {
         if (!res || !data) return alert('Error, no data!');
         if (data.err && data.errStatus === 0) return this.pleaseLogin();
         if (data.err) return alert(`Error, ${data.errStatus}: ${data.err}`);
-        if (!data.coins) return alert('Error, there is no coin!');
+        if (!data) return alert('Error, there is no data!');
         // for only AI coin
-        const coins = data.coins.find(coin => coin.name === '3');
-        if (!coins) return false;
-        this.setState({ totalAiCoin: coins.total });
+        // const coins = data.coins.find(coin => coin.name === '3');
+        // if (!coins) return false;
+        this.setState({ totalAiCoin: data.result.totalAmount, weekAmount: data.result.weekAmount , dayAmount : data.result.dayAmount, issueDate : data.result.issueDate });
       })
       .catch((err) => {
         console.log(err);
         return false;
       });
   }
-
-    // 일주일치 코인 발행량 갯수 요청
-    getAiCoinAmount() {
-      // Coins
-      Axios.get(`${cp.server_ip}/api/coins/issue/7`, {
-          headers: {
-            Authorization : `Bearer ${window.localStorage['nu_token']}`,
-          },
-        })
-        .then((res) => {
-          const data = res.data;
-          if (!res || !data) return alert('Error, no data!');
-          if (data.err && data.errStatus === 0) return this.pleaseLogin();
-          if (data.err) return alert(`Error, ${data.errStatus}: ${data.err}`);
-          if (!data) return alert('Error, there is no data!');
-          // for only AI coin
-          this.setState({ totalAmount: data.totalAmount , dayAmount :data.dayAmount, issueDate :data.issueDate });
-        })
-        .catch((err) => {
-          console.log(err);
-          return false;
-        });
-    }
 
   // 총 가입자 수와 월별 가입자수를 요청
   getUserCount() {
@@ -113,7 +91,7 @@ class Dashboard extends Component {
     return data;
   }
 
-    // 일별 코인발행량
+    // 일일 코인발행량
     getDayCoinAmount(dayAmountArr,issueDateArr) {
       let data = [];
       let num =0 ;
@@ -133,7 +111,7 @@ class Dashboard extends Component {
   componentDidMount() {
     this.getAicoins();
     this.getUserCount();
-    this.getAiCoinAmount();
+    // this.getAiCoinAmount();
   }
 
   createLegend(json) {
@@ -195,20 +173,9 @@ class Dashboard extends Component {
                       }
                       <tr>
                           <td style={Object.assign({}, style.Config.w15, style.Config.wordCenter, style.Config.wordBlod)} >Total</td>
-                          <td style={Object.assign({}, style.Config.w10, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.totalAmount}</td>
+                          <td style={Object.assign({}, style.Config.w10, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekAmount}</td>
                       </tr>
                     </tbody>
-                    <tfoot>
-                      <tr>
-                          <td colspan="2">
-                            <Update 
-                              statsIconText="Updated now"
-                              statsIcon={<i className="fa fa-refresh" />}
-                              statsClick={this.getAiCoinAmount.bind(this)}
-                            />
-                          </td>
-                        </tr>  
-                    </tfoot>
                   </Table>
                 }
               />
@@ -232,17 +199,6 @@ class Dashboard extends Component {
                         this.getMonthUserCount(this.state.usersMonthCnt)
                       }
                     </tbody>
-                    <tfoot>
-                      <tr>
-                          <td colspan="2">
-                            <Update 
-                              statsIconText="Updated now"
-                              statsIcon={<i className="fa fa-refresh" />}
-                              statsClick={this.getUserCount.bind(this)}
-                            />
-                          </td>
-                        </tr>  
-                    </tfoot>
                   </Table>
                 }
               />
