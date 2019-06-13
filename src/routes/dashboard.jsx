@@ -18,6 +18,8 @@ import WithdrawView from "views/Withdraw/WithdrawView";
 import WithdrawWrite from "views/Withdraw/WithdrawWrite";
 import WithdrawLog from "views/Withdraw/WithdrawLog";
 import Member from "views/Member/Member";
+import Version from "views/Version/Version";
+import VersionWrite from "views/Version/VersionWrite";
 
 const dashboardRoutes = [
   {
@@ -120,6 +122,22 @@ const dashboardRoutes = [
     view: false,
   },
   {
+    path: "/version",
+    name: "Version",
+    icon: "pe-7s-server",
+    component: Version,
+    view: true,
+  },
+  {
+    path: "/versionWrite",
+    name: "VersionWrite",
+    icon: "pe-7s-server",
+    component: VersionWrite,
+    view: false,
+  },
+
+
+  {
     path: "/icons",
     name: "Icons",
     icon: "pe-7s-science",
@@ -162,6 +180,7 @@ const dashboardRoutes = [
     component: Upgrade,
     view: false,
   },
+
   {
     redirect: true,
     path: "/",
