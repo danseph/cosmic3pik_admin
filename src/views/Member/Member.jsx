@@ -243,7 +243,9 @@ class Member extends Component {
                                             </Col>
                                         </Row>
                                         <Table striped hover>
-                                            <thead content={tableTh} />
+                                            <thead>
+                                                {tableTh}
+                                            </thead>
                                             <tbody>
                                                 {tableTd}
                                             </tbody>
