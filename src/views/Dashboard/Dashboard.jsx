@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import { Grid, Row, Col, Table } from "react-bootstrap";
 
+
 import Card from "components/Card/Card.jsx";
 import Axios from 'axios';
 import cp from '../../cp';
 import { style } from 'variables/Variables.jsx';
 
 import { StatsCard } from "components/StatsCard/StatsCard.jsx";
-import { Update } from "components/Update/Update.jsx";
+
 
 class Dashboard extends Component {
 
@@ -155,7 +156,7 @@ class Dashboard extends Component {
           <Row>
           <Col md={6}>
               <Card
-                title="AI coin Issue Quantity For A week"
+                title="AI coin volume during a week"
                 category=""
                 ctTableFullWidth
                 ctTableResponsive

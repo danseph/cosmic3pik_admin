@@ -99,6 +99,10 @@
     }
     .stats{
         color: #a9a9a9;
+        &:hover{
+            color: #333333;
+            cursor: Pointer;
+        }
     }
     .footer div{
         display: inline-block;

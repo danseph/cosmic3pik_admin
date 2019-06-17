@@ -1803,9 +1803,9 @@ body > .navbar-collapse[data-color="purple"]:after {
       margin-bottom: 5px; }
   .card .stats {
     color: #a9a9a9; }
-  .card .stats:hover {
-    color: #333;
-    font-weight: bolder }   
+    .card .stats:hover {
+      color: #333333;
+      cursor: Pointer; }
   .card .footer div {
     display: inline-block; }
   .card .author {
