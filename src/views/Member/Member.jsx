@@ -37,9 +37,14 @@ class Member extends Component {
             selectedListCount: { value: '10', label: '10' },
             sort: [
                         { value: 'time', label: '날짜순' },
-                        { value: 'coins', label: '코인순' },
+                        { value: 'coins.2.value', label: '코인순' },
                     ],
             selectedSort: { value: 'time', label: '날짜순' },
+            sortOption: [
+                        { value: -1, label: '내림차순' },
+                        { value: 1, label: '오름차순' },
+                    ],
+            selectedSortOption: { value: -1, label: '내림차순' },
             searchKind: [
                         { value: 'nick', label: '닉네임' },
                         { value: 'email', label: '이메일' },
@@ -67,6 +72,7 @@ class Member extends Component {
                     search :search,
                     searchKind : this.state.selectedSearchKind.value,
                     sort : this.state.selectedSort.value,
+                    sortOption : this.state.selectedSortOption.value,
                     limit : this.state.selectedListCount,
                     startDate:this.state.startDate,
                     endDate:this.state.endDate,
@@ -132,10 +138,17 @@ class Member extends Component {
     };
       
     /**
-     * sort desc
+     * sort change
      */
     sortChange = selectedSort => {
         this.setState({ selectedSort },() => this.onSearch())
+    };
+
+    /**
+     * sort option change
+     */
+    sortOptionChange = selectedSortOption => {
+        this.setState({ selectedSortOption },() => this.onSearch())
     };
 
     /**
@@ -155,6 +168,7 @@ class Member extends Component {
 
 		tableTh.push(
 			<tr key="1">
+				<th style={Object.assign({}, defaultStyle, style.Config.wordBlod)}>No</th>
 				<th style={Object.assign({}, defaultStyle, style.Config.wordBlod)}>USER ID</th>
 				<th style={Object.assign({}, defaultStyle, style.Config.wordBlod)}>닉네임</th>
 				<th style={Object.assign({}, defaultStyle, style.Config.wordBlod)}>가입일</th>
@@ -164,12 +178,18 @@ class Member extends Component {
 			</tr>
         );
         
+        let no = (this.state.activePage -1) * this.state.selectedListCount.value + 1;
+        let date;
+        
         for (let item of this.state.data) {
+            date = new Date(Number(item.time));
+            
 			tableTd.push(
 				<tr key={item._id} >
+					<td style={defaultStyle}>{no++}</td>
 					<td style={defaultStyle}>{item._id}</td>
                     <td style={defaultStyle}>{item.nick}</td>
-                    <td style={defaultStyle}>{moment(item.time, "x").format("YYYY-MM-DD HH:mm")}</td>
+                    <td style={defaultStyle}>{moment(date).format("YYYY-MM-DD HH:mm")}</td>
                     <td style={defaultStyle}>{item.where}</td>
                     <td style={defaultStyle}>{item.email}</td>
                     <td style={defaultStyle}>{item.coins.length > 0? item.coins.find(foo => foo.name === '3').value : '0'}</td>
@@ -227,6 +247,14 @@ class Member extends Component {
                                                     value={this.state.selectedSort}
                                                 />
                                                 정렬
+                                            </Col>
+                                            <Col md={1}>
+                                                <Select
+                                                    onChange={this.sortOptionChange}
+                                                    options={this.state.sortOption}
+                                                    value={this.state.selectedSortOption}
+                                                />
+                                                정렬순서
                                             </Col>
                                             <Col md={1}>
                                                 <Select
