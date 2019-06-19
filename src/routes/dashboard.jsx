@@ -1,4 +1,5 @@
 import Dashboard from "views/Dashboard/Dashboard";
+import Statistics from "views/Statistics/Statistics";
 import Basic from "views/Basic/Basic";
 import Vote from "views/Vote/Vote";
 import VoteWrite from "views/Vote/VoteWrite";
@@ -28,6 +29,13 @@ const dashboardRoutes = [
     icon: "pe-7s-graph",
     view: true,
     component: Dashboard
+  },
+  {
+    path: "/statistics",
+    name: "Statistics",
+    icon: "pe-7s-graph1",
+    view: true,
+    component: Statistics
   },
   {
     path: "/basic",
