@@ -217,8 +217,8 @@ class Statistics extends Component {
                   content={
                     <div>
                       <Row>
-                        <div id="container" class="svg-container">
-                            <svg class="svg-content"style={{
+                        <div id="container" className="svg-container">
+                            <svg className="svg-content"style={{
                             
                             }}>
                                 {this.graph(this.state.dayAmount,this.state.issueDate)}
