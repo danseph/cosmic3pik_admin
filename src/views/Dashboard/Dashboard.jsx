@@ -97,10 +97,11 @@ class Dashboard extends Component {
       let data = [];
       let num =0 ;
       dayAmountArr.map(item => {
+        console.log(item)
         data.push(
           <tr key={issueDateArr[num]}>
             <td style={Object.assign({}, style.Config.w5, style.Config.wordCenter)} >{issueDateArr[num]}</td>
-            <td style={Object.assign({}, style.Config.w15, style.Config.wordCenter)} >{dayAmountArr[num]}</td>
+            <td style={Object.assign({}, style.Config.w15, style.Config.wordCenter)} >{dayAmountArr[num].labTotal}</td>
           </tr>
         );
         num++;

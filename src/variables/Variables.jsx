@@ -256,6 +256,15 @@ var style = {
 		},
 		pointer:{
 			cursor:'pointer'
+    },
+    w1:{
+			width:'1%'
+    },
+    w3:{
+			width:'3%'
+    },
+    w4:{
+			width:'4%'
 		},
 		w5:{
 			width:'5%'
