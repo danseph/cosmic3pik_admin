@@ -17,7 +17,8 @@ class Statistics extends Component {
       usersMonthCnt: [],
       dayAmount:[],
       weekAmount: 0,
-      issueDate:[]
+      issueDate:[],
+      weekRewordAmount:{}
     };
   }
 
@@ -45,7 +46,7 @@ class Statistics extends Component {
         // for only AI coin
         // const coins = data.coins.find(coin => coin.name === '3');
         // if (!coins) return false;
-        this.setState({ totalAiCoin: data.result.totalAmount, weekAmount: data.result.weekAmount , dayAmount : data.result.dayAmount, issueDate : data.result.issueDate });
+        this.setState({ totalAiCoin: data.result.totalAmount, weekAmount: data.result.weekAmount , dayAmount : data.result.dayAmount, issueDate : data.result.issueDate, weekRewordAmount : data.result.weekRewordAmount });
       })
       .catch((err) => {
         console.log(err);
@@ -182,42 +183,54 @@ class Statistics extends Component {
                     <div>
                       <Row>
                         <div id="container" className="svg-container">
-                            <svg className="svg-content"style={{
-                            
-                            }}>
+                            <svg className="svg-content">
                                 {this.graph(this.state.dayAmount,this.state.issueDate)}
                             </svg>  
                         </div>
                       </Row>
-                      <Table striped bordered hover>
-                      <thead>
-                        <tr key="aicoin-day-count">
-                          <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >날짜</th>
-                          <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >총 AI coin 발행량</th>
-                          <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >회차 투표보상</th>
-                          <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >회차 참가 Lucky 보상</th>
-                          <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >회차 예측 정답 추첨보상</th>
-                          <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >예측 정답 보상</th>
-                          <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >일간 정답자 추첨 보상</th>
-                          <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >일간 투표자 추첨 보상</th>
-                          <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >주간 정답자 추첨 보상</th>
-                          <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >주간 투표자 추첨 보상</th>
-                          <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >주간 정답자 랭킹 보상</th>
-                          <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >월간 정답자 랭킹 보상</th>
-                          <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >랜덤 선물상자 보상</th>
-                          <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >추천인 보상</th>
-                        </tr>  
-                      </thead>
-                      <tbody>
-                        {this.AddComma(this.state.dayAmount) &&
-                          this.getDayCoinAmount(this.state.dayAmount,this.state.issueDate)
-                        }
-                        <tr>
-                            <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >Total</td>
-                            <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.AddComma(this.state.weekAmount)}</td>
-                        </tr>
-                      </tbody>
-                    </Table>
+                      <div className="table-container">
+                          <Table striped bordered hover>
+                          <thead>
+                            <tr key="aicoin-day-count">
+                              <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >날짜</th>
+                              <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >총 AI coin<br></br> 발행량</th>
+                              <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >회차 투표</th>
+                              <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >회차 참가<br></br> Lucky </th>
+                              <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >회차 예측<br></br> 정답 추첨</th>
+                              <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >예측 정답</th>
+                              <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >일간 정답자<br></br> 추첨</th>
+                              <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >일간 투표자<br></br> 추첨</th>
+                              <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >주간 정답자<br></br> 추첨</th>
+                              <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >주간 투표자<br></br> 추첨</th>
+                              <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >주간 정답자<br></br> 랭킹</th>
+                              <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >월간 정답자<br></br> 랭킹</th>
+                              <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >랜덤 <br></br>선물상자</th>
+                              <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >추천인</th>
+                            </tr>  
+                          </thead>
+                          <tbody>
+                            {this.AddComma(this.state.dayAmount) &&
+                              this.getDayCoinAmount(this.state.dayAmount,this.state.issueDate)
+                            }
+                            <tr>
+                                <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >Total</td>
+                                <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.AddComma(this.state.weekAmount)}</td>
+                                <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.userPik !== 0 ? this.AddComma(this.state.weekRewordAmount.userPik) : '-'}</td>
+                                <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.voteLucky !== 0 ? this.AddComma(this.state.weekRewordAmount.voteLucky) : '-'}</td>
+                                <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.userWinRandom !== 0 ? this.AddComma(this.state.weekRewordAmount.userWinRandom) : '-'}</td>
+                                <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.userWin !== 0 ? this.AddComma(this.state.weekRewordAmount.userWin) : '-'}</td>  
+                                <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.dayWinRandom !== 0 ? this.AddComma(this.state.weekRewordAmount.dayWinRandom) : '-'}</td>
+                                <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.dayVoteRandom !== 0 ? this.AddComma(this.state.weekRewordAmount.dayVoteRandom) : '-'}</td>
+                                <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.weekWinRandom !== 0 ? this.AddComma(this.state.weekRewordAmount.weekWinRandom) : '-'}</td>
+                                <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.weekVoteRandom !== 0 ? this.AddComma(this.state.weekRewordAmount.weekVoteRandom) : '-'}</td>
+                                <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.weekRank !== 0 ? this.AddComma(this.state.weekRewordAmount.weekRank) : '-'}</td>
+                                <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.monthRank !== 0 ? this.AddComma(this.state.weekRewordAmount.monthRank) : '-'}</td>
+                                <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.lotteryOpen !== 0 ? this.AddComma(this.state.weekRewordAmount.lotteryOpen) : '-'}</td>
+                                <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.lotteryRecommender !== 0 ? this.AddComma(this.state.weekRewordAmount.lotteryRecommender) : '-'}</td> 
+                            </tr>
+                          </tbody>
+                        </Table>
+                      </div>
                     </div>
                   }
                 />

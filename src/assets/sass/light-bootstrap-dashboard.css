@@ -3019,3 +3019,8 @@ body > .navbar-collapse[data-color="purple"]:after {
   position: absolute;
   top: 0;
   left: 0; }
+
+.table-container {
+  width: 90%;
+  overflow: hidden;
+  margin: auto; }
