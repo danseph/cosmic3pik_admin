@@ -1,14 +1,10 @@
 import React, { Component } from "react";
 import { Grid, Row, Col, Table } from "react-bootstrap";
 import * as d3 from "d3";
-
-
 import Card from "components/Card/Card.jsx";
 import Axios from 'axios';
 import cp from '../../cp';
 import { style } from 'variables/Variables.jsx';
-
-import { StatsCard } from "components/StatsCard/StatsCard.jsx";
 
 
 class Statistics extends Component {
@@ -57,41 +53,6 @@ class Statistics extends Component {
       });
   }
 
-  // 총 가입자 수와 월별 가입자수를 요청
-  getUserCount() {
-    // All users count
-    Axios.get(`${cp.server_ip}/api/users/count`, {
-      headers: {
-        Authorization : `Bearer ${window.localStorage['nu_token']}`,
-      },
-    })
-    .then((res) => {
-      const data = res.data;
-      if (!res || !data) return alert('Error, no data!');
-      if (data.err && data.errStatus === 0) return this.pleaseLogin();
-      if (data.err) return alert(`Error, ${data.errStatus}: ${data.err}`);
-      if (!data.count) return alert('Error, there is no user count!');
-      this.setState({ usersTotalCnt: data.result.totalCount, usersMonthCnt: data.result.monthCount });
-    })
-    .catch((err) => {
-      console.log(err);
-      return false;
-    });
-  }
-
-  // 월별 가입자 수
-  getMonthUserCount(monthArr) {
-    let data = [];
-    monthArr.map(item => {
-      data.push(
-				<tr  key={item._id}>
-					<td style={Object.assign({}, style.Config.w1, style.Config.wordCenter)} >{item._id}</td>
-					<td style={Object.assign({}, style.Config.w1, style.Config.wordCenter)} >{item.count}</td>
-        </tr>
-      );
-    });
-    return data;
-  }
 
   // 일일 코인발행량
   getDayCoinAmount(dayAmountArr,issueDateArr) {
@@ -101,26 +62,31 @@ class Statistics extends Component {
       data.push(
         <tr key={issueDateArr[num]}>
           <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter)} >{issueDateArr[num]}</td>
-          <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter)} >{dayAmountArr[num].labTotal}</td>           
-          <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter)} >{(dayAmountArr[num].userPik) ? dayAmountArr[num].userPik : '-'}</td>
-          <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter)} >{(dayAmountArr[num].voteLucky) ? dayAmountArr[num].voteLucky : '-'}</td>
-          <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter)} >{(dayAmountArr[num].userWinRandom) ? dayAmountArr[num].userWinRandom : '-'}</td>
-          <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter)} >{(dayAmountArr[num].userWin) ? dayAmountArr[num].userWin : '-'}</td>
-          <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter)} >{(dayAmountArr[num].dayWinRandom) ? dayAmountArr[num].dayWinRandom : '-'}</td>
-          <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter)} >{(dayAmountArr[num].dayVoteRandom) ? dayAmountArr[num].dayVoteRandom : '-'}</td>
-          <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter)} >{(dayAmountArr[num].weekWinRandom) ? dayAmountArr[num].weekWinRandom : '-'}</td>
-          <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter)} >{(dayAmountArr[num].weekVoteRandom) ? dayAmountArr[num].weekVoteRandom : '-'}</td>
-          <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter)} >{(dayAmountArr[num].weekRank) ? dayAmountArr[num].weekRank : '-'}</td>
-          <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter)} >{(dayAmountArr[num].monthRank) ? dayAmountArr[num].monthRank : '-'}</td>
-          <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter)} >{(dayAmountArr[num].lotteryOpen) ? dayAmountArr[num].lotteryOpen : '-'}</td>
-          <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter)} >{(dayAmountArr[num].lotteryRecommender) ? dayAmountArr[num].lotteryRecommender : '-'}</td>
+          <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter)} >{this.AddComma(dayAmountArr[num].labTotal)}</td>           
+          <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter)} >{(dayAmountArr[num].userPik) ? this.AddComma(dayAmountArr[num].userPik) : '-'}</td>
+          <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter)} >{(dayAmountArr[num].voteLucky) ? this.AddComma(dayAmountArr[num].voteLucky) : '-'}</td>
+          <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter)} >{(dayAmountArr[num].userWinRandom) ? this.AddComma(dayAmountArr[num].userWinRandom) : '-'}</td>
+          <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter)} >{(dayAmountArr[num].userWin) ? this.AddComma(dayAmountArr[num].userWin) : '-'}</td>
+          <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter)} >{(dayAmountArr[num].dayWinRandom) ? this.AddComma(dayAmountArr[num].dayWinRandom) : '-'}</td>
+          <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter)} >{(dayAmountArr[num].dayVoteRandom) ? this.AddComma(dayAmountArr[num].dayVoteRandom) : '-'}</td>
+          <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter)} >{(dayAmountArr[num].weekWinRandom) ? this.AddComma(dayAmountArr[num].weekWinRandom) : '-'}</td>
+          <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter)} >{(dayAmountArr[num].weekVoteRandom) ? this.AddComma(dayAmountArr[num].weekVoteRandom) : '-'}</td>
+          <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter)} >{(dayAmountArr[num].weekRank) ? this.AddComma(dayAmountArr[num].weekRank) : '-'}</td>
+          <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter)} >{(dayAmountArr[num].monthRank) ? this.AddComma(dayAmountArr[num].monthRank) : '-'}</td>
+          <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter)} >{(dayAmountArr[num].lotteryOpen) ? this.AddComma(dayAmountArr[num].lotteryOpen) : '-'}</td>
+          <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter)} >{(dayAmountArr[num].lotteryRecommender) ? this.AddComma(dayAmountArr[num].lotteryRecommender) : '-'}</td>
         </tr>
       );
       num++;
     });
     return data;
   }
-  
+
+  AddComma(data_value) {
+    return Number(data_value).toLocaleString('en');
+    }
+
+
   // D3 그래프
   graph(dayAmountArr,issueDateArr){
 
@@ -170,7 +136,7 @@ class Statistics extends Component {
     .data(dataset)
     .enter()
     .append("text")
-    .text(function(d) {return d.y})
+    .text(function(d) {return Number(d.y).toLocaleString('en')})
     .attr("class", "text")
     .attr("x", function(d, i) {return xScale(d.x)+xScale.bandwidth()/2})
     .style("text-anchor", "middle")
@@ -187,8 +153,6 @@ class Statistics extends Component {
 
   componentDidMount() {
     this.getAicoins();
-    this.getUserCount();
-    // this.getAiCoinAmount();
   }
 
   createLegend(json) {
@@ -229,7 +193,7 @@ class Statistics extends Component {
                       <thead>
                         <tr key="aicoin-day-count">
                           <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >날짜</th>
-                          <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >AI coin 발행량</th>
+                          <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >총 AI coin 발행량</th>
                           <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >회차 투표보상</th>
                           <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >회차 참가 Lucky 보상</th>
                           <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >회차 예측 정답 추첨보상</th>
@@ -245,20 +209,16 @@ class Statistics extends Component {
                         </tr>  
                       </thead>
                       <tbody>
-                        {this.state.dayAmount &&
+                        {this.AddComma(this.state.dayAmount) &&
                           this.getDayCoinAmount(this.state.dayAmount,this.state.issueDate)
                         }
                         <tr>
                             <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >Total</td>
-                            <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekAmount}</td>
-  
+                            <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.AddComma(this.state.weekAmount)}</td>
                         </tr>
                       </tbody>
                     </Table>
-
                     </div>
-
-                    
                   }
                 />
             </Col>

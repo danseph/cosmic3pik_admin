@@ -85,7 +85,7 @@ class Dashboard extends Component {
       data.push(
 				<tr  key={item._id}>
 					<td style={Object.assign({}, style.Config.w5, style.Config.wordCenter)} >{item._id}</td>
-					<td style={Object.assign({}, style.Config.w15, style.Config.wordCenter)} >{item.count}</td>
+					<td style={Object.assign({}, style.Config.w15, style.Config.wordCenter)} >{this.AddComma(item.count)}</td>
         </tr>
       );
     });
@@ -101,13 +101,17 @@ class Dashboard extends Component {
         data.push(
           <tr key={issueDateArr[num]}>
             <td style={Object.assign({}, style.Config.w5, style.Config.wordCenter)} >{issueDateArr[num]}</td>
-            <td style={Object.assign({}, style.Config.w15, style.Config.wordCenter)} >{dayAmountArr[num].labTotal}</td>
+            <td style={Object.assign({}, style.Config.w15, style.Config.wordCenter)} >{this.AddComma(dayAmountArr[num].labTotal)}</td>
           </tr>
         );
         num++;
       });
       return data;
     }
+
+    AddComma(data_value) {
+      return Number(data_value).toLocaleString('en');
+      }
 
 
   componentDidMount() {
@@ -137,7 +141,7 @@ class Dashboard extends Component {
               <StatsCard
                 bigIcon={<i className="pe-7s-server text-warning" />}
                 statsText="AI coin"
-                statsValue={totalAiCoin}
+                statsValue={this.AddComma(totalAiCoin)}
                 statsIcon={<i className="fa fa-refresh" />}
                 statsIconText="Updated now"
                 statsClick={this.getAicoins.bind(this)}
@@ -147,7 +151,7 @@ class Dashboard extends Component {
               <StatsCard
                 bigIcon={<i className="pe-7s-users text-warning" />}
                 statsText="Current users"
-                statsValue={usersTotalCnt}
+                statsValue={this.AddComma(usersTotalCnt)}
                 statsIcon={<i className="fa fa-refresh" />}
                 statsIconText="Updated now"
                 statsClick={this.getUserCount.bind(this)}
@@ -175,7 +179,7 @@ class Dashboard extends Component {
                       }
                       <tr>
                           <td style={Object.assign({}, style.Config.w15, style.Config.wordCenter, style.Config.wordBlod)} >Total</td>
-                          <td style={Object.assign({}, style.Config.w10, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekAmount}</td>
+                          <td style={Object.assign({}, style.Config.w10, style.Config.wordCenter, style.Config.wordBlod)} >{this.AddComma(this.state.weekAmount)}</td>
                       </tr>
                     </tbody>
                   </Table>
