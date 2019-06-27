@@ -1,10 +1,18 @@
 import React, { Component } from "react";
 import { Grid, Row, Col, Table } from "react-bootstrap";
-import * as d3 from "d3";
 import Card from "components/Card/Card.jsx";
 import Axios from 'axios';
 import cp from '../../cp';
 import { style } from 'variables/Variables.jsx';
+import ReactHighcharts from 'react-highcharts';
+import Highcharts from 'highcharts';
+
+
+Highcharts.setOptions({
+  lang: {
+      thousandsSep: ','
+  }
+});
 
 
 class Statistics extends Component {
@@ -46,7 +54,7 @@ class Statistics extends Component {
         // for only AI coin
         // const coins = data.coins.find(coin => coin.name === '3');
         // if (!coins) return false;
-        this.setState({ totalAiCoin: data.result.totalAmount, weekAmount: data.result.weekAmount , dayAmount : data.result.dayAmount, issueDate : data.result.issueDate, weekRewordAmount : data.result.weekRewordAmount });
+        this.setState({ totalAiCoin: data.result.totalAmount, weekAmount: data.result.weekAmount , dayAmount : data.result.dayAmount.reverse(), issueDate : data.result.issueDate.reverse(), weekRewordAmount : data.result.weekRewordAmount });
       })
       .catch((err) => {
         console.log(err);
@@ -87,70 +95,166 @@ class Statistics extends Component {
     return Number(data_value).toLocaleString('en');
     }
 
+  
+  highcharts(dayAmountArr,issueDateArr) {
+    const config = {
+    credits: {
+      enabled: false
+    },
+    chart: {
+        borderWidth: 0,
+        height: '50%',
+        type: 'column',
+    },
+    title: {
+        text: '주간 보상별 AI 코인 발행량'
+    },
+    xAxis: {
+        categories: issueDateArr
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Total AI coin volume'
+        },
+        stackLabels: {
+            enabled: true,
+            style: {
+                fontWeight: 'bold',
+                color: ( // theme
+                    Highcharts.defaultOptions.title.style &&
+                    Highcharts.defaultOptions.title.style.color
+                ) || 'gray'
+            }
+        }
+    },
+    legend: {
+        align: 'right',
+        x: 0,
+        verticalAlign: 'top',
+        y: 25,
+        floating: false,
+        backgroundColor:
+            Highcharts.defaultOptions.legend.backgroundColor || 'white',
+        borderColor: '#CCC',
+        borderWidth: 1,
+        shadow: false
+    },
+    tooltip: {
+        headerFormat: '<b>{point.x}</b><br/>',
+        pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+    },
+    plotOptions: {
+        column: {
+            stacking: 'normal',
+            dataLabels: {
+                enabled: true
+            }
+        }
+    },
+      series: [{
+          name: '회차 투표',
+          data: dayAmountArr.map((d) => {
+            if(!d.userPik){
+             return 0
+            }  
+            return d.userPik
+          })
+      }, {
+          name: '회차 참가 Lucky',
+          data: dayAmountArr.map((d) => {
+            if(!d.voteLucky){
+             return 0
+            }  
+            return d.voteLucky
+          })
+      }, {
+          name: '회차 예측 정답 추첨',
+          data: dayAmountArr.map((d) => {
+            if(!d.userWinRandom){
+             return 0
+            } 
+            return d.userWinRandom
+          })
+      }, {
+          name: '예측 정답',
+          data: dayAmountArr.map((d) => {
+            if(!d.userWin){
+             return 0
+            } 
+            return d.userWin
+          })
+      }, {
+        name: '일간 정답자 추첨',
+        data: dayAmountArr.map((d) => {
+          if(!d.dayWinRandom){
+           return 0
+          } 
+          return d.dayWinRandom
+        })
+      }, {
+        name: '일간 투표자 추첨',
+        data: dayAmountArr.map((d) => {
+          if(!d.dayVoteRandom){
+          return 0
+          } 
+          return d.dayVoteRandom
+        })
+      }, {
+        name: '주간 정답자 추첨',
+        data: dayAmountArr.map((d) => {
+          if(!d.weekWinRandom){
+          return 0
+          }  
+          return d.weekWinRandom
+        })
+      }, {
+        name: '주간 투표자 추첨',
+        data: dayAmountArr.map((d) => {
+          if(!d.weekVoteRandom){
+          return 0
+          } 
+          return d.weekVoteRandom
+        })
+      }, {
+        name: '주간 정답자 랭킹',
+        data: dayAmountArr.map((d) => {
+          if(!d.weekRank){
+          return 0
+          } 
+          return d.weekRank
+        })
+      }, {
+        name: '월간 정답자 랭킹',
+        data: dayAmountArr.map((d) => {
+          if(!d.monthRank){
+          return 0
+          } 
+          return d.monthRank
+        })
+      }, {
+        name: '랜덤 선물상자',
+        data: dayAmountArr.map((d) => {
+          if(!d.lotteryOpen){
+          return 0
+          } 
+          return d.lotteryOpen
+        })
+      }, {
+        name: '추천인 보상',
+        data: dayAmountArr.map((d) => {
+          if(!d.lotteryRecommender){
+          return 0
+          } 
+          return d.lotteryRecommender
+        })
+      }
+    ]
+   };
+   return config
+  }
 
-  // D3 그래프
-  graph(dayAmountArr,issueDateArr){
 
-    var dataset = [];
-    var num =0 ;
-    dayAmountArr.map(item => {
-      dataset.push(
-          {
-            x : issueDateArr[num],
-            y : dayAmountArr[num].labTotal
-          }
-      );
-      num++;
-    });
-    
-    var svg = d3.select("div#container")
-    .append("svg")
-    .attr("preserveAspectRatio", "xMinYMin meet")
-    .attr("viewBox", "0 0 1200 1000")
-    .classed("svg-content", true);
-    var width  = 1000;
-    var height = 500;
-    var svgG = svg.append("g")
-    .attr("transform", "translate(100, 0)");
-    var xScale = d3.scaleBand()
-    .domain(dataset.map(function(d) { return d.x;} ).reverse())
-    .range([0, width]).padding(0.9);
-    var yScale = d3.scaleLinear()
-    .domain([0, d3.max(dataset, function(d){ return d.y; }) + d3.max(dataset, function(d){ return d.y; })/4])
-    .range([height, 0])
-
-    // .domain(dataset.map(function(d) { return d.x;} ))
-
-    svgG.selectAll("rect")
-    .data(dataset)
-    .enter()
-    .append("rect")
-    .attr("class", "bar")
-    .attr("height", function(d, i) {return height-yScale(d.y)})
-    .attr("width", xScale.bandwidth())
-    .attr("x", function(d, i) {return xScale(d.x)})
-    .attr("y", function(d, i) {return yScale(d.y)})
-    .attr("fill", "#a9a9a9")
-
-
-    svgG.selectAll("text")
-    .data(dataset)
-    .enter()
-    .append("text")
-    .text(function(d) {return Number(d.y).toLocaleString('en')})
-    .attr("class", "text")
-    .attr("x", function(d, i) {return xScale(d.x)+xScale.bandwidth()/2})
-    .style("text-anchor", "middle")
-    .attr("y", function(d, i) {return yScale(d.y) - 5 });
-
-    svgG.append("g")
-    .attr("transform", "translate(0," + (height) + ")")
-    .call(d3.axisBottom(xScale));
-    
-
-    svgG.append("g")
-    .call(d3.axisLeft(yScale));
-    }
 
   componentDidMount() {
     this.getAicoins();
@@ -168,7 +272,7 @@ class Statistics extends Component {
   }
 
   render() {
-    const { totalAiCoin, usersTotalCnt: usersTotalCnt } = this.state;
+    // const { totalAiCoin, usersTotalCnt: usersTotalCnt } = this.state;
     return (
       <div className="content">
         <Grid fluid>
@@ -181,56 +285,56 @@ class Statistics extends Component {
                   ctTableResponsive
                   content={
                     <div>
-                      <Row>
-                        <div id="container" className="svg-container">
-                            <svg className="svg-content">
-                                {this.graph(this.state.dayAmount,this.state.issueDate)}
-                            </svg>  
-                        </div>
+                      <Row style={{textAlign : "center"}}>
+                          <div className="chart-container">
+                            <ReactHighcharts config={this.highcharts(this.state.dayAmount,this.state.issueDate)}></ReactHighcharts>
+                          </div>
                       </Row>
-                      <div className="table-container">
-                          <Table striped bordered hover>
-                          <thead>
-                            <tr key="aicoin-day-count">
-                              <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >날짜</th>
-                              <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >총 AI coin<br></br> 발행량</th>
-                              <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >회차 투표</th>
-                              <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >회차 참가<br></br> Lucky </th>
-                              <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >회차 예측<br></br> 정답 추첨</th>
-                              <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >예측 정답</th>
-                              <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >일간 정답자<br></br> 추첨</th>
-                              <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >일간 투표자<br></br> 추첨</th>
-                              <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >주간 정답자<br></br> 추첨</th>
-                              <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >주간 투표자<br></br> 추첨</th>
-                              <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >주간 정답자<br></br> 랭킹</th>
-                              <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >월간 정답자<br></br> 랭킹</th>
-                              <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >랜덤 <br></br>선물상자</th>
-                              <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >추천인</th>
-                            </tr>  
-                          </thead>
-                          <tbody>
-                            {this.AddComma(this.state.dayAmount) &&
-                              this.getDayCoinAmount(this.state.dayAmount,this.state.issueDate)
-                            }
-                            <tr>
-                                <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >Total</td>
-                                <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.AddComma(this.state.weekAmount)}</td>
-                                <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.userPik !== 0 ? this.AddComma(this.state.weekRewordAmount.userPik) : '-'}</td>
-                                <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.voteLucky !== 0 ? this.AddComma(this.state.weekRewordAmount.voteLucky) : '-'}</td>
-                                <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.userWinRandom !== 0 ? this.AddComma(this.state.weekRewordAmount.userWinRandom) : '-'}</td>
-                                <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.userWin !== 0 ? this.AddComma(this.state.weekRewordAmount.userWin) : '-'}</td>  
-                                <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.dayWinRandom !== 0 ? this.AddComma(this.state.weekRewordAmount.dayWinRandom) : '-'}</td>
-                                <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.dayVoteRandom !== 0 ? this.AddComma(this.state.weekRewordAmount.dayVoteRandom) : '-'}</td>
-                                <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.weekWinRandom !== 0 ? this.AddComma(this.state.weekRewordAmount.weekWinRandom) : '-'}</td>
-                                <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.weekVoteRandom !== 0 ? this.AddComma(this.state.weekRewordAmount.weekVoteRandom) : '-'}</td>
-                                <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.weekRank !== 0 ? this.AddComma(this.state.weekRewordAmount.weekRank) : '-'}</td>
-                                <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.monthRank !== 0 ? this.AddComma(this.state.weekRewordAmount.monthRank) : '-'}</td>
-                                <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.lotteryOpen !== 0 ? this.AddComma(this.state.weekRewordAmount.lotteryOpen) : '-'}</td>
-                                <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.lotteryRecommender !== 0 ? this.AddComma(this.state.weekRewordAmount.lotteryRecommender) : '-'}</td> 
-                            </tr>
-                          </tbody>
-                        </Table>
-                      </div>
+                      <Row>
+                          <div className="table-container">
+                              <Table striped bordered hover>
+                              <thead>
+                                <tr key="aicoin-day-count">
+                                  <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >날짜</th>
+                                  <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >총 AI coin<br></br> 발행량</th>
+                                  <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >회차 투표</th>
+                                  <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >회차 참가<br></br> Lucky </th>
+                                  <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >회차 예측<br></br> 정답 추첨</th>
+                                  <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >예측 정답</th>
+                                  <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >일간 정답자<br></br> 추첨</th>
+                                  <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >일간 투표자<br></br> 추첨</th>
+                                  <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >주간 정답자<br></br> 추첨</th>
+                                  <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >주간 투표자<br></br> 추첨</th>
+                                  <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >주간 정답자<br></br> 랭킹</th>
+                                  <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >월간 정답자<br></br> 랭킹</th>
+                                  <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >랜덤 <br></br>선물상자</th>
+                                  <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >추천인</th>
+                                </tr>  
+                              </thead>
+                              <tbody>
+                                {this.AddComma(this.state.dayAmount) &&
+                                  this.getDayCoinAmount(this.state.dayAmount,this.state.issueDate)
+                                }
+                                <tr>
+                                    <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >Total</td>
+                                    <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.AddComma(this.state.weekAmount)}</td>
+                                    <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.userPik !== 0 ? this.AddComma(this.state.weekRewordAmount.userPik) : '-'}</td>
+                                    <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.voteLucky !== 0 ? this.AddComma(this.state.weekRewordAmount.voteLucky) : '-'}</td>
+                                    <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.userWinRandom !== 0 ? this.AddComma(this.state.weekRewordAmount.userWinRandom) : '-'}</td>
+                                    <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.userWin !== 0 ? this.AddComma(this.state.weekRewordAmount.userWin) : '-'}</td>  
+                                    <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.dayWinRandom !== 0 ? this.AddComma(this.state.weekRewordAmount.dayWinRandom) : '-'}</td>
+                                    <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.dayVoteRandom !== 0 ? this.AddComma(this.state.weekRewordAmount.dayVoteRandom) : '-'}</td>
+                                    <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.weekWinRandom !== 0 ? this.AddComma(this.state.weekRewordAmount.weekWinRandom) : '-'}</td>
+                                    <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.weekVoteRandom !== 0 ? this.AddComma(this.state.weekRewordAmount.weekVoteRandom) : '-'}</td>
+                                    <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.weekRank !== 0 ? this.AddComma(this.state.weekRewordAmount.weekRank) : '-'}</td>
+                                    <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.monthRank !== 0 ? this.AddComma(this.state.weekRewordAmount.monthRank) : '-'}</td>
+                                    <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.lotteryOpen !== 0 ? this.AddComma(this.state.weekRewordAmount.lotteryOpen) : '-'}</td>
+                                    <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.lotteryRecommender !== 0 ? this.AddComma(this.state.weekRewordAmount.lotteryRecommender) : '-'}</td> 
+                                </tr>
+                              </tbody>
+                            </Table>
+                          </div>
+                      </Row>
                     </div>
                   }
                 />
