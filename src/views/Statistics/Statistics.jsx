@@ -76,7 +76,6 @@ class Statistics extends Component {
           <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter)} >{(dayAmountArr[num].userPik) ? this.AddComma(dayAmountArr[num].userPik) : '-'} <br /> {(dayAmountArr[num].userPik) ? '(' + (dayCountArr[num].userPik) + '회)'  : ''}</td>
           <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter)} >{(dayAmountArr[num].voteLucky) ? this.AddComma(dayAmountArr[num].voteLucky) : '-'} <br /> {(dayAmountArr[num].voteLucky) ? '(' + (dayCountArr[num].voteLucky) + '회)'  : ''}</td>
           <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter)} >{(dayAmountArr[num].userWinRandom) ? this.AddComma(dayAmountArr[num].userWinRandom) : '-'} <br /> {(dayAmountArr[num].userWinRandom) ? '(' + (dayCountArr[num].userWinRandom) + '회)'  : ''}</td>
-          <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter)} >{(dayAmountArr[num].userWin) ? this.AddComma(dayAmountArr[num].userWin) : '-'} <br /> {(dayAmountArr[num].userWin) ? '(' + (dayCountArr[num].userWin) + '회)'  : ''}</td>
           <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter)} >{(dayAmountArr[num].dayWinRandom) ? this.AddComma(dayAmountArr[num].dayWinRandom) : '-'} <br /> {(dayAmountArr[num].dayWinRandom) ? '(' + (dayCountArr[num].dayWinRandom) + '회)'  : ''}</td>
           <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter)} >{(dayAmountArr[num].dayVoteRandom) ? this.AddComma(dayAmountArr[num].dayVoteRandom) : '-'} <br /> {(dayAmountArr[num].dayVoteRandom) ? '(' + (dayCountArr[num].dayVoteRandom) + '회)'  : ''}</td>
           <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter)} >{(dayAmountArr[num].weekWinRandom) ? this.AddComma(dayAmountArr[num].weekWinRandom) : '-'} <br /> {(dayAmountArr[num].weekWinRandom) ? '(' + (dayCountArr[num].weekWinRandom) + '회)'  : ''}</td>
@@ -177,15 +176,8 @@ class Statistics extends Component {
             } 
             return d.userWinRandom
           })
-      }, {
-          name: '예측 정답',
-          data: dayAmountArr.map((d) => {
-            if(!d.userWin){
-             return 0
-            } 
-            return d.userWin
-          })
-      }, {
+      },
+      {
         name: '일간 정답자 추첨',
         data: dayAmountArr.map((d) => {
           if(!d.dayWinRandom){
@@ -301,7 +293,6 @@ class Statistics extends Component {
                                   <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >회차 투표</th>
                                   <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >회차 참가<br></br> Lucky </th>
                                   <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >회차 예측<br></br> 정답 추첨</th>
-                                  <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >예측 정답</th>
                                   <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >일간 정답자<br></br> 추첨</th>
                                   <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >일간 투표자<br></br> 추첨</th>
                                   <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >주간 정답자<br></br> 추첨</th>
@@ -321,8 +312,7 @@ class Statistics extends Component {
                                     <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.AddComma(this.state.weekAmount)} <br/> ({this.state.weekCount}회) </td>
                                     <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.userPik !== 0 ? this.AddComma(this.state.weekRewordAmount.userPik) : '-'} <br/> {this.state.weekRewordAmount.userPik !== 0 ? '(' + (this.state.weekRewordCount.userPik) + '회)' : '' }</td>
                                     <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.voteLucky !== 0 ? this.AddComma(this.state.weekRewordAmount.voteLucky) : '-'} <br/> {this.state.weekRewordAmount.voteLucky !== 0 ? '(' + (this.state.weekRewordCount.voteLucky) + '회)' : '' }</td>
-                                    <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.userWinRandom !== 0 ? this.AddComma(this.state.weekRewordAmount.userWinRandom) : '-'} <br/> {this.state.weekRewordAmount.userWinRandom !== 0 ? '(' + (this.state.weekRewordCount.userWinRandom) + '회)' : '' }</td>
-                                    <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.userWin !== 0 ? this.AddComma(this.state.weekRewordAmount.userWin) : '-'} <br/> {this.state.weekRewordAmount.userWin !== 0 ? '(' + (this.state.weekRewordCount.userWin) + '회)' : '' }</td>  
+                                    <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.userWinRandom !== 0 ? this.AddComma(this.state.weekRewordAmount.userWinRandom) : '-'} <br/> {this.state.weekRewordAmount.userWinRandom !== 0 ? '(' + (this.state.weekRewordCount.userWinRandom) + '회)' : '' }</td>            
                                     <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.dayWinRandom !== 0 ? this.AddComma(this.state.weekRewordAmount.dayWinRandom) : '-'} <br/> {this.state.weekRewordAmount.dayWinRandom !== 0 ? '(' + (this.state.weekRewordCount.dayWinRandom) + '회)' : '' }</td>
                                     <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.dayVoteRandom !== 0 ? this.AddComma(this.state.weekRewordAmount.dayVoteRandom) : '-'} <br/> {this.state.weekRewordAmount.dayVoteRandom !== 0 ? '(' + (this.state.weekRewordCount.dayVoteRandom) + '회)' : '' }</td>
                                     <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.weekRewordAmount.weekWinRandom !== 0 ? this.AddComma(this.state.weekRewordAmount.weekWinRandom) : '-'} <br/> {this.state.weekRewordAmount.weekWinRandom !== 0 ? '(' + (this.state.weekRewordCount.weekWinRandom) + '회)' : '' }</td>
