@@ -55,7 +55,7 @@ class Statistics extends Component {
         // for only AI coin
         // const coins = data.coins.find(coin => coin.name === '3');
         // if (!coins) return false;
-        this.setState({ totalAiCoin: data.result.totalAmount, weekAmount: data.result.weekAmount, weekCount: data.result.weekCount , dayAmount : data.result.dayAmount.reverse(), dayCount : data.result.dayCount.reverse(), issueDate : data.result.issueDate.reverse(), weekRewordAmount : data.result.weekRewordAmount, weekRewordCount: data.result.weekRewordCount });
+        this.setState({ weekAmount: data.result.weekAmount, weekCount: data.result.weekCount , dayAmount : data.result.dayAmount.reverse(), dayCount : data.result.dayCount.reverse(), issueDate : data.result.issueDate.reverse(), weekRewordAmount : data.result.weekRewordAmount, weekRewordCount: data.result.weekRewordCount}, () => this.render());
       })
       .catch((err) => {
         console.log(err);

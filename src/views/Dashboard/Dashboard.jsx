@@ -48,7 +48,7 @@ class Dashboard extends Component {
         // for only AI coin
         // const coins = data.coins.find(coin => coin.name === '3');
         // if (!coins) return false;
-        this.setState({ totalAiCoin: data.result.totalAmount, weekAmount: data.result.weekAmount , dayAmount : data.result.dayAmount, issueDate : data.result.issueDate });
+        this.setState({ totalAiCoin: data.result.totalAmount, weekAmount: data.result.weekAmount , dayAmount : data.result.dayAmount, issueDate : data.result.issueDate }, () => this.render());
       })
       .catch((err) => {
         console.log(err);
