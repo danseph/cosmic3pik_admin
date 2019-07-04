@@ -1,12 +1,9 @@
 import React, { Component } from "react";
 import { Grid, Row, Col, Table } from "react-bootstrap";
-
-
 import Card from "components/Card/Card.jsx";
 import Axios from 'axios';
 import cp from '../../cp';
 import { style } from 'variables/Variables.jsx';
-
 import { StatsCard } from "components/StatsCard/StatsCard.jsx";
 
 
@@ -101,7 +98,7 @@ class Dashboard extends Component {
         data.push(
           <tr key={issueDateArr[num]}>
             <td style={Object.assign({}, style.Config.w5, style.Config.wordCenter)} >{issueDateArr[num]}</td>
-            <td style={Object.assign({}, style.Config.w15, style.Config.wordCenter)} >{this.AddComma(dayAmountArr[num].labTotal)}</td>
+            <td style={Object.assign({}, style.Config.w15, style.Config.wordCenter)} >{this.AddComma(dayAmountArr[num])}</td>
           </tr>
         );
         num++;
