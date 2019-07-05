@@ -16,6 +16,7 @@ import cp from '../../cp';
 import moment from 'moment';
 import ReactHighcharts from 'react-highcharts';
 import Highcharts from 'highcharts';
+import ReactToExcel from 'react-html-table-to-excel';
 
 
 Highcharts.setOptions({
@@ -374,9 +375,17 @@ class Statistics extends Component {
                                                     검색
                                                 </Button>
                                             </Col>
+                                            <Col md={1} >
+                                                <ReactToExcel
+                                                        className="test-table-xls-button"
+                                                        table="table-to-xls"
+                                                        filename="table.xls"
+                                                        sheet="tablexls"
+                                                        buttonText="Download as Excel (.xls)"/>
+                                            </Col>
                                         </Row>
                                             <div>
-                                                <Table striped  hover>
+                                                <Table striped  hover id='table-to-xls'>
                                                 <thead>
                                                     <tr key="aicoin-day-count">
                                                     <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >NO</th>
@@ -426,12 +435,12 @@ class Statistics extends Component {
 				</Grid>
                 <div style={{textAlign:"center"}}> 
                     <Pagination
-                        activePage={this.state.activePage}
-                        itemsCountPerPage={this.state.selectedListCount.value}
-                        totalItemsCount={this.state.totalDayCount}
-                        pageRangeDisplayed={10}
-                        onChange={this.pageChange}
-                    />
+                            activePage={this.state.activePage}
+                            itemsCountPerPage={this.state.selectedListCount.value}
+                            totalItemsCount={this.state.totalDayCount}
+                            pageRangeDisplayed={10}
+                            onChange={this.pageChange}
+                        />
                 </div>
 			</div>
 		);
