@@ -7,8 +7,7 @@ import {
   } from "react-bootstrap";
 import CustomDatePicker from "components/CustomDatepicker/CustomDatepicker.jsx";
 import Select from 'react-select';
-  import Button from "components/CustomButton/CustomButton.jsx";
-import Pagination from 'react-js-pagination';
+import Button from "components/CustomButton/CustomButton.jsx";
 import Card from "components/Card/Card.jsx";
 import { style } from "variables/Variables.jsx";
 import axios from 'axios';
@@ -33,7 +32,6 @@ class Statistics extends Component {
 
         // config state
         this.state = {
-            totalDayCount: 0,
             dayAmount:[],
             dayCount:[],
             periodAmount: 0,
@@ -42,17 +40,11 @@ class Statistics extends Component {
             periodRewordAmount:{},
             periodRewordCount:{},
             isLoad: false,
-            activePage: 1,
             listCount: [
-                            { value: '10', label: '10' },
-                            { value: '30', label: '30' }
+                            { value: '7', label: '최근 일주일' },
+                            { value: '31', label: '최근 한달' }
                         ],
-            selectedListCount: { value: '10', label: '10' },
-            sortOption: [
-                        { value: -1, label: '내림차순' },
-                        { value: 1, label: '오름차순' },
-                    ],
-            selectedSortOption: { value: 1, label: '오름차순' }
+            selectedListCount: { value: '7', label: '최근 일주일' },
         };
 
         // fetch the list when this page is loaded
@@ -64,54 +56,64 @@ class Statistics extends Component {
     /**
      * fetch list
      */
-    fetch = (pageNumber) => {
+    fetch = () => {
         const queryString = require('query-string');
-        
-        axios.post(`${cp.server_ip}/api/stats/stats_list`,
+        let newStartDate = moment(this.state.startDate).format('YYYY-MM-DD 00:00:00');
+        // console.log(newStartDate)
+        newStartDate = new Date(newStartDate).getTime();
+        let newEndDate = moment(this.state.endDate).format('YYYY-MM-DD 24:00:00');
+        // console.log(newEndDate)
+        newEndDate = new Date(newEndDate).getTime();
+        let endDateMinusOne = moment(this.state.endDate).subtract(32, 'days').format('YYYY-MM-DD 24:00:00');
+        // console.log(endDateMinusOne)
+        endDateMinusOne = new Date(endDateMinusOne).getTime();
+        // console.log(newStartDate)
+        // console.log(newEndDate)
+        // console.log(endDateMinusOne)
+
+
+        if( newStartDate < endDateMinusOne && this.state.startDate  ){
+            alert('최대 조회기간은 한달(31일)로 제한됩니다. 기간을 재설정하여 조회해주세요.')
+        }
+        else if( newStartDate > newEndDate  ){
+            alert('조회기간 설정이 올바르지 않습니다. 기간을 재설정하여 조회해주세요.')
+        }
+        else {
+            axios.post(`${cp.server_ip}/api/stats/stats_list`,
             {
                 data: {
                     token: window.localStorage['nu_token'],
-                    startIndex: (!pageNumber)? 0 : (pageNumber -1) * this.state.selectedListCount.value,
-                    sortOption : this.state.selectedSortOption.value,
                     limit : this.state.selectedListCount,
                     startDate:this.state.startDate,
                     endDate:this.state.endDate,
                 }
             }
-        ).then(res => {
-            const data  = res.data;
+            ).then(res => {
+                const data  = res.data;
 
-            if (data.err || !data) { 
-                window.location.href = '/'; 
-            } else { 
-                this.setState(
-                    {
-                        periodAmount: data.periodAmount, periodCount: data.periodCount , dayAmount : data.dayAmount, dayCount : data.dayCount, issueDate : data.issueDate, periodRewordAmount : data.periodRewordAmount, periodRewordCount: data.periodRewordCount,
-                        totalDayCount: data.totalDayCount, 
-                        isLoad: true 
-                    },
-                    () => this.render()
-                ) 
-            }
-        }).catch(err => { 
-            console.error(err); 
-        });
-    };
-
-    /** 
-     * paging
-     */
-    pageChange = pageNumber => {
-        this.setState({activePage: pageNumber});
-        this.fetch(pageNumber);
-    };
+                if (data.err || !data) { 
+                    window.location.href = '/'; 
+                } else { 
+                    this.setState(
+                        {
+                            periodAmount: data.periodAmount, periodCount: data.periodCount , dayAmount : data.dayAmount, dayCount : data.dayCount, issueDate : data.issueDate, periodRewordAmount : data.periodRewordAmount, periodRewordCount: data.periodRewordCount,
+                            // totalDayCount: data.totalDayCount, 
+                            isLoad: true 
+                        },
+                        () => this.render()
+                    ) 
+                }
+            }).catch(err => { 
+                console.error(err); 
+            })
+        }
+    }
 
     /**
      * search
      */
     onSearch = () => {
-        this.setState({activePage: 1});
-        this.fetch(0);
+        this.fetch();
     };
 
     /**
@@ -123,27 +125,30 @@ class Statistics extends Component {
     };
 
     /**
-     * list count per a page
+     * datepicker change (recent one month)
      */
-    listCountChange = selectedListCount => {
-        this.setState({ selectedListCount },() => this.onSearch())
+    recentOneMonth = (value) => { 
+        var curDate = new Date();
+        var newDate = moment(curDate).subtract(value, 'days').format('YYYY-MM-DD 00:00:00');
+            newDate = new Date(newDate); 
+        this.setState({ startDate : newDate, endDate: null}, () => this.fetch()) ;
     };
 
     /**
-     * sort option change
+     * list count per a page
      */
-    sortOptionChange = selectedSortOption => {
-        this.setState({ selectedSortOption },() => this.onSearch())
+    listCountChange = selectedListCount => {
+        this.setState({ selectedListCount }, () => this.recentOneMonth(selectedListCount.value))
     };
 
     getDayCoinAmount(dayAmountArr,issueDateArr,dayCountArr) {
         let data = [];
         let num = 0;
-        let no = (this.state.activePage -1) * this.state.selectedListCount.value + 1;
+        // let no = (this.state.activePage -1) * this.state.selectedListCount.value + 1;
         dayAmountArr.map(item => {
           data.push(
             <tr key={issueDateArr[num]}>
-              <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter)} >{no++}</td>
+              {/* <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter)} >{no++}</td> */}
               <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter)} >{issueDateArr[num]}</td>
               <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter)} >{this.AddComma(dayAmountArr[num].labTotal)} <br />  ({dayCountArr[num].labTotalCount})</td>           
               <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter)} >{(dayAmountArr[num].userPik) ? this.AddComma(dayAmountArr[num].userPik) : '-'} <br /> {(dayAmountArr[num].userPik) ? '(' + (dayCountArr[num].userPik) + ')'  : ''}</td>
@@ -167,9 +172,7 @@ class Statistics extends Component {
     AddComma(data_value) {
     return Number(data_value).toLocaleString('en');
     }
-
-
-      
+  
     highcharts(dayAmountArr,issueDateArr) {
         const config = {
         credits: {
@@ -329,7 +332,7 @@ class Statistics extends Component {
 					<Row>
 						<Col md={12}>
 							<Card
-								title={`조회기간 (총 ${this.state.totalDayCount}일)`}
+								title={`Chart & List for AI coin volume`}
 								ctTableFullWidth
 								ctTableResponsive
 								content={
@@ -349,26 +352,18 @@ class Statistics extends Component {
                                             </Col>
                                             <Col md={2}>
                                                 <CustomDatePicker                        
-                                                        name = 'endDate'
-                                                        changeAction = {this.changedValue}
-                                                        description='종료일'
+                                                    name = 'endDate'
+                                                    changeAction = {this.changedValue}
+                                                    description='종료일'
                                                 />
                                             </Col>
-                                            <Col md={1}>
-                                                <Select
-                                                    onChange={this.sortOptionChange}
-                                                    options={this.state.sortOption}
-                                                    value={this.state.selectedSortOption}
-                                                />
-                                                정렬순서
-                                            </Col>
-                                            <Col md={1}>
+                                            <Col md={1} style={{width: 150}} >
                                                 <Select
                                                     onChange={this.listCountChange}
                                                     options={this.state.listCount}
                                                     value={this.state.selectedListCount}
                                                 />
-                                                검색일수
+                                                {/* 최근 일주일 or 한달 */}
                                             </Col>
                                             <Col md={1} >
                                                 <Button bsStyle="info" fill onClick={(e) => this.onSearch(e)} >
@@ -388,7 +383,7 @@ class Statistics extends Component {
                                                 <Table striped  hover id='table-to-xls'>
                                                 <thead>
                                                     <tr key="aicoin-day-count">
-                                                    <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >NO</th>
+                                                    {/* <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >NO</th> */}
                                                     <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >날짜</th>
                                                     <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >총 AI coin<br></br> 발행량 (회)</th>
                                                     <th style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >회차 투표 (회)</th>
@@ -410,7 +405,6 @@ class Statistics extends Component {
                                                     }
                                                     <tr>
                                                         <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >Total</td>
-                                                        <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >-</td>
                                                         <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.AddComma(this.state.periodAmount)} <br/> ({this.state.periodCount}) </td>
                                                         <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.periodRewordAmount.userPik !== 0 ? this.AddComma(this.state.periodRewordAmount.userPik) : '-'}  <br/> {this.state.periodRewordAmount.userPik !== 0 ? '(' + (this.state.periodRewordCount.userPik) + ')' : '' } </td>
                                                         <td style={Object.assign({}, style.Config.w1, style.Config.wordCenter, style.Config.wordBlod)} >{this.state.periodRewordAmount.voteLucky !== 0 ? this.AddComma(this.state.periodRewordAmount.voteLucky) : '-'} <br/> {this.state.periodRewordAmount.voteLucky !== 0 ? '(' + (this.state.periodRewordCount.voteLucky) + ')' : '' }</td>
@@ -433,15 +427,6 @@ class Statistics extends Component {
 						</Col>
 					</Row>
 				</Grid>
-                <div style={{textAlign:"center"}}> 
-                    <Pagination
-                            activePage={this.state.activePage}
-                            itemsCountPerPage={this.state.selectedListCount.value}
-                            totalItemsCount={this.state.totalDayCount}
-                            pageRangeDisplayed={10}
-                            onChange={this.pageChange}
-                        />
-                </div>
 			</div>
 		);
 	}
