@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { ControlLabel, HelpBlock} from "react-bootstrap";
+import { ControlLabel } from "react-bootstrap";
 import { DatePickerInput } from 'rc-datepicker';
 import 'rc-datepicker/lib/style.css';
 
@@ -26,14 +26,13 @@ export class CustomDatePicker extends Component {
   render() {
 		return(
 			<div>
+				{this.props.description}
 				<ControlLabel>{this.props.label}</ControlLabel>
 				<DatePickerInput
 						onChange={e => this.props.changeAction(this.props.name , e)}
 						value={this.props.defaultDate}
 						className='my-custom-datepicker-component'
 				/>
-				<HelpBlock>{this.props.description}</HelpBlock>
-
 			</div>
 		)
 	}

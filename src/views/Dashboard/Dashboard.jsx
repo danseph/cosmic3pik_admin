@@ -114,7 +114,6 @@ class Dashboard extends Component {
   componentDidMount() {
     this.getAicoins();
     this.getUserCount();
-    // this.getAiCoinAmount();
   }
 
   createLegend(json) {

@@ -5,6 +5,7 @@ import {
     Col,
     Table,
     FormControl,
+    HelpBlock,
     InputGroup,
   } from "react-bootstrap";
 import CustomDatePicker from "components/CustomDatepicker/CustomDatepicker.jsx";
@@ -210,61 +211,64 @@ class Member extends Component {
                                         <Row style={style.Config.p15}>
                                             <Col md={2}>
                                                 <CustomDatePicker
+                                                    description='시작일'
                                                     name = 'startDate'
                                                     changeAction = {this.changedValue}
-                                                    description='시작일'
                                                 />
                                             </Col>
                                             <Col md={2}>
-                                                <CustomDatePicker                        
-                                                        name = 'endDate'
-                                                        changeAction = {this.changedValue}
-                                                        description='종료일'
+                                                <CustomDatePicker    
+                                                    description='종료일'                    
+                                                    name = 'endDate'
+                                                    changeAction = {this.changedValue}    
                                                 />
                                             </Col>
                                             <Col md={1}>
+                                                    검색구분
                                                     <Select
                                                         onChange={this.searchKindChange}
                                                         options={this.state.searchKind}
                                                         value={this.state.selectedSearchKind}
                                                     />
-                                                    검색구분
                                             </Col>
                                             <Col md={2}>
-                                            <InputGroup>
-                                                <FormControl
-                                                    inputRef={input => { this.search = input; }}
-                                                    placeholder={`${this.state.selectedSearchKind.label} 검색`}
-                                                    onKeyDown={(e) => this.onKeyDown(e)}
-                                                />
-                                                <InputGroup.Addon ></InputGroup.Addon>
-                                            </InputGroup>
+                                                    검색어
+                                                    <InputGroup>
+                                                        <FormControl
+                                                            inputRef={input => { this.search = input; }}
+                                                            placeholder={`${this.state.selectedSearchKind.label} 검색`}
+                                                            onKeyDown={(e) => this.onKeyDown(e)}
+                                                        />
+                                                        <InputGroup.Addon ></InputGroup.Addon>
+                                                    </InputGroup>
                                             </Col>
                                             <Col md={1}>
+                                                정렬
                                                 <Select
                                                     onChange={this.sortChange}
                                                     options={this.state.sort}
                                                     value={this.state.selectedSort}
                                                 />
-                                                정렬
+                                                
                                             </Col>
                                             <Col md={1}>
+                                                정렬순서
                                                 <Select
                                                     onChange={this.sortOptionChange}
                                                     options={this.state.sortOption}
                                                     value={this.state.selectedSortOption}
                                                 />
-                                                정렬순서
                                             </Col>
                                             <Col md={1}>
+                                                글갯수
                                                 <Select
                                                     onChange={this.listCountChange}
                                                     options={this.state.listCount}
                                                     value={this.state.selectedListCount}
                                                 />
-                                                글갯수
                                             </Col>
                                             <Col md={1} >
+                                                <br />
                                                 <Button bsStyle="info" fill onClick={(e) => this.onSearch(e)} >
                                                     검색
                                                 </Button>
