@@ -24,7 +24,7 @@
     "react-chartist": "0.13.1",
     "react-clipboard.js": "^2.0.12",
     "react-dom": "^16.4.0",
-    "react-draft-wysiwyg": "^1.12.13",
+    "react-draft-wysiwyg": "^1.14.6",
     "react-google-maps": "9.4.5",
     "react-highcharts": "^16.0.2",
     "react-html-table-to-excel": "^2.0.0",
